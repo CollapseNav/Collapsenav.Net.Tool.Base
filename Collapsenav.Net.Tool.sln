@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj", "{C17EED73-7B7C-49EF-AF21-71931258377C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionGenerator", "RegionGenerator\RegionGenerator.csproj", "{8ACBCA98-2A56-4666-B1FE-103B8DFFC3F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.AutoInject", "Collapsenav.Net.Tool.AutoInject\Collapsenav.Net.Tool.AutoInject.csproj", "{5FC04200-F052-4B02-81B3-4C8FFFC682EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Region", "Collapsenav.Net.Tool.Region\Collapsenav.Net.Tool.Region.csproj", "{AD5D639E-9029-4882-A47D-792841B074B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Test", "Test\Collapsenav.Net.Tool.Test.csproj", "{7F3F7F12-95E5-4BD0-B324-5BC0BA3AE4BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C17EED73-7B7C-49EF-AF21-71931258377C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C17EED73-7B7C-49EF-AF21-71931258377C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C17EED73-7B7C-49EF-AF21-71931258377C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C17EED73-7B7C-49EF-AF21-71931258377C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ACBCA98-2A56-4666-B1FE-103B8DFFC3F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ACBCA98-2A56-4666-B1FE-103B8DFFC3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ACBCA98-2A56-4666-B1FE-103B8DFFC3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ACBCA98-2A56-4666-B1FE-103B8DFFC3F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC04200-F052-4B02-81B3-4C8FFFC682EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC04200-F052-4B02-81B3-4C8FFFC682EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC04200-F052-4B02-81B3-4C8FFFC682EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC04200-F052-4B02-81B3-4C8FFFC682EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD5D639E-9029-4882-A47D-792841B074B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD5D639E-9029-4882-A47D-792841B074B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD5D639E-9029-4882-A47D-792841B074B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD5D639E-9029-4882-A47D-792841B074B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3F7F12-95E5-4BD0-B324-5BC0BA3AE4BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3F7F12-95E5-4BD0-B324-5BC0BA3AE4BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3F7F12-95E5-4BD0-B324-5BC0BA3AE4BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3F7F12-95E5-4BD0-B324-5BC0BA3AE4BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

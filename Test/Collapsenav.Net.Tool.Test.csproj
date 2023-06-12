@@ -23,7 +23,7 @@
         <PackageReference Include="coverlet.msbuild" Version="3.1.0"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
+        <ProjectReference Include="..\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
         <None Include="./*.png" CopyToOutputDirectory="Always"/>
         <None Include="./JsonTest.json" CopyToOutputDirectory="Always"/>
         <None Include="./streamtest.txt" CopyToOutputDirectory="Always"/>
