@@ -54,40 +54,40 @@ public static partial class DictionaryExt
     /// 将键值对集合转为字典
     /// </summary>
     /// <param name="dict"></param>
-    public static IDictionary<K, V> ToDictionary<K, V>(this IEnumerable<KeyValuePair<K, V>> dict)
+    public static IDictionary<K, V>? ToDictionary<K, V>(this IEnumerable<KeyValuePair<K, V>> dict) where K : notnull
     {
-        return dict.ToDictionary(item => item.Key, item => item.Value);
+        return dict?.ToDictionary(item => item.Key, item => item.Value);
     }
     /// <summary>
     /// 将集合转为键值对
     /// </summary>
     /// <param name="query">集合</param>
     /// <param name="keySelector">key选择器</param>
-    public static IDictionary<K, V> ToDictionary<K, V>(this IEnumerable<V> query, Func<V, K> keySelector)
+    public static IDictionary<K, V>? ToDictionary<K, V>(this IEnumerable<V> query, Func<V, K> keySelector) where K : notnull
     {
-        return query.ToDictionary(keySelector, item => item);
+        return query?.ToDictionary(keySelector, item => item);
     }
     /// <summary>
     /// 获取值并且移除字典项
     /// </summary>
     /// <param name="dict"></param>
     /// <param name="key"></param>
-    public static V GetAndRemove<K, V>(this IDictionary<K, V> dict, K key)
+    public static V? GetAndRemove<K, V>(this IDictionary<K, V> dict, K key)
     {
-        var flag = dict.TryGetValue(key, out V value);
+        var flag = dict.TryGetValue(key, out V? value);
         if (flag)
             dict.Remove(key);
         return value;
     }
-    
+
     /// <summary>
     /// 获取值并且移除字典项
     /// </summary>
     /// <param name="dict"></param>
     /// <param name="key"></param>
-    public static V Pop<K, V>(this IDictionary<K, V> dict, K key)
+    public static V? Pop<K, V>(this IDictionary<K, V> dict, K key)
     {
-        var flag = dict.TryGetValue(key, out V value);
+        var flag = dict.TryGetValue(key, out V? value);
         if (flag)
             dict.Remove(key);
         return value;

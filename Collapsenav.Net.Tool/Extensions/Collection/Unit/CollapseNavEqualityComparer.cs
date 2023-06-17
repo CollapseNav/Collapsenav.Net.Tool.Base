@@ -9,13 +9,13 @@ public class CollapseNavEqualityComparer<T> : IEqualityComparer<T>
     {
         HashCodeFunc = hashcodeFunc;
     }
-    public CollapseNavEqualityComparer(Func<T, T, bool> equalFunc, Func<T, int> hashcodeFunc = null)
+    public CollapseNavEqualityComparer(Func<T, T, bool>? equalFunc, Func<T, int>? hashcodeFunc = null)
     {
         EqualFunc = equalFunc;
         HashCodeFunc = hashcodeFunc;
     }
-    private readonly Func<T, T, bool> EqualFunc;
-    private readonly Func<T, int> HashCodeFunc;
+    private readonly Func<T, T, bool>? EqualFunc;
+    private readonly Func<T, int>? HashCodeFunc;
 
     public bool Equals(T x, T y)
     {

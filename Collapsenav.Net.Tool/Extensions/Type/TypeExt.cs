@@ -43,9 +43,9 @@ public static partial class TypeExt
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string> PropNames<T>(this T obj)
+    public static IEnumerable<string>? PropNames<T>(this T obj)
     {
-        return obj.GetType().PropNames();
+        return obj?.GetType()?.PropNames();
     }
     /// <summary>
     /// 获取属性名称
@@ -57,14 +57,14 @@ public static partial class TypeExt
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string> PropNames<T>(this T obj, int depth)
+    public static IEnumerable<string>? PropNames<T>(this T obj, int depth)
     {
-        return obj.GetType().PropNames(depth);
+        return obj?.GetType()?.PropNames(depth);
     }
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string> PropNames(this Type type, int depth)
+    public static IEnumerable<string>? PropNames(this Type type, int depth)
     {
         var props = type.GetProperties();
         var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
@@ -78,15 +78,15 @@ public static partial class TypeExt
     /// <summary>
     /// 获取内建类型的属性名
     /// </summary>
-    public static IEnumerable<string> BuildInTypePropNames<T>(this T obj)
+    public static IEnumerable<string>? BuildInTypePropNames<T>(this T obj)
     {
-        var nameProps = obj.GetType().BuildInTypeProps();
-        return nameProps.Select(item => item.Name);
+        var nameProps = obj?.GetType()?.BuildInTypeProps();
+        return nameProps?.Select(item => item.Name);
     }
     /// <summary>
     /// 获取内建类型的属性名
     /// </summary>
-    public static IEnumerable<string> BuildInTypePropNames(this Type type)
+    public static IEnumerable<string>? BuildInTypePropNames(this Type type)
     {
         var nameProps = type.BuildInTypeProps();
         return nameProps.Select(item => item.Name);
@@ -104,9 +104,9 @@ public static partial class TypeExt
     /// <summary>
     /// 获取内建类型的属性和值
     /// </summary>
-    public static Dictionary<PropertyInfo, object> BuildInTypeValues<T>(this T obj)
+    public static Dictionary<PropertyInfo, object>? BuildInTypeValues<T>(this T obj)
     {
-        var propDict = obj.GetType().BuildInTypeProps()
+        var propDict = obj?.GetType().BuildInTypeProps()
         .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name)))
         .ToDictionary(item => item.Key, item => item.Value);
         return propDict;
@@ -169,10 +169,10 @@ public static partial class TypeExt
     /// </summary>
     /// <param name="obj">对象</param>
     /// <param name="field">属性/字段</param>
-    public static object GetValue<T>(this T obj, string field)
+    public static object? GetValue<T>(this T obj, string field)
     {
         var fieldName = field.FirstTo('.');
-        var prop = obj.GetType().GetProperty(fieldName);
+        var prop = obj?.GetType().GetProperty(fieldName);
         if (fieldName.Length == field.Length && prop != null)
             return prop?.GetValue(obj);
         else if (prop != null)

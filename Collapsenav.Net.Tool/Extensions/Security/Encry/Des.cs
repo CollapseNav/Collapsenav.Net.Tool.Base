@@ -6,7 +6,7 @@ public partial class DesTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
-    private static DES Algorithm;
+    private static DES? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// Des解密

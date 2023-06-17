@@ -26,14 +26,14 @@ public static partial class StringExt
     /// <param name="obj">源</param>
     /// <param name="total">总长度</param>
     /// <param name="fill">填充字符</param>
-    public static string PadLeft<T>(this T obj, int total, char? fill = ' ') => obj.ToString().PadLeft(total, fill ?? ' ');
+    public static string PadLeft<T>(this T obj, int total, char? fill = ' ') => obj?.ToString()?.PadLeft(total, fill ?? ' ') ?? string.Empty;
     /// <summary>
     /// 右填充
     /// </summary>
     /// <param name="obj">源</param>
     /// <param name="total">总长度</param>
     /// <param name="fill">填充字符</param>
-    public static string PadRight<T>(this T obj, int total, char? fill = ' ') => obj.ToString().PadRight(total, fill ?? ' ');
+    public static string PadRight<T>(this T obj, int total, char? fill = ' ') => obj?.ToString()?.PadRight(total, fill ?? ' ') ?? string.Empty;
     /// <summary>
     /// 左填充
     /// </summary>
@@ -41,7 +41,7 @@ public static partial class StringExt
     /// <param name="total">总长度</param>
     /// <param name="act">一个委托</param>
     /// <param name="fill">填充字符</param>
-    public static string PadLeft<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj).ToString().PadLeft(total, fill ?? ' ');
+    public static string PadLeft<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj)?.ToString()?.PadLeft(total, fill ?? ' ') ?? string.Empty;
     /// <summary>
     /// 右填充
     /// </summary>
@@ -49,7 +49,7 @@ public static partial class StringExt
     /// <param name="total">总长度</param>
     /// <param name="act">一个委托</param>
     /// <param name="fill">填充字符</param>
-    public static string PadRight<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj).ToString().PadRight(total, fill ?? ' ');
+    public static string PadRight<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj)?.ToString()?.PadRight(total, fill ?? ' ') ?? string.Empty;
     /// <summary>
     /// 数字转为中文,暂时只支持整数,支持最大的整数长度为16位
     /// </summary>
@@ -81,7 +81,7 @@ public static partial class StringExt
     public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
     public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
 
-    public static object ToValue(this string input, Type type)
+    public static object? ToValue(this string input, Type type)
     {
         var flag = type.HasMethod("Parse");
         if (flag)
@@ -98,9 +98,9 @@ public static partial class StringExt
     /// <param name="query">源集合</param>
     /// <param name="separate">分隔符</param>
     /// <param name="getStr">针对复杂类型的委托</param>
-    public static string Join<T>(this IEnumerable<T> query, string separate = "", Func<T, object> getStr = null)
+    public static string Join<T>(this IEnumerable<T> query, string separate = "", Func<T, object>? getStr = null)
     {
-        return string.Join(separate, query.Select(getStr ?? (item => item.ToString())));
+        return string.Join(separate, query.Select(getStr ?? (item => item?.ToString() ?? string.Empty)));
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public static partial class StringExt
     /// <summary>
     /// 字符串转为byte[] 默认 utf8
     /// </summary>
-    public static byte[] ToBytes(this string origin, Encoding encode = null)
+    public static byte[] ToBytes(this string origin, Encoding? encode = null)
     {
         encode ??= Encoding.UTF8;
         return encode.GetBytes(origin);
@@ -184,7 +184,7 @@ public static partial class StringExt
     /// <summary>
     /// bytes转为string
     /// </summary>
-    public static string BytesToString(this byte[] bytes, Encoding encoding = null)
+    public static string BytesToString(this byte[] bytes, Encoding? encoding = null)
     {
         encoding ??= Encoding.UTF8;
         return encoding.GetString(bytes);

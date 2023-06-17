@@ -9,7 +9,7 @@ public partial class TripleDesTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
-    private static TripleDES Algorithm;
+    private static TripleDES? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// Des解密

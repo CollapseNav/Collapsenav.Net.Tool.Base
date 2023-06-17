@@ -68,7 +68,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc)
+    public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T, T, bool>? comparer, Func<T, int>? hashCodeFunc)
     {
         return query.Distinct(new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
     }
@@ -89,7 +89,7 @@ public static partial class CollectionExt
     /// <param name="right">集合2</param>
     /// <param name="comparer">怎么比</param>
     /// <param name="hashCodeFunc">hash</param>
-    public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc)
+    public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T, T, bool>? comparer, Func<T, int>? hashCodeFunc)
     {
         return left.SequenceEqual(right, new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
     }

@@ -8,7 +8,7 @@ public partial class AESTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
-    private static Aes Algorithm;
+    private static Aes? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密

@@ -6,7 +6,7 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class Sha256Tool
 {
-    private static SHA256 Algorithm;
+    private static SHA256? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密

@@ -298,7 +298,7 @@ public class CollectionTest
             Assert.True(index == item * item);
         foreach (var (item, index) in nums.SelectWithIndex(num => num.ToString(), num => num))
         {
-            Assert.True(item is string);
+            Assert.True(item is not null);
             Assert.True(item.ToInt() == index);
         }
     }

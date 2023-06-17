@@ -79,14 +79,14 @@ public static partial class AttributeExt
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E> AttrValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, E?> AttrValues<E>(this Type type) where E : Attribute
     {
         return type.AttrPropValues<E>();
     }
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E> AttrPropValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, E?> AttrPropValues<E>(this Type type) where E : Attribute
     {
         var props = type.AttrProps<E>();
         return props.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
@@ -94,7 +94,7 @@ public static partial class AttributeExt
     /// <summary>
     /// 获取T中存在E的attribute的字段及attribute值
     /// </summary>
-    public static Dictionary<FieldInfo, E> AttrFieldValues<E>(this Type type) where E : Attribute
+    public static Dictionary<FieldInfo, E?> AttrFieldValues<E>(this Type type) where E : Attribute
     {
         var fields = type.AttrFields<E>();
         return fields.ToDictionary(item => item, item => item.GetCustomAttribute<E>());

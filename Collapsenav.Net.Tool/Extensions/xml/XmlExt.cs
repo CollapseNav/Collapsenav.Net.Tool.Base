@@ -9,12 +9,12 @@ public class XmlNodeCache
         Doc = doc;
         Path = path;
         NodeList = doc.SelectNodes(path);
-        Nodes = NodeList.GetNodes();
+        Nodes = NodeList?.GetNodes();
     }
-    public XmlDocument Doc { get; private set; }
+    public XmlDocument? Doc { get; private set; }
     public string Path { get; private set; }
-    public IEnumerable<XmlNode> Nodes { get; private set; }
-    public XmlNodeList NodeList { get; set; }
+    public IEnumerable<XmlNode>? Nodes { get; private set; }
+    public XmlNodeList? NodeList { get; set; }
 }
 
 public static class XmlExt
@@ -36,8 +36,8 @@ public static class XmlExt
     /// <summary>
     /// 基本上不太可能会在运行的过程中改变, 所以写个静态存着
     /// </summary>
-    private static IEnumerable<XmlDocument> Docs;
-    private static Dictionary<XmlDocument, IEnumerable<SummaryNode>> SummaryDict;
+    private static IEnumerable<XmlDocument>? Docs;
+    private static Dictionary<XmlDocument, IEnumerable<SummaryNode>>? SummaryDict;
     public static List<XmlNodeCache> NodeCaches { get; private set; }
     private static void AddDocToCache(XmlDocument doc, string path)
     {

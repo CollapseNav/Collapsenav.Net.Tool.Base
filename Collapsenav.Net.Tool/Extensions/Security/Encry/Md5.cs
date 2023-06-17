@@ -5,7 +5,7 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class MD5Tool
 {
-    private static MD5 Algorithm;
+    private static MD5? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密

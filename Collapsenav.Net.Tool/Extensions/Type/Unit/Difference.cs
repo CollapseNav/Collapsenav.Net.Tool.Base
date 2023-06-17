@@ -13,11 +13,11 @@ public class Difference<T>
     public IEnumerable<DiffItem<T>> Diffs { get; private set; }
     public T Before { get; private set; }
     public T End { get; private set; }
-    public DiffItem<T> GetDiff(string propName)
+    public DiffItem<T>? GetDiff(string propName)
     {
         return Diffs.FirstOrDefault(item => item.PropName == propName);
     }
-    public DiffItem<T> GetDiff(PropertyInfo prop)
+    public DiffItem<T>? GetDiff(PropertyInfo prop)
     {
         return Diffs.FirstOrDefault(item => item.Prop == prop);
     }
@@ -53,14 +53,14 @@ public class DiffItem<T>
         Beforevalue = before;
         Endvalue = end;
     }
-    public PropertyInfo Prop { get; set; }
-    public string PropName { get => Prop?.Name; }
-    public object Beforevalue { get; set; }
-    public object Endvalue { get; set; }
+    public PropertyInfo? Prop { get; set; }
+    public string? PropName { get => Prop?.Name; }
+    public object? Beforevalue { get; set; }
+    public object? Endvalue { get; set; }
 
-    public static IEnumerable<DiffItem<T>> GetDiffs(T before, T end)
+    public static IEnumerable<DiffItem<T>>? GetDiffs(T before, T end)
     {
-        var props = before.GetType().Props().GetItemIn(end.GetType().Props(), (a, b) => a.Name == b.Name && a.PropertyType == b.PropertyType).ToArray();
+        var props = before?.GetType().Props().GetItemIn(end?.GetType()?.Props(), (a, b) => a.Name == b.Name && a.PropertyType == b.PropertyType).ToArray();
         if (props.IsEmpty())
             return default;
         return props.Select(item => new DiffItem<T>(item, item.GetValue(before), item.GetValue(end)));

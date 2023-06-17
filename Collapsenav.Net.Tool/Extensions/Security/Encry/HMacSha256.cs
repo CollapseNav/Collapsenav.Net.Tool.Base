@@ -7,7 +7,7 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacSha256Tool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
-    private static HMACSHA256 Algorithm;
+    private static HMACSHA256? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密

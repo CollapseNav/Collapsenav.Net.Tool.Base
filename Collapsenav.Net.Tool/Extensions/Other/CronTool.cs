@@ -17,11 +17,11 @@ public class CronTool
         { CronEnum.Day, 30 },
         { CronEnum.Month, 12 },
     };
-    public static string CreateCron(int? len = null, CronEnum? cronEnum = CronEnum.Second)
+    public static string? CreateCron(int? len = null, CronEnum? cronEnum = CronEnum.Second)
     {
-        return CreateCrons(len, cronEnum).FirstOrDefault();
+        return CreateCrons(len, cronEnum)?.FirstOrDefault() ?? string.Empty;
     }
-    public static IEnumerable<string> CreateCrons(int? len = null, CronEnum? cronEnum = CronEnum.Second)
+    public static IEnumerable<string>? CreateCrons(int? len = null, CronEnum? cronEnum = CronEnum.Second)
     {
         len ??= 1;
         cronEnum ??= CronEnum.Second;
@@ -66,7 +66,7 @@ public class CronTool
     internal static string CreateCron(CronEnum cronEnum, params string[] values)
     {
         if (values.Length == 0)
-            return null;
+            return string.Empty;
         var start = (int)cronEnum;
         int sum = start;
         string cron = string.Empty;

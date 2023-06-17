@@ -4,7 +4,7 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacMd5Tool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
-    private static HMACMD5 Algorithm;
+    private static HMACMD5? Algorithm;
     public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密

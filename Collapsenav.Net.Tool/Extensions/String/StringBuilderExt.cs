@@ -9,7 +9,7 @@ public static partial class StringBuilderExt
             self.Append(data);
         return self;
     }
-    public static StringBuilder AddIf(this StringBuilder self, string flag, string data = null)
+    public static StringBuilder AddIf(this StringBuilder self, string flag, string? data = null)
     {
         if (data.IsNull())
             data = flag;
