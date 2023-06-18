@@ -33,7 +33,7 @@ public class SummaryNode
     /// <summary>
     /// 注释内容
     /// </summary>
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
     /// <summary>
     /// 元素完整名称
     /// </summary>
@@ -41,7 +41,7 @@ public class SummaryNode
     /// <summary>
     /// 参数集合
     /// </summary>
-    public IEnumerable<ParamNode> ParamsDesc { get; set; }
+    public IEnumerable<ParamNode>? ParamsDesc { get; set; }
     public SummaryNode(XmlNode node)
     {
         FullName = node.Attributes!["name"]!.Value;
