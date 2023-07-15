@@ -183,8 +183,6 @@ public class CollectionTest
 
         numMergeList = nums.Take(2).Merge(nums.TakeLast(2));
         Assert.True(numMergeList.SequenceEqual(mergeInts));
-        numMergeList = nums.Merge((x, y) => x == y, item => item.GetHashCode());
-        Assert.True(numMergeList.SequenceEqual(mergeInts));
 
         numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 });
         Assert.True(numMergeList.SequenceEqual(mergeInts));
@@ -271,7 +269,6 @@ public class CollectionTest
         Assert.True(nums.Count == 16);
         nums.AddRange(x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
         Assert.True(nums.Count == 16);
-        nums.AddRange((x, y) => x == y, x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
         Assert.True(nums.Count == 16);
     }
 

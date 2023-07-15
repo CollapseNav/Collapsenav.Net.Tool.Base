@@ -65,7 +65,7 @@ public class SummaryNode
                     break;
                 }
             }
-            var paramsNodes = node.SelectNodes("param").GetNodes();
+            var paramsNodes = node?.SelectNodes("param")?.GetNodes();
             if (paramsNodes.NotEmpty())
                 ParamsDesc = paramsNodes.Select(item => new ParamNode(item.Attributes!["name"]!.Value, item.InnerText.Trim()));
         }

@@ -9,12 +9,17 @@ public class CollapseNavEqualityComparer<T> : IEqualityComparer<T>
     {
         HashCodeFunc = hashcodeFunc;
     }
-    public CollapseNavEqualityComparer(Func<T, T, bool>? equalFunc, Func<T, int>? hashcodeFunc = null)
+    public CollapseNavEqualityComparer(Func<T, T, bool>? equalFunc)
     {
         EqualFunc = equalFunc;
-        HashCodeFunc = hashcodeFunc;
     }
+    /// <summary>
+    /// 提供一个用于对比的委托
+    /// </summary>
     private readonly Func<T, T, bool>? EqualFunc;
+    /// <summary>
+    /// 提供一个计算hashcode的委托，然后使用该委托计算对比
+    /// </summary>
     private readonly Func<T, int>? HashCodeFunc;
 
     public bool Equals(T x, T y)
