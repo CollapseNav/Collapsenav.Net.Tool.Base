@@ -7,8 +7,8 @@ namespace Collapsenav.Net.Tool.Region;
 /// </summary>
 public class RegionNode
 {
-    public string Name { get; set; }
-    public string Code { get; set; }
+    public string? Name { get; set; }
+    public string? Code { get; set; }
 }
 /// <summary>
 /// 树形节点
@@ -16,8 +16,8 @@ public class RegionNode
 public class RegionTreeNode : RegionNode
 {
     public RegionTreeNode() { }
-    public IReadOnlyCollection<RegionTreeNode> Child { get; set; }
-    public RegionTreeNode Parent { get; set; }
+    public IReadOnlyCollection<RegionTreeNode>? Child { get; set; }
+    public RegionTreeNode? Parent { get; set; }
     public RegionNode ToNode()
     {
         return new RegionNode
@@ -39,14 +39,14 @@ public class RegionTreeNode : RegionNode
     /// <summary>
     /// 全称
     /// </summary>
-    public string FullName(string fill = "", int level = 10)
+    public string? FullName(string fill = "", int level = 10)
     {
         return Parent != null && !string.IsNullOrEmpty(Parent.Name) ? $"{(level > 1 ? Parent.FullName(fill, --level) + fill : "")}{Name}" : Name;
     }
     /// <summary>
     /// 全称
     /// </summary>
-    public string FullName(int level)
+    public string? FullName(int level)
     {
         return FullName("", level);
     }

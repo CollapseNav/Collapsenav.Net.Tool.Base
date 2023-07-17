@@ -219,7 +219,7 @@ public static partial class AssemblyExt
     {
         return ass.GetTypes().Where(item =>
         {
-            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
+            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName!.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
         });
     }
 }

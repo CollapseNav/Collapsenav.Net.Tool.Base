@@ -1,0 +1,14 @@
+# Collapsenav.Net.Tool.Base
+
+[nuget](https://www.nuget.org/packages/Collapsenav.Net.Tool) / [GitHub](https://github.com/CollapseNav/Collapsenav.Net.Tool/tree/main/Tool/Collapsenav.Net.Tool)
+
+一些可能会方便日常使用的操作
+
+比如 字符串判空，集合判空，集合去重，日期转时间戳 等
+
+为了使用方便，都做成了扩展方法，对应类型的对象可以直接使用，无需使用 `XXXTool` 这样的方式调用
+
+暂时只做了一些 **"我觉得好用"** 的东西
+
+欢迎来提 **PR/Issue**
+

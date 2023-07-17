@@ -34,7 +34,7 @@ public class SnowFlake
         return YitIdHelper.NextId();
     }
 
-    public static IdWorker Worker;
+    public static IdWorker? Worker;
     /// <summary>
     /// 初始化雪花算法(经典雪花算法-更长)
     /// </summary>
@@ -47,6 +47,6 @@ public class SnowFlake
     /// </summary>
     public static long ClassicNextId()
     {
-        return Worker.NextId();
+        return Worker!.NextId();
     }
 }

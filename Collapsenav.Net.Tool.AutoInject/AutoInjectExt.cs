@@ -16,7 +16,7 @@ public static class AutoInjectExt
     public static IServiceCollection AddAutoInject(this IServiceCollection services)
     {
         // 获取 CustomerTypes , 但是剔除 Collapsenav.Net.Tool 的 types
-        var types = AppDomain.CurrentDomain.GetCustomerTypes().Where(item => !item.FullName.StartsWith("Collapsenav.Net.Tool"));
+        var types = AppDomain.CurrentDomain.GetCustomerTypes().Where(item => !item.FullName!.StartsWith("Collapsenav.Net.Tool"));
         // 获取 service 中已经注册的 type
         var registedTypes = services.Select(item => item.ServiceType).ToList();
         // 获取被标记了 AutoInject 的 types

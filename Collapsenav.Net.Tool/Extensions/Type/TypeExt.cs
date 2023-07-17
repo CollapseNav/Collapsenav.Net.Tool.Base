@@ -114,7 +114,7 @@ public static partial class TypeExt
     /// <summary>
     /// 设置值
     /// </summary>
-    public static void SetValue<T>(this T obj, string field, object value) where T : class
+    public static void SetValue<T>(this T? obj, string field, object? value) where T : class
     {
         // 判断是否匿名类型, 可能会对性能有影响, 暂时不确定是否应该开启
         // var objType = obj.GetType();

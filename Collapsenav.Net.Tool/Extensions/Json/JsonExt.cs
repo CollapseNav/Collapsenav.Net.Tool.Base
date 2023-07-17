@@ -37,6 +37,8 @@ public static partial class JsonExt
     {
         var propNames = origin.PropNames();
         var temp = target.ToJson().ToObj<T>();
+        if (propNames == null)
+            throw new NullReferenceException();
         foreach (var name in propNames)
             temp?.SetValue(name, origin.GetValue(name));
         return temp;

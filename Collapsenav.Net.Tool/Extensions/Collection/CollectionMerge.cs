@@ -6,7 +6,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="querys">合并目标</param>
     /// <param name="comparer">怎么去重啊</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, Func<T, T, bool>? comparer = null)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, Func<T?, T?, bool>? comparer = null)
     {
         if (querys.IsEmpty())
             return null;
@@ -24,7 +24,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="querys">合并目标</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, Func<T, int>? hashCodeFunc)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, Func<T?, int>? hashCodeFunc)
     {
         if (querys.IsEmpty())
             return null;
@@ -44,7 +44,7 @@ public static partial class CollectionExt
     /// <param name="querys">合并目标</param>
     /// <param name="query">多加一行</param>
     /// <param name="comparer">怎么去重啊</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<T> query, Func<T, T, bool>? comparer = null)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<T> query, Func<T?, T?, bool>? comparer = null)
     {
         querys = querys.Append(query);
         return querys.Merge(comparer);
@@ -55,7 +55,7 @@ public static partial class CollectionExt
     /// <param name="querys">合并目标</param>
     /// <param name="query">多加一行</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<T> query, Func<T, int>? hashCodeFunc)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<T> query, Func<T?, int>? hashCodeFunc)
     {
         querys = querys.Append(query);
         return querys.Merge(hashCodeFunc);
@@ -67,8 +67,7 @@ public static partial class CollectionExt
     /// <param name="querys">合并目标</param>
     /// <param name="concatQuerys">多加一个同级选手</param>
     /// <param name="comparer">怎么去重啊</param>
-    /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<IEnumerable<T>> concatQuerys, Func<T, T, bool>? comparer = null)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<IEnumerable<T>> concatQuerys, Func<T?, T?, bool>? comparer = null)
     {
         querys = querys.Concat(concatQuerys);
         return querys.Merge(comparer);
@@ -78,9 +77,8 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="querys">合并目标</param>
     /// <param name="concatQuerys">多加一个同级选手</param>
-    /// <param name="comparer">怎么去重啊</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<IEnumerable<T>> concatQuerys, Func<T, int>? hashCodeFunc)
+    public static IEnumerable<T>? Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<IEnumerable<T>> concatQuerys, Func<T?, int>? hashCodeFunc)
     {
         querys = querys.Concat(concatQuerys);
         return querys.Merge(hashCodeFunc);
