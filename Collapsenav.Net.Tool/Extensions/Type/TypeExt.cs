@@ -64,7 +64,7 @@ public static partial class TypeExt
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string>? PropNames(this Type type, int depth)
+    public static IEnumerable<string> PropNames(this Type type, int depth)
     {
         var props = type.GetProperties();
         var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
@@ -107,7 +107,7 @@ public static partial class TypeExt
     public static Dictionary<PropertyInfo, object>? BuildInTypeValues<T>(this T obj)
     {
         var propDict = obj?.GetType().BuildInTypeProps()
-        .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name)))
+        .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name) ?? ""))
         .ToDictionary(item => item.Key, item => item.Value);
         return propDict;
     }
@@ -121,7 +121,7 @@ public static partial class TypeExt
         // if (objType.Name.Contains("AnonymousType"))
         //     obj.SetAnonymousValue(field, value);
         var fieldName = field.FirstTo('.');
-        var prop = obj.GetType().GetProperty(fieldName);
+        var prop = obj?.GetType().GetProperty(fieldName);
         if (fieldName.Length == field.Length)
             prop?.SetValue(obj, value);
         else if (prop != null)
@@ -161,7 +161,7 @@ public static partial class TypeExt
     /// </summary>
     public static IEnumerable<PropertyInfo> Props<T>(this T obj)
     {
-        return obj.GetType().GetProperties();
+        return obj?.GetType().GetProperties() ?? Enumerable.Empty<PropertyInfo>();
     }
 
     /// <summary>

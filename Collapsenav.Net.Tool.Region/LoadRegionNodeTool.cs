@@ -5,7 +5,7 @@ namespace Collapsenav.Net.Tool.Region;
 internal static class LoadRegionNodeTool
 {
     internal const string TreeNodeName = "region-tree.json";
-    internal static RegionTreeNode LoadTreeNode()
+    internal static RegionTreeNode? LoadTreeNode()
     {
 #if NETSTANDARD2_0
         var str = File.ReadAllText($"{AppContext.BaseDirectory}/{TreeNodeName}");
@@ -18,8 +18,10 @@ internal static class LoadRegionNodeTool
         return node;
     }
 
-    internal static void LoadParentNode(RegionTreeNode node)
+    internal static void LoadParentNode(RegionTreeNode? node)
     {
+        if (node?.Child == null)
+            return;
         foreach (var n in node.Child)
         {
             n.Parent = node;

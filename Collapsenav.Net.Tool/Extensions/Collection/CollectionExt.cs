@@ -8,10 +8,15 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="size">每片大小</param>
-    public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T> query, int size = 1)
+    public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T>? query, int size = 1)
     {
-        for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
-            yield return query.Skip(i * size).Take(size);
+        if (query == null)
+            yield return Enumerable.Empty<T>();
+        else
+        {
+            for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
+                yield return query.Skip(i * size).Take(size);
+        }
     }
 
     /// <summary>
@@ -19,7 +24,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
-    public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> Distinct<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer)
     {
         return query.Unique(comparer);
     }
@@ -28,8 +33,10 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
-    public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> Unique<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         return query.Distinct(new CollapseNavEqualityComparer<T>(comparer));
     }
 
@@ -38,7 +45,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T?, int>? hashCodeFunc)
+    public static IEnumerable<T> Distinct<T>(this IEnumerable<T>? query, Func<T?, int>? hashCodeFunc)
     {
         return query.Unique(hashCodeFunc);
     }
@@ -47,8 +54,10 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T?, int>? hashCodeFunc)
+    public static IEnumerable<T> Unique<T>(this IEnumerable<T>? query, Func<T?, int>? hashCodeFunc)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         return query.Distinct(new CollapseNavEqualityComparer<T>(hashCodeFunc));
     }
 
@@ -56,8 +65,10 @@ public static partial class CollectionExt
     /// 去重
     /// </summary>
     /// <param name="query">源集合</param>
-    public static IEnumerable<T> Unique<T>(this IEnumerable<T> query)
+    public static IEnumerable<T> Unique<T>(this IEnumerable<T>? query)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         return query.Distinct();
     }
 
@@ -67,8 +78,10 @@ public static partial class CollectionExt
     /// <param name="left">集合1</param>
     /// <param name="right">集合2</param>
     /// <param name="comparer">怎么比</param>
-    public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T?, T?, bool>? comparer)
+    public static bool SequenceEqual<T>(this IEnumerable<T>? left, IEnumerable<T>? right, Func<T?, T?, bool>? comparer)
     {
+        if (left == null || right == null)
+            return false;
         return left.SequenceEqual(right, new CollapseNavEqualityComparer<T>(comparer));
     }
 
@@ -78,8 +91,10 @@ public static partial class CollectionExt
     /// <param name="left">集合1</param>
     /// <param name="right">集合2</param>
     /// <param name="hashCodeFunc">hash</param>
-    public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T?, int>? hashCodeFunc)
+    public static bool SequenceEqual<T>(this IEnumerable<T>? left, IEnumerable<T>? right, Func<T?, int>? hashCodeFunc)
     {
+        if (left == null || right == null)
+            return false;
         return left.SequenceEqual(right, new CollapseNavEqualityComparer<T>(hashCodeFunc));
     }
 
@@ -89,8 +104,10 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="flag">bool 作为标记，true则应用 filter</param>
     /// <param name="filter">筛选条件</param>
-    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, bool flag, Func<T, bool> filter)
+    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T>? query, bool flag, Func<T, bool> filter)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         return flag ? query.Where(filter) : query;
     }
     /// <summary>
@@ -99,8 +116,10 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="flag">bool 作为标记，true则应用 filter</param>
     /// <param name="filter">筛选条件</param>
-    public static IEnumerable<T> WhereIf<T, N>(this IEnumerable<T> query, N? flag, Func<T, bool> filter) where N : struct
+    public static IEnumerable<T> WhereIf<T, N>(this IEnumerable<T>? query, N? flag, Func<T, bool> filter) where N : struct
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         return flag.HasValue ? query.Where(filter) : query;
     }
 
@@ -110,7 +129,7 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="input">非空字符串则应用筛选条件</param>
     /// <param name="filter">筛选条件</param>
-    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, string input, Func<T, bool> filter)
+    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T>? query, string input, Func<T, bool> filter)
     {
         return query.WhereIf(input.NotEmpty(), filter);
     }
@@ -121,8 +140,10 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="flag">bool 作为标记，true则应用 filter</param>
     /// <param name="filter">筛选条件</param>
-    public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, bool flag, Expression<Func<T, bool>> filter)
+    public static IQueryable<T> WhereIf<T>(this IQueryable<T>? query, bool flag, Expression<Func<T, bool>> filter)
     {
+        if (query == null)
+            return Enumerable.Empty<T>().AsQueryable();
         return flag ? query.Where(filter) : query;
     }
 
@@ -132,7 +153,7 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="input">非空字符串则应用筛选条件</param>
     /// <param name="filter">筛选条件</param>
-    public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, string input, Expression<Func<T, bool>> filter)
+    public static IQueryable<T> WhereIf<T>(this IQueryable<T>? query, string input, Expression<Func<T, bool>> filter)
     {
         return query.WhereIf(input.NotEmpty(), filter);
     }
@@ -141,7 +162,7 @@ public static partial class CollectionExt
     /// 空?
     /// </summary>
     /// <param name="query">源集合</param>
-    public static bool IsEmpty<T>(this IEnumerable<T> query)
+    public static bool IsEmpty<T>(this IEnumerable<T>? query)
     {
         return query == null || !query.Any();
     }
@@ -150,15 +171,17 @@ public static partial class CollectionExt
     /// 没空?
     /// </summary>
     /// <param name="query">源集合</param>
-    public static bool NotEmpty<T>(this IEnumerable<T> query)
+    public static bool NotEmpty<T>(this IEnumerable<T>? query)
     {
         return query != null && query.Any();
     }
     /// <summary>
     /// 打乱顺序
     /// </summary>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> query, int round = 1)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T>? query, int round = 1)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         var random = new Random();
         if (round > 0)
         {
@@ -172,8 +195,10 @@ public static partial class CollectionExt
     /// <summary>
     /// 遍历执行(不知道为啥原来的IEnumerable不提供这功能)
     /// </summary>
-    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> query, Action<T> action)
+    public static IEnumerable<T> ForEach<T>(this IEnumerable<T>? query, Action<T> action)
     {
+        if (query == null)
+            return Enumerable.Empty<T>();
         foreach (var item in query)
             action(item);
         return query;
@@ -181,8 +206,10 @@ public static partial class CollectionExt
     /// <summary>
     /// 生成包含index的元组集合(value,index)
     /// </summary>
-    public static IEnumerable<(T value, int index)> SelectWithIndex<T>(this IEnumerable<T> origin, int zero = 0)
+    public static IEnumerable<(T value, int index)> SelectWithIndex<T>(this IEnumerable<T>? origin, int zero = 0)
     {
+        if (origin == null)
+            return Enumerable.Empty<(T, int)>();
         return origin.Select((value, index) => (value, index + zero));
     }
     /// <summary>
@@ -190,8 +217,10 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="origin">源集合</param>
     /// <param name="index">生成index的委托</param>
-    public static IEnumerable<(T value, E index)> SelectWithIndex<T, E>(this IEnumerable<T> origin, Func<T, E> index)
+    public static IEnumerable<(T value, E index)> SelectWithIndex<T, E>(this IEnumerable<T>? origin, Func<T, E> index)
     {
+        if (origin == null)
+            return Enumerable.Empty<(T, E)>();
         return origin.Select(value => (value, index(value)));
     }
     /// <summary>
@@ -200,8 +229,10 @@ public static partial class CollectionExt
     /// <param name="origin">源集合</param>
     /// <param name="value">生成value的委托</param>
     /// <param name="index">生成index的委托</param>
-    public static IEnumerable<(E value, F index)> SelectWithIndex<T, E, F>(this IEnumerable<T> origin, Func<T, E> value, Func<T, F> index)
+    public static IEnumerable<(E value, F index)> SelectWithIndex<T, E, F>(this IEnumerable<T>? origin, Func<T, E> value, Func<T, F> index)
     {
+        if (origin == null)
+            return Enumerable.Empty<(E, F)>();
         return origin.Select(item => (value(item), index(item)));
     }
 

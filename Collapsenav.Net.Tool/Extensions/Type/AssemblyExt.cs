@@ -26,18 +26,16 @@ public static partial class AssemblyExt
     public static IEnumerable<AssemblyName> GetAllAssemblyNames(this Assembly ass)
     {
         if (ass.IsDynamic)
-        {
             return Enumerable.Empty<AssemblyName>();
-        }
-        var fileNames = Directory.GetFiles(Path.GetDirectoryName(ass.Location), "*.dll");
+        var dirPath = Path.GetDirectoryName(ass.Location);
+        if (dirPath == null)
+            return Enumerable.Empty<AssemblyName>();
+        var fileNames = Directory.GetFiles(dirPath, "*.dll");
         return fileNames.Select(item =>
         {
             if (TryGetAssemblyName(item, out AssemblyName assName))
-            {
                 assName.CodeBase = item;
-                return assName;
-            }
-            return null;
+            return assName;
         }).Where(item => item != null);
     }
 
@@ -68,14 +66,14 @@ public static partial class AssemblyExt
     /// </summary>
     public static IEnumerable<Assembly> GetAllAssemblies(this Assembly ass)
     {
-        return ass.GetAllAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase));
+        return ass.GetAllAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase ?? ""));
     }
     /// <summary>
     /// 获取所有自定义 assembly(通过publickeytoken是否为空判断)
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this Assembly ass)
     {
-        return ass.GetCustomerAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase));
+        return ass.GetCustomerAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase ?? ""));
     }
 
     /// <summary>
@@ -170,7 +168,9 @@ public static partial class AssemblyExt
     {
         return domain.GetCustomerTypes().Where(item =>
         {
-            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(suffixs);
+            if (item.FullName == null)
+                return false;
+            return (item.IsGenericType ? item.FullName[..item.FullName.IndexOf('`')] : item.Name).HasEndsWith(suffixs);
         });
     }
     /// <summary>
@@ -182,7 +182,9 @@ public static partial class AssemblyExt
     {
         return domain.GetCustomerTypes().Where(item =>
         {
-            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
+            if (item.FullName == null)
+                return false;
+            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName[..item.FullName.IndexOf('`')] : item.Name).HasEndsWith(prefixAndSuffixs);
         });
     }
     public static IEnumerable<Type> GetTypes<T>(this Assembly ass)
@@ -207,7 +209,9 @@ public static partial class AssemblyExt
     {
         return ass.GetTypes().Where(item =>
         {
-            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.FullName).HasEndsWith(suffixs);
+            if (item.FullName == null)
+                return false;
+            return (item.IsGenericType ? item.FullName[..item.FullName.IndexOf('`')] : item.FullName).HasEndsWith(suffixs);
         });
     }
     /// <summary>
@@ -219,7 +223,9 @@ public static partial class AssemblyExt
     {
         return ass.GetTypes().Where(item =>
         {
-            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName!.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
+            if (item.FullName == null)
+                return false;
+            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName[..item.FullName.IndexOf('`')] : item.Name).HasEndsWith(prefixAndSuffixs);
         });
     }
 }

@@ -7,7 +7,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
+    public static bool AllContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
     {
         return query.AllContain(comparer, filters.ToArray());
     }
@@ -17,7 +17,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么判断重复</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
+    public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
     {
         return query.HasContain(comparer, filters.ToArray());
     }
@@ -38,8 +38,10 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T> query, params T[] filters)
+    public static bool AllContain<T>(this IEnumerable<T>? query, params T[] filters)
     {
+        if (query == null)
+            return false;
         foreach (var filter in filters)
             if (!query.Contains(filter))
                 return false;
@@ -51,8 +53,10 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer, params T[] filters)
+    public static bool AllContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
+        if (query == null)
+            return false;
         foreach (var filter in filters)
             if (!query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
                 return false;
@@ -64,8 +68,10 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T> query, params T[] filters)
+    public static bool HasContain<T>(this IEnumerable<T>? query, params T[] filters)
     {
+        if (query == null)
+            return false;
         foreach (var filter in filters)
             if (query.Contains(filter))
                 return true;
@@ -77,8 +83,10 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T> query, Func<T?, T?, bool>? comparer, params T[] filters)
+    public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
+        if (query == null)
+            return false;
         foreach (var filter in filters)
             if (query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
                 return true;
@@ -106,42 +114,50 @@ public static partial class CollectionExt
     /// <summary>
     /// 取交集
     /// </summary>
-    public static IEnumerable<T> Intersect<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> Intersect<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
     {
         return origin.GetItemIn(target, comparer);
     }
     /// <summary>
     /// 取交集
     /// </summary>
-    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T> origin, IEnumerable<T> target)
+    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target)
     {
+        if (origin == null)
+            return Enumerable.Empty<T>();
         return origin.Intersect(target);
     }
     /// <summary>
     /// 取交集
     /// </summary>
-    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T>? target, Func<T?, T?, bool>? comparer)
     {
+        if (origin == null || target == null)
+            return Enumerable.Empty<T>();
         return origin.Intersect(target, new CollapseNavEqualityComparer<T>(comparer));
     }
     /// <summary>
     /// 取差集
     /// </summary>
-    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
     {
+        if (origin == null)
+            return Enumerable.Empty<T>();
         return origin.Except(target, new CollapseNavEqualityComparer<T>(comparer));
     }
     /// <summary>
     /// 取差集
     /// </summary>
-    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T> origin, IEnumerable<T> target)
+    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target)
     {
+        if (origin == null)
+            return Enumerable.Empty<T>();
         return origin.Except(target);
     }
     /// <summary>
     /// 取差集
     /// </summary>
-    public static IEnumerable<T> Except<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> Except<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
     {
         return origin.GetItemNotIn(target, comparer);
     }

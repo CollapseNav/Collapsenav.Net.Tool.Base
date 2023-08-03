@@ -188,7 +188,7 @@ public class CollectionTest
         Assert.True(numMergeList.SequenceEqual(mergeInts));
 
         nums = null;
-        Assert.Null(nums.Merge());
+        Assert.Empty(nums.Merge());
     }
 
     [Fact]

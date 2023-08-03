@@ -7,7 +7,11 @@ public class AutoInjectServiceProvider : IServiceProvider, ISupportRequiredServi
 {
     private readonly IServiceProvider _provider;
     public AutoInjectServiceProvider(IServiceProvider provider) { _provider = provider; }
-    public object? GetRequiredService(Type serviceType) => GetService(serviceType);
+    public object GetRequiredService(Type serviceType)
+    {
+        var obj = GetService(serviceType) ?? throw new NullReferenceException();
+        return obj;
+    }
     public object? GetService(Type serviceType)
     {
         var obj = _provider.GetService(serviceType);

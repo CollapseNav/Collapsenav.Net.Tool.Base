@@ -40,14 +40,14 @@ public class DiffItem<T>
     {
         var l = before.GetValue(prop.Name);
         var r = end.GetValue(prop.Name);
-        if (l.Equals(r))
+        if (l != null && r != null && l.Equals(r))
             return;
         Prop = prop;
         Beforevalue = l;
         Endvalue = r;
     }
 
-    public DiffItem(PropertyInfo prop, object before, object end)
+    public DiffItem(PropertyInfo prop, object? before, object? end)
     {
         Prop = prop;
         Beforevalue = before;
@@ -60,10 +60,10 @@ public class DiffItem<T>
 
     public static IEnumerable<DiffItem<T>>? GetDiffs(T before, T end)
     {
-        var props = before?.GetType().Props().GetItemIn(end?.GetType()?.Props(), (a, b) => a.Name == b.Name && a.PropertyType == b.PropertyType).ToArray();
+        var props = before?.GetType().Props().GetItemIn(end?.GetType()?.Props(), (a, b) => a?.Name == b?.Name && a?.PropertyType == b?.PropertyType).ToArray();
         if (props.IsEmpty())
             return default;
-        return props.Select(item => new DiffItem<T>(item, item.GetValue(before), item.GetValue(end)));
+        return props?.Select(item => new DiffItem<T>(item, item.GetValue(before), item.GetValue(end)));
     }
 }
 
