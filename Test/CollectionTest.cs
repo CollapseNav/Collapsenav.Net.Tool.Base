@@ -25,6 +25,12 @@ public class CollectionTest
 
         uniqueIntList = intList.Unique();
         Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        intList = null;
+        Assert.Empty(intList.Unique(item => item));
+        Assert.Empty(intList.Distinct(item => item));
+        Assert.Empty(intList.Unique((x, y) => x == y));
+        Assert.Empty(intList.Unique());
+
 
         var data = new List<UniqueTestModel>{
                 new UniqueTestModel(),
@@ -80,6 +86,12 @@ public class CollectionTest
         Assert.True(userInfos.SequenceEqual(userInfosCopy2, (x, y) => x.UserName == y.UserName));
         Assert.False(userInfos.SequenceEqual(userInfosCopy2, item => item.Age.GetHashCode()));
         Assert.False(userInfos.SequenceEqual(userInfosCopy2, item => item.Age));
+        userInfos = null;
+        userInfosCopy2 = null;
+        Assert.False(userInfosCopy.SequenceEqual(userInfosCopy2, (x, y) => x.UserName == y.UserName));
+        Assert.False(userInfos.SequenceEqual(userInfosCopy2, (x, y) => x.UserName == y.UserName));
+        Assert.False(userInfos.SequenceEqual(userInfosCopy2, item => item.Age.GetHashCode()));
+        Assert.False(userInfos.SequenceEqual(userInfosCopy2, item => item.Age));
     }
 
     [Fact]
@@ -91,7 +103,14 @@ public class CollectionTest
         Assert.False(strList.AllContain(new[] { "2", "8" }));
         Assert.True(strList.AllContain((x, y) => x == y, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
-        Assert.False(strList.AsEnumerable().AllContain((x, y) => x == y, new[] { "2", "8" }.AsEnumerable()));
+        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
+        strList = null;
+        Assert.False(strList.AllContain(new[] { "2", "6" }));
+        Assert.False(strList.AllContain("2", "6"));
+        Assert.False(strList.AllContain(new[] { "2", "8" }));
+        Assert.False(strList.AllContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
+        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
     }
 
     [Fact]
@@ -104,7 +123,11 @@ public class CollectionTest
         Assert.True(strList.HasContain((x, y) => x == y, "2", "6"));
         Assert.True(strList.HasContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.HasContain((x, y) => x == y, "7", "8"));
-        Assert.False(strList.AsEnumerable().HasContain((x, y) => x == y, new[] { "7", "8" }.AsEnumerable()));
+        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
+        strList = null;
+        Assert.False(strList.HasContain(new[] { "2", "6" }));
+        Assert.False(strList.HasContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
     }
 
 
@@ -129,6 +152,17 @@ public class CollectionTest
         Assert.True(intList.SequenceEqual(new[] { 3, 3, 4 }));
         Assert.False(new[] { 3, 3, 4 }.Except(intList).Any());
         Assert.True(intList.Length == 3);
+
+        intList = null;
+        input = null;
+        Assert.Empty(intList.WhereIf(true, item => item > 1)
+        .WhereIf(false, item => item < 3)
+        .WhereIf("", item => item != 2)
+        .ToArray());
+        Assert.Empty(intList.WhereIf(input, item => item > 1)
+        .WhereIf(false, item => item < 3)
+        .WhereIf("", item => item != 2)
+        .ToArray());
     }
 
     [Fact]
@@ -143,6 +177,14 @@ public class CollectionTest
         Assert.True(intList.SequenceEqual(new[] { 2, 2, 3, 3, 4 }));
         Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
         Assert.True(intList.Length == 5);
+
+        var query = intList.AsQueryable();
+        query = null;
+        Assert.Empty(query
+        .WhereIf(true, item => item > 1)
+        .WhereIf(false, item => item < 3)
+        .WhereIf("", item => item != 2)
+        .ToArray());
     }
 
     [Fact]
@@ -186,9 +228,30 @@ public class CollectionTest
 
         numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 });
         Assert.True(numMergeList.SequenceEqual(mergeInts));
+        numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 }, i => i);
+        Assert.True(numMergeList.SequenceEqual(mergeInts));
+        numMergeList = nums.Take(2).Merge(nums.TakeLast(2), i => i);
+        Assert.True(numMergeList.SequenceEqual(mergeInts));
+        numMergeList = nums.Take(2).Merge(nums.TakeLast(2), (x, y) => x == y);
+        Assert.True(numMergeList.SequenceEqual(mergeInts));
+        numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 }, (x, y) => x == y);
+        Assert.True(numMergeList.SequenceEqual(mergeInts));
 
         nums = null;
+        mergeInts = null;
+        IEnumerable<int[]> emptyNums = null;
         Assert.Empty(nums.Merge());
+        Assert.Empty(nums.Merge(true));
+        Assert.Empty(nums.Merge(mergeInts));
+        Assert.Empty(nums.Merge(mergeInts, true));
+        Assert.Empty(nums.Merge(mergeInts, i => i));
+        Assert.Empty(nums.Merge(mergeInts, (x, y) => x == y));
+        Assert.Empty(nums.Merge(emptyNums));
+        Assert.Empty(nums.Merge(emptyNums, true));
+        Assert.Empty(nums.Merge(emptyNums, i => i));
+        Assert.Empty(nums.Merge(emptyNums, (x, y) => x == y));
+
+
     }
 
     [Fact]
@@ -203,6 +266,8 @@ public class CollectionTest
         Assert.True(numSplit.Count() == 4);
         Assert.True(numSplit.First().SequenceEqual(new[] { 1, 2, 3 }));
         Assert.True(numSplit.Last().SequenceEqual(new[] { 10 }));
+        nums = null;
+        Assert.Empty(nums.SpliteCollection(3));
     }
 
     [Fact]
@@ -225,6 +290,9 @@ public class CollectionTest
         var oNums = new[] { 1, 2, 3, 4, 5 };
         Assert.True(nums.SequenceEqual(oNums));
         Assert.False(nums.Shuffle().SequenceEqual(oNums));
+
+        nums = null;
+        Assert.Empty(nums.Shuffle());
     }
 
     [Fact]
@@ -244,10 +312,18 @@ public class CollectionTest
         Assert.True(enums.Count() == 5);
         enums = nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
         Assert.True(enums.Count() == 6);
-        enums = nums.AddRange((x, y) => x == y, new[] { 3, 4, 5 }.AsEnumerable());
+        enums = nums.AddRange(new[] { 3, 4, 5 }, (x, y) => x == y);
         Assert.True(enums.Count() == 5);
-        enums = nums.AddRange(x => x.GetHashCode(), new[] { 2, 3, 4 }.AsEnumerable());
+        enums = nums.AddRange(new[] { 2, 3, 4 }, x => x.GetHashCode());
         Assert.True(enums.Count() == 4);
+        nums = null;
+        IEnumerable<int> targets = null;
+        Assert.Empty(nums.AddRange());
+        Assert.Empty(nums.AddRange(targets));
+        Assert.Empty(nums.AddRange(i => i));
+        Assert.Empty(nums.AddRange(targets, i => i));
+        Assert.Empty(nums.AddRange((x, y) => x == y));
+        Assert.Empty(nums.AddRange(targets, (x, y) => x == y));
     }
 
     [Fact]
@@ -265,11 +341,25 @@ public class CollectionTest
 
         nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
         Assert.True(nums.Count == 16);
-        nums.AddRange((x, y) => x == y, new[] { 6, 7, 8 }.AsEnumerable());
+        nums.AddRange(new[] { 6, 7, 8 }, (x, y) => x == y);
         Assert.True(nums.Count == 16);
-        nums.AddRange(x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
+        nums.AddRange(new[] { 8, 9, 10 }, x => x.GetHashCode());
         Assert.True(nums.Count == 16);
         Assert.True(nums.Count == 16);
+        nums = null;
+        IEnumerable<int> targets = null;
+        nums.AddRange();
+        Assert.Null(nums);
+        nums.AddRange(targets);
+        Assert.Null(nums);
+        nums.AddRange(i => i);
+        Assert.Null(nums);
+        nums.AddRange(targets, i => i);
+        Assert.Null(nums);
+        nums.AddRange((x, y) => x == y);
+        Assert.Null(nums);
+        nums.AddRange(targets, (x, y) => x == y);
+        Assert.Null(nums);
     }
 
     [Fact]
@@ -282,6 +372,9 @@ public class CollectionTest
         sum = 0;
         nums.ForEach(item => sum += item * item);
         Assert.True(sum == 14);
+
+        nums = null;
+        Assert.Empty(nums.ForEach(item => sum += item));
     }
 
     [Fact]
@@ -298,6 +391,11 @@ public class CollectionTest
             Assert.True(item is not null);
             Assert.True(item.ToInt() == index);
         }
+
+        nums = null;
+        Assert.Empty(nums.SelectWithIndex());
+        Assert.Empty(nums.SelectWithIndex(num => num * num));
+        Assert.Empty(nums.SelectWithIndex(num => num.ToString(), num => num));
     }
 
     [Fact]
@@ -398,6 +496,12 @@ public class CollectionTest
         };
         Assert.True(model1.GetItemIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
         Assert.True(model1.Intersect(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
+
+        model1 = null;
+        model2 = null;
+        Assert.Empty(model1.GetItemIn(model2, (a, b) => a.Index == b.Index));
+        Assert.Empty(model1.Intersect(model2, (a, b) => a.Index == b.Index));
+        Assert.Empty(model1.GetItemIn(model2));
     }
 
     [Fact]
@@ -421,5 +525,11 @@ public class CollectionTest
         };
         Assert.True(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
         Assert.True(model1.Except(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
+
+        model1 = null;
+        model2 = null;
+        Assert.Empty(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index));
+        Assert.Empty(model1.Except(model2, (a, b) => a.Index == b.Index));
+        Assert.Empty(model1.GetItemNotIn(model2));
     }
 }

@@ -60,7 +60,9 @@ public class DiffItem<T>
 
     public static IEnumerable<DiffItem<T>>? GetDiffs(T before, T end)
     {
-        var props = before?.GetType().Props().GetItemIn(end?.GetType()?.Props(), (a, b) => a?.Name == b?.Name && a?.PropertyType == b?.PropertyType).ToArray();
+        if (before == null || end == null)
+            return Enumerable.Empty<DiffItem<T>>();
+        var props = before?.GetType().Props().GetItemIn(end.GetType().Props(), (a, b) => a?.Name == b?.Name && a?.PropertyType == b?.PropertyType).ToArray();
         if (props.IsEmpty())
             return default;
         return props?.Select(item => new DiffItem<T>(item, item.GetValue(before), item.GetValue(end)));

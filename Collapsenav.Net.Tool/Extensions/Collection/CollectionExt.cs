@@ -10,9 +10,7 @@ public static partial class CollectionExt
     /// <param name="size">每片大小</param>
     public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T>? query, int size = 1)
     {
-        if (query == null)
-            yield return Enumerable.Empty<T>();
-        else
+        if (query != null)
         {
             for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
                 yield return query.Skip(i * size).Take(size);

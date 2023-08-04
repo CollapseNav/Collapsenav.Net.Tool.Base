@@ -13,7 +13,7 @@ public partial class StringExt
     /// <summary>
     /// 若空则返回value
     /// </summary>
-    public static string? IsNull(this string? str, string value) => str.IsNull() ? value : str;
+    public static string IsNull(this string? str, string value) => str.IsNull() ? value : str!;
     /// <summary>
     /// 是空的
     /// </summary>
@@ -21,7 +21,7 @@ public partial class StringExt
     /// <summary>
     /// 若空则返回value
     /// </summary>
-    public static string? IsEmpty(this string? str, string? value) => str.IsEmpty() ? (value ?? string.Empty) : str;
+    public static string IsEmpty(this string? str, string? value) => str.IsEmpty() ? (value ?? string.Empty) : str!;
     /// <summary>
     /// 没空
     /// </summary>

@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace Collapsenav.Net.Tool;
 public static partial class StringExt
 {

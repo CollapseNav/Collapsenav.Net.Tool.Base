@@ -2,26 +2,6 @@ namespace Collapsenav.Net.Tool;
 public static partial class CollectionExt
 {
     /// <summary>
-    /// 全包含
-    /// </summary>
-    /// <param name="query">源集合</param>
-    /// <param name="comparer">怎么去重</param>
-    /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
-    {
-        return query.AllContain(comparer, filters.ToArray());
-    }
-    /// <summary>
-    /// 部分包含
-    /// </summary>
-    /// <param name="query">源集合</param>
-    /// <param name="comparer">怎么判断重复</param>
-    /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, IEnumerable<T> filters)
-    {
-        return query.HasContain(comparer, filters.ToArray());
-    }
-    /// <summary>
     /// 对象是否在集合中
     /// </summary>
     /// <param name="origin"></param>
@@ -32,7 +12,21 @@ public static partial class CollectionExt
         return comparer == null ? items.Contains(origin) : items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
     }
 
-
+    /// <summary>
+    /// 全包含
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么去重</param>
+    /// <param name="filters">条件</param>
+    public static bool AllContain<T>(this IEnumerable<T>? query, IEnumerable<T> filters, Func<T?, T?, bool>? comparer = null)
+    {
+        if (query == null)
+            return false;
+        foreach (var filter in filters)
+            if (!query.Contains(filter, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer)))
+                return false;
+        return true;
+    }
     /// <summary>
     /// 全包含
     /// </summary>
@@ -40,12 +34,7 @@ public static partial class CollectionExt
     /// <param name="filters">条件</param>
     public static bool AllContain<T>(this IEnumerable<T>? query, params T[] filters)
     {
-        if (query == null)
-            return false;
-        foreach (var filter in filters)
-            if (!query.Contains(filter))
-                return false;
-        return true;
+        return query.AllContain(filters, null);
     }
     /// <summary>
     /// 全包含
@@ -55,14 +44,24 @@ public static partial class CollectionExt
     /// <param name="filters">条件</param>
     public static bool AllContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
+        return query.AllContain(filters, comparer);
+    }
+
+    /// <summary>
+    /// 部分包含
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么判断重复</param>
+    /// <param name="filters">条件</param>
+    public static bool HasContain<T>(this IEnumerable<T>? query, IEnumerable<T> filters, Func<T?, T?, bool>? comparer)
+    {
         if (query == null)
             return false;
         foreach (var filter in filters)
-            if (!query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
-                return false;
-        return true;
+            if (query.Contains(filter, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer)))
+                return true;
+        return false;
     }
-
     /// <summary>
     /// 部分包含
     /// </summary>
@@ -70,12 +69,7 @@ public static partial class CollectionExt
     /// <param name="filters">条件</param>
     public static bool HasContain<T>(this IEnumerable<T>? query, params T[] filters)
     {
-        if (query == null)
-            return false;
-        foreach (var filter in filters)
-            if (query.Contains(filter))
-                return true;
-        return false;
+        return query.HasContain(filters, null);
     }
     /// <summary>
     /// 部分包含
@@ -85,12 +79,7 @@ public static partial class CollectionExt
     /// <param name="filters">条件</param>
     public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
-        if (query == null)
-            return false;
-        foreach (var filter in filters)
-            if (query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
-                return true;
-        return false;
+        return query.HasContain(filters, comparer);
     }
     /// <summary>
     /// 对象是否在集合中
@@ -121,38 +110,20 @@ public static partial class CollectionExt
     /// <summary>
     /// 取交集
     /// </summary>
-    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target)
+    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer = null)
     {
         if (origin == null)
             return Enumerable.Empty<T>();
-        return origin.Intersect(target);
-    }
-    /// <summary>
-    /// 取交集
-    /// </summary>
-    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T>? target, Func<T?, T?, bool>? comparer)
-    {
-        if (origin == null || target == null)
-            return Enumerable.Empty<T>();
-        return origin.Intersect(target, new CollapseNavEqualityComparer<T>(comparer));
+        return origin.Intersect(target, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer));
     }
     /// <summary>
     /// 取差集
     /// </summary>
-    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer = null)
     {
         if (origin == null)
             return Enumerable.Empty<T>();
-        return origin.Except(target, new CollapseNavEqualityComparer<T>(comparer));
-    }
-    /// <summary>
-    /// 取差集
-    /// </summary>
-    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target)
-    {
-        if (origin == null)
-            return Enumerable.Empty<T>();
-        return origin.Except(target);
+        return origin.Except(target, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer));
     }
     /// <summary>
     /// 取差集

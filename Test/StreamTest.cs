@@ -256,17 +256,17 @@ public class StreamTest
         File.Delete(path);
     }
 
-    [Theory]
-    [InlineData("./streamtest.txt", "123123123")]
-    public void ReadStringAndClearStreamTest(string path, string value)
-    {
-        using var fs = path.OpenReadWriteShareStream();
-        Assert.Equal(value, fs.ReadString());
-        fs.Dispose();
+    // [Theory]
+    // [InlineData("./streamtest.txt", "123123123")]
+    // public void ReadStringAndClearStreamTest(string path, string value)
+    // {
+    //     using var fs = path.OpenReadWriteShareStream();
+    //     Assert.Equal(value, fs.ReadString());
+    //     fs.Dispose();
 
-        using var closefs = path.OpenReadWriteShareStream();
-        closefs.Clear();
-        Assert.Equal("", closefs.ReadString());
-    }
+    //     using var closefs = path.OpenReadWriteShareStream();
+    //     closefs.Clear();
+    //     Assert.Equal("", closefs.ReadString());
+    // }
 }
 

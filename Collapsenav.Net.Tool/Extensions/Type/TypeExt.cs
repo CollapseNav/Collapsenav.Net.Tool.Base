@@ -13,16 +13,16 @@ public static partial class TypeExt
     /// <summary>
     /// 是否内建类型
     /// </summary>
-    public static bool IsBaseType<T>(this T obj)
+    public static bool IsBaseType(this object obj)
     {
-        return typeof(T).IsBaseType();
+        return obj.GetType().IsBaseType();
     }
     /// <summary>
     /// 是否内建类型
     /// </summary>
-    public static bool IsBuildInType<T>(this T obj)
+    public static bool IsBuildInType(this object obj)
     {
-        return typeof(T).IsBaseType();
+        return obj.IsBaseType();
     }
     /// <summary>
     /// 是否内建类型

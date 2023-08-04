@@ -65,17 +65,25 @@ public class StringExtTest
     [Theory]
     [InlineData("https://www.bilibili.com/")]
     [InlineData("https://www.baidu.com/")]
+    [InlineData(null)]
     public void PingTest(string url)
     {
-        Assert.True(url.CanPing(2000));
+        if (url == null)
+            Assert.False(url.CanPing(2000));
+        else
+            Assert.True(url.CanPing(2000));
     }
 
     [Theory]
     [InlineData("https://www.bilibili.com/")]
     [InlineData("https://www.baidu.com/")]
+    [InlineData(null)]
     public void IsUrlTest(string url)
     {
-        Assert.True(url.IsUrl());
+        if (url == null)
+            Assert.False(url.IsUrl());
+        else
+            Assert.True(url.IsUrl());
     }
 
     [Theory]
@@ -323,6 +331,12 @@ public class StringExtTest
         Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: true));
         Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: false));
         Assert.False(temp.HasContain(new[] { "ABcE", "cD" }, ignoreCase: false));
+
+        temp = null;
+        Assert.False(temp.AllContain("456", "898"));
+        Assert.False(temp.HasContain("456", "898"));
+        Assert.False(temp.AllContain(new[] { "456", "898" }, ignoreCase: true));
+        Assert.False(temp.HasContain(new[] { "456", "898" }, ignoreCase: true));
     }
 
     [Fact]
