@@ -49,8 +49,7 @@ public static partial class AssemblyExt
         catch (BadImageFormatException ex)
         {
             Console.WriteLine(ex.Message);
-            assemblyName = null;
-            return false;
+            throw;
         }
     }
     /// <summary>
@@ -83,7 +82,10 @@ public static partial class AssemblyExt
     /// <returns></returns>
     public static IEnumerable<Assembly> GetAllAssemblies(this AppDomain domain)
     {
-        return domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly()).GetAllAssemblies();
+        var ass = domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly());
+        if (ass == null)
+            return Enumerable.Empty<Assembly>();
+        return ass.GetAllAssemblies();
     }
 
     /// <summary>
@@ -91,7 +93,10 @@ public static partial class AssemblyExt
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this AppDomain domain)
     {
-        return domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly()).GetCustomerAssemblies();
+        var ass = domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly());
+        if (ass == null)
+            return Enumerable.Empty<Assembly>();
+        return ass.GetCustomerAssemblies();
     }
     /// <summary>
     /// 获取所有接口
