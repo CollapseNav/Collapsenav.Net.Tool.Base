@@ -2,6 +2,12 @@ using System.Xml;
 
 namespace Collapsenav.Net.Tool;
 
+/// <summary>
+/// xml节点的缓存
+/// </summary>
+/// <remarks>
+/// 会在运行的时候加载一次，正常来说运行期间xml内容不会被修改
+/// </remarks>
 public class XmlNodeCache
 {
     public XmlNodeCache(XmlDocument doc, string path)
