@@ -4,12 +4,8 @@ namespace Collapsenav.Net.Tool;
 /// <summary>
 /// Aes工具
 /// </summary>
-public partial class AESTool
+public partial class AESTool : WithKeyAndIVAlgorithm<Aes>
 {
-    public const string DefaultKey = "Collapsenav.Net.Tool";
-    public const string DefaultIV = "looT.teN.vanespalloC";
-    private static Aes? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>

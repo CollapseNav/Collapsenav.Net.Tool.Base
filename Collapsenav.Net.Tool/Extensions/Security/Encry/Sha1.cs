@@ -4,10 +4,8 @@ namespace Collapsenav.Net.Tool;
 /// <summary>
 /// Sha1工具
 /// </summary>
-public partial class Sha1Tool
+public partial class Sha1Tool : DefaultAlgorithm<SHA1>
 {
-    private static SHA1? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>

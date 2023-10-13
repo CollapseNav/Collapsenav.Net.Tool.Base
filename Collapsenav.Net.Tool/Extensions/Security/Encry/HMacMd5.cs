@@ -1,11 +1,8 @@
 using System.Security.Cryptography;
 
 namespace Collapsenav.Net.Tool;
-public partial class HMacMd5Tool
+public partial class HMacMd5Tool : WithKeyAlgorithm<HMACMD5>
 {
-    public const string DefaultKey = "Collapsenav.Net.Tool";
-    private static HMACMD5? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>

@@ -4,11 +4,8 @@ namespace Collapsenav.Net.Tool;
 /// <summary>
 /// Sha1工具
 /// </summary>
-public partial class HMacSha1Tool
+public partial class HMacSha1Tool : WithKeyAlgorithm<HMACSHA1>
 {
-    public const string DefaultKey = "Collapsenav.Net.Tool";
-    private static HMACSHA1? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>

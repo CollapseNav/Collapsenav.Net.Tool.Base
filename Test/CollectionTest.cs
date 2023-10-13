@@ -237,6 +237,8 @@ public class CollectionTest
         numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 }, (x, y) => x == y);
         Assert.True(numMergeList.SequenceEqual(mergeInts));
 
+        Func<int, int> hashFunc = null;
+        Assert.True(nums.Merge(hashFunc).SequenceEqual(mergeInts));
         nums = null;
         mergeInts = null;
         IEnumerable<int[]> emptyNums = null;
@@ -250,7 +252,7 @@ public class CollectionTest
         Assert.Empty(nums.Merge(emptyNums, true));
         Assert.Empty(nums.Merge(emptyNums, i => i));
         Assert.Empty(nums.Merge(emptyNums, (x, y) => x == y));
-
+        Assert.Empty(emptyNums.Merge(item => item.GetHashCode()));
 
     }
 

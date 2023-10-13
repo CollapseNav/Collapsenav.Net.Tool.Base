@@ -4,10 +4,8 @@ namespace Collapsenav.Net.Tool;
 /// <summary>
 /// Sha256工具
 /// </summary>
-public partial class Sha256Tool
+public partial class Sha256Tool : DefaultAlgorithm<SHA256>
 {
-    private static SHA256? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>

@@ -5,12 +5,8 @@ namespace Collapsenav.Net.Tool;
 /// <summary>
 /// 3Des
 /// </summary>
-public partial class TripleDesTool
+public partial class TripleDesTool : WithKeyAndIVAlgorithm<TripleDES>
 {
-    public const string DefaultKey = "Collapsenav.Net.Tool";
-    public const string DefaultIV = "looT.teN.vanespalloC";
-    private static TripleDES? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// Des解密
     /// </summary>

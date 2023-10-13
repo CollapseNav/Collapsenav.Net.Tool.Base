@@ -2,12 +2,8 @@ using System.Security.Cryptography;
 
 namespace Collapsenav.Net.Tool;
 
-public partial class DesTool
+public partial class DesTool : WithKeyAndIVAlgorithm<DES>
 {
-    public const string DefaultKey = "Collapsenav.Net.Tool";
-    public const string DefaultIV = "looT.teN.vanespalloC";
-    private static DES? Algorithm;
-    public static void Clear() => Algorithm = null;
     /// <summary>
     /// Des解密
     /// </summary>
