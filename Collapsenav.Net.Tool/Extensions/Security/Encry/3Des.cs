@@ -7,6 +7,8 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class TripleDesTool : WithKeyAndIVAlgorithm<TripleDES>
 {
+    static TripleDesTool() => Algorithm ??= TripleDES.Create();
+
     /// <summary>
     /// Des解密
     /// </summary>
@@ -19,8 +21,7 @@ public partial class TripleDesTool : WithKeyAndIVAlgorithm<TripleDES>
     public static string Decrypt(string tripleDes, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 24)
     {
         byte[] decryptMsg = tripleDes.FromBase64();
-        Algorithm ??= TripleDES.Create();
-        Algorithm.Mode = mode;
+        Algorithm!.Mode = mode;
         Algorithm.Padding = padding;
         using var decrypt = Algorithm.CreateDecryptor(GetTripleDESBytes(key, level), GetTripleDESBytes(iv, 8));
         var result = decrypt.TransformFinalBlock(decryptMsg, 0, decryptMsg.Length);
@@ -37,8 +38,7 @@ public partial class TripleDesTool : WithKeyAndIVAlgorithm<TripleDES>
     /// <param name="level"></param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 24)
     {
-        Algorithm ??= TripleDES.Create();
-        Algorithm.Mode = mode;
+        Algorithm!.Mode = mode;
         Algorithm.Padding = padding;
         using var encrypt = Algorithm.CreateEncryptor(GetTripleDESBytes(key, level), GetTripleDESBytes(iv, 8));
         var result = encrypt.TransformFinalBlock(msg.ToBytes(), 0, msg.Length);

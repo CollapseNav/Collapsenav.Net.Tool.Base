@@ -6,6 +6,7 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class Sha256Tool : DefaultAlgorithm<SHA256>
 {
+    static Sha256Tool() => Algorithm ??= SHA256.Create();
     /// <summary>
     /// 解密
     /// </summary>
@@ -18,8 +19,7 @@ public partial class Sha256Tool : DefaultAlgorithm<SHA256>
     /// </summary>
     public static string Encrypt(string msg)
     {
-        Algorithm ??= SHA256.Create();
-        var result = Algorithm.ComputeHash(msg.ToBytes());
+        var result = Algorithm!.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
     /// <summary>
@@ -28,8 +28,7 @@ public partial class Sha256Tool : DefaultAlgorithm<SHA256>
     public static string Encrypt(Stream stream)
     {
         stream.SeekToOrigin();
-        Algorithm ??= SHA256.Create();
-        var result = Algorithm.ComputeHash(stream);
+        var result = Algorithm!.ComputeHash(stream);
         stream.SeekToOrigin();
         return BitConverter.ToString(result).Replace("-", "");
     }

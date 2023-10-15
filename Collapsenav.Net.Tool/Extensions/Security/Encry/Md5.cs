@@ -5,6 +5,7 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class MD5Tool : DefaultAlgorithm<MD5>
 {
+    static MD5Tool() => Algorithm ??= MD5.Create();
     /// <summary>
     /// 解密
     /// </summary>
@@ -17,8 +18,7 @@ public partial class MD5Tool : DefaultAlgorithm<MD5>
     /// </summary>
     public static string Encrypt(string msg)
     {
-        Algorithm ??= MD5.Create();
-        var result = Algorithm.ComputeHash(msg.ToBytes());
+        var result = Algorithm!.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
 
@@ -28,8 +28,7 @@ public partial class MD5Tool : DefaultAlgorithm<MD5>
     public static string Encrypt(Stream stream)
     {
         stream.SeekToOrigin();
-        Algorithm ??= MD5.Create();
-        var result = Algorithm.ComputeHash(stream);
+        var result = Algorithm!.ComputeHash(stream);
         stream.SeekToOrigin();
         return BitConverter.ToString(result).Replace("-", "");
     }

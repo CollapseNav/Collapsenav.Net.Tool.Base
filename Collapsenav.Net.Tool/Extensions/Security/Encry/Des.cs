@@ -4,6 +4,7 @@ namespace Collapsenav.Net.Tool;
 
 public partial class DesTool : WithKeyAndIVAlgorithm<DES>
 {
+    static DesTool() => Algorithm ??= DES.Create();
     /// <summary>
     /// Des解密
     /// </summary>
@@ -16,8 +17,7 @@ public partial class DesTool : WithKeyAndIVAlgorithm<DES>
     public static string Decrypt(string sec, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
         byte[] decryptMsg = sec.FromBase64();
-        Algorithm ??= DES.Create();
-        Algorithm.Mode = mode;
+        Algorithm!.Mode = mode;
         Algorithm.Padding = padding;
         using var decrypt = Algorithm.CreateDecryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
         var result = decrypt.TransformFinalBlock(decryptMsg, 0, decryptMsg.Length);
@@ -34,8 +34,7 @@ public partial class DesTool : WithKeyAndIVAlgorithm<DES>
     /// <param name="level"></param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
-        Algorithm ??= DES.Create();
-        Algorithm.Mode = mode;
+        Algorithm!.Mode = mode;
         Algorithm.Padding = padding;
         using var encrypt = Algorithm.CreateEncryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
         var result = encrypt.TransformFinalBlock(msg.ToBytes(), 0, msg.Length);
