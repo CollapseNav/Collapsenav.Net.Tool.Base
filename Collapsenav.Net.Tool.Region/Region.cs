@@ -27,7 +27,7 @@ public static partial class Region
     /// <summary>
     /// 获取根节点
     /// </summary>
-    public static RegionTreeNode? GetRoot() => Tree;
+    public static RegionTreeNode GetRoot() => Tree!;
     /// <summary>
     /// 尝试获取省
     /// </summary>
@@ -82,5 +82,15 @@ public static partial class Region
         AllProvinces = AllTreeProvinces?.Select(item => item.ToNode()).ToList();
         AllTreeCities = AllTreeProvinces?.SelectMany(item => item?.Child ?? new List<RegionTreeNode>()).ToList();
         AllCities = AllTreeCities?.Select(item => item.ToNode()).ToList();
+    }
+
+    public static void UseSearchIndex(RegionTreeNode? node = null)
+    {
+        node ??= GetRoot();
+        if (node.Child == null)
+            return;
+        node.SearchIndex ??= new RegionSearchIndex(node!.Child.Select(item => item.Name!));
+        foreach (var child in node.Child)
+            UseSearchIndex(child);
     }
 }

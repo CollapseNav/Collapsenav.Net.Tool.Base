@@ -5,28 +5,30 @@ namespace Collapsenav.Net.Tool.Region;
 internal static class LoadRegionNodeTool
 {
     internal const string TreeNodeName = "region-tree.json";
+    /// <summary>
+    /// 加载树节点
+    /// </summary>
     internal static RegionTreeNode? LoadTreeNode()
     {
-#if NETSTANDARD2_0
         var str = File.ReadAllText($"{AppContext.BaseDirectory}/{TreeNodeName}");
-#else
-        var str = File.ReadAllText($"{AppContext.BaseDirectory}/{TreeNodeName}");
-#endif
         JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
         var node = JsonSerializer.Deserialize<RegionTreeNode>(str, options);
-        LoadParentNode(node);
+        if (node == null)
+            return null;
+        InitParentNode(node);
         return node;
     }
-
-    internal static void LoadParentNode(RegionTreeNode? node)
+    /// <summary>
+    /// 加载父节点
+    /// </summary>
+    internal static void InitParentNode(RegionTreeNode node)
     {
-        if (node?.Child == null)
+        if (node.Child == null)
             return;
         foreach (var n in node.Child)
         {
             n.Parent = node;
-            if (n.Child != null)
-                LoadParentNode(n);
+            InitParentNode(n);
         }
     }
 }

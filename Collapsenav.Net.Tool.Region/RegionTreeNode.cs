@@ -7,6 +7,12 @@ namespace Collapsenav.Net.Tool.Region;
 /// </summary>
 public class RegionNode
 {
+    public RegionNode() { }
+    public RegionNode(string? name, string? code)
+    {
+        Name = name;
+        Code = code;
+    }
     public string? Name { get; set; }
     public string? Code { get; set; }
 }
@@ -16,25 +22,18 @@ public class RegionNode
 public class RegionTreeNode : RegionNode
 {
     public RegionTreeNode() { }
-    public IReadOnlyCollection<RegionTreeNode>? Child { get; set; }
-    public RegionTreeNode? Parent { get; set; }
-    public RegionNode ToNode()
+    public RegionTreeNode(string? name, string? code, IReadOnlyCollection<RegionTreeNode>? child) : base(name, code)
     {
-        return new RegionNode
-        {
-            Code = Code,
-            Name = Name,
-        };
+        Child = child;
     }
 
+    public IReadOnlyCollection<RegionTreeNode>? Child { get; set; }
+    public RegionSearchIndex? SearchIndex { get; set; }
+    public RegionTreeNode? Parent { get; set; }
+    public RegionNode ToNode() => new(Name, Code);
     public RegionTreeNode ToTreeNodeWithoutParent()
     {
-        return new RegionTreeNode
-        {
-            Code = Code,
-            Name = Name,
-            Child = (Child == null || !Child.Any()) ? null : new ReadOnlyCollection<RegionTreeNode>(Child.Select(item => item.ToTreeNodeWithoutParent()).ToList())
-        };
+        return new RegionTreeNode(Name, Code, new ReadOnlyCollection<RegionTreeNode>(Child!.Select(item => item.ToTreeNodeWithoutParent()).ToList()));
     }
     /// <summary>
     /// 全称
