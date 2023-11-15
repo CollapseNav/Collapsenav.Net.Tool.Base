@@ -65,8 +65,6 @@ public class CronTool
 
     internal static string CreateCron(CronEnum cronEnum, params string[] values)
     {
-        if (values.Length == 0)
-            return string.Empty;
         var start = (int)cronEnum;
         int sum = start;
         string cron = string.Empty;

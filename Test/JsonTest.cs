@@ -203,6 +203,14 @@ public class JsonTest
         Assert.Equal(default, obj.Id);
     }
 
+    [Fact]
+    public void ToJsonDocument_WithValidJson_ReturnsDocument()
+    {
+        string json = "{}";
+        var result = json.ToJsonDocument();
+        Assert.NotNull(result);
+    }
+
     public class DateConverterTestModel
     {
         [JsonConverter(typeof(DateConverter))]

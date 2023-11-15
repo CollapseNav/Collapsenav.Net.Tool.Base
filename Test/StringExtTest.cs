@@ -491,4 +491,12 @@ public class StringExtTest
         origin = origin.AddIf(i, "5");
         Assert.True(origin == "12345");
     }
+
+    [Fact]
+    public void ToBase64_WithString_ReturnsBase64String()
+    {
+        string input = "hello world";
+        string result = input.ToBase64();
+        Assert.Equal("aGVsbG8gd29ybGQ=", result);
+    }
 }
