@@ -31,10 +31,10 @@ public static partial class CollectionExt
         var result = querys!.First();
         if (hashCodeFunc == null)
             foreach (var query in querys!.Skip(1))
-                result = result?.Concat(query);
+                result = result.Concat(query);
         else
             foreach (var query in querys!.Skip(1))
-                result = result?.Union(query, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+                result = result.Union(query, new CollapseNavEqualityComparer<T>(hashCodeFunc));
         return result;
     }
 

@@ -1,5 +1,3 @@
-using System.IO;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
@@ -100,7 +98,13 @@ public class StreamTest
     public void OpenFileStreamTest()
     {
         var path = "./vscode2.png";
-        var fs = path.OpenReadStream();
+        var fs = path.OpenStream();
+        Assert.True(fs.Length > 0);
+        Assert.True(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs.Dispose();
+
+        fs = path.OpenReadStream();
         Assert.True(fs.CanRead);
         Assert.False(fs.CanWrite);
         fs.Dispose();
