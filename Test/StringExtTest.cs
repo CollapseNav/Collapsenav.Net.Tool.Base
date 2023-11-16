@@ -209,6 +209,8 @@ public class StringExtTest
     }
     [Theory]
     [InlineData("123")]
+    [InlineData("  fdsa")]
+    [InlineData("  fdsa   ")]
     public void NotWhiteTest(string value)
     {
         Assert.True(value.NotWhite());
@@ -492,11 +494,33 @@ public class StringExtTest
         Assert.True(origin == "12345");
     }
 
-    [Fact]
-    public void ToBase64_WithString_ReturnsBase64String()
+    [Theory]
+    [InlineData("hello world", "aGVsbG8gd29ybGQ=")]
+    [InlineData("test string", "dGVzdCBzdHJpbmc=")]
+    [InlineData("1234", "MTIzNA==")]
+    public void ToBase64_WithString_ReturnsBase64String(string input, string expected)
     {
-        string input = "hello world";
         string result = input.ToBase64();
-        Assert.Equal("aGVsbG8gd29ybGQ=", result);
+        Assert.Equal(expected, result);
+    }
+
+    [Theory]
+    [InlineData("aGVsbG8gd29ybGQ=", "hello world")]
+    [InlineData("dGVzdCBzdHJpbmc=", "test string")]
+    [InlineData("MTIzNA==", "1234")]
+    public void FromBase64_WithBase64String_ReturnsOriginalString(string input, string expected)
+    {
+        string result = input.FromBase64ToString();
+        Assert.Equal(expected, result);
+    }
+
+    [Fact]
+    public void Pad_WithDelegate_ReturnsPaddedString()
+    {
+        var obj = "test";
+        var act = (string s) => s.ToUpper();
+        var expected = "TEST      ";
+        var result = obj.Pad(10, act);
+        Assert.Equal(expected, result);
     }
 }

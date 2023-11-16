@@ -117,11 +117,6 @@ public static partial class StringExt
         return string.Empty;
     }
 
-    public static string ToString(this char input, int count)
-    {
-        return new string(input, count);
-    }
-
     /// <summary>
     /// 自动遮罩(偷懒)
     /// </summary>

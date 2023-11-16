@@ -52,7 +52,7 @@ public partial class AESTool : WithKeyAndIVAlgorithm<Aes>
     public static byte[] GetAesBytes(byte[] key, int level = 32)
     {
         if (key.Length < level)
-            key = '#'.ToString(level - key.Length).ToBytes().Concat(key).ToArray();
+            key = new string('#', key.Length).ToBytes().Concat(key).ToArray();
         return key.Take(level).ToArray();
     }
 }
