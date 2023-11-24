@@ -4,6 +4,22 @@ namespace Collapsenav.Net.Tool.Test;
 public class UniqueTestModel
 {
     public int Index { get; set; } = 1;
+
+    public static IEnumerable<UniqueTestModel> GetEmptyModel(int count = 5)
+    {
+        IEnumerable<UniqueTestModel> result = Enumerable.Empty<UniqueTestModel>();
+        while (count-- > 0)
+            result = result.Append(new UniqueTestModel());
+        return result;
+    }
+
+    public static IEnumerable<UniqueTestModel> GetModels(params int[] values)
+    {
+        IEnumerable<UniqueTestModel> result = Enumerable.Empty<UniqueTestModel>();
+        foreach (var i in values)
+            result = result.Append(new UniqueTestModel { Index = i });
+        return result;
+    }
 }
 public class CollectionTest
 {
@@ -11,33 +27,26 @@ public class CollectionTest
     public void UniqueTest()
     {
         int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
+        int[] value = { 1, 2, 3, 4 };
         var uniqueIntList = intList.Unique(item => item);
-        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        Assert.True(uniqueIntList.SequenceEqual(value));
         uniqueIntList = intList.Distinct(item => item);
-        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        Assert.True(uniqueIntList.SequenceEqual(value));
 
         uniqueIntList = intList.Unique((x, y) => x == y);
-        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        Assert.True(uniqueIntList.SequenceEqual(value));
         uniqueIntList = intList.Distinct((x, y) => x == y);
-        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        Assert.True(uniqueIntList.SequenceEqual(value));
 
         uniqueIntList = intList.Unique();
-        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        Assert.True(uniqueIntList.SequenceEqual(value));
         intList = null;
         Assert.Empty(intList.Unique(item => item));
         Assert.Empty(intList.Distinct(item => item));
         Assert.Empty(intList.Unique((x, y) => x == y));
         Assert.Empty(intList.Unique());
 
-
-        var data = new List<UniqueTestModel>{
-                new UniqueTestModel(),
-                new UniqueTestModel(),
-                new UniqueTestModel(),
-                new UniqueTestModel(),
-                new UniqueTestModel(),
-                new UniqueTestModel(),
-            };
+        var data = UniqueTestModel.GetEmptyModel(6);
 
         var uniqueData = data.Unique();
         Assert.True(uniqueData.Count() == 6);
@@ -305,6 +314,8 @@ public class CollectionTest
         Assert.True(enums.Count() == 6);
         enums = nums.AddRange((x, y) => x == y, 3, 4, 5);
         Assert.True(enums.Count() == 5);
+        enums = nums.AddRange(Enumerable.Empty<int>(), item => item);
+        Assert.True(enums.Count() == 3);
         enums = nums.AddRange(x => x.GetHashCode(), 2, 3, 4);
         Assert.True(enums.Count() == 4);
 
@@ -316,16 +327,65 @@ public class CollectionTest
         Assert.True(enums.Count() == 5);
         enums = nums.AddRange(new[] { 2, 3, 4 }, x => x.GetHashCode());
         Assert.True(enums.Count() == 4);
-        nums = null;
+    }
+
+    [Fact]
+    public void NullIEnumerableAddRangeTest()
+    {
+        IEnumerable<int> nums = null;
         IEnumerable<int> targets = null;
         Assert.Empty(nums.AddRange());
         Assert.Empty(nums.AddRange(targets));
         Assert.Empty(nums.AddRange(i => i));
         Assert.Empty(nums.AddRange(targets, i => i));
+        Assert.Empty(nums.AddRange(Enumerable.Empty<int>(), i => i));
         Assert.Empty(nums.AddRange((x, y) => x == y));
         Assert.Empty(nums.AddRange(targets, (x, y) => x == y));
     }
 
+    public class AddRangeTestModel
+    {
+        public string Name { get; set; }
+    }
+
+    [Fact]
+    public void NullIEnumerableAddRangeUniqueObjectTest()
+    {
+        IEnumerable<AddRangeTestModel> datas = null;
+        IEnumerable<AddRangeTestModel> datas2 = null;
+        Assert.Empty(datas.AddRange(datas2, item => item.Name));
+    }
+
+    [Fact]
+    public void IEnumerableAddRangeUniqueObjectTest()
+    {
+        IEnumerable<AddRangeTestModel> datas = new[] { new AddRangeTestModel { Name = "1" } };
+        IEnumerable<AddRangeTestModel> datas2 = new[] { new AddRangeTestModel { Name = "1" } };
+        var temps = datas.AddRange(datas2);
+        Assert.True(temps.Count() == 2);
+        temps = datas.AddRange(datas2, item => item.Name);
+        Assert.False(temps.Count() == 2);
+        Assert.Single(temps);
+    }
+
+    [Fact]
+    public void NullICollectionAddRangeTest()
+    {
+        ICollection<int> nums = null;
+        IEnumerable<int> targets = null;
+        nums.AddRange();
+        Assert.Null(nums);
+        nums.AddRange(targets);
+        Assert.Null(nums);
+        nums.AddRange(i => i);
+        Assert.Null(nums);
+        nums.AddRange(targets, i => i);
+        Assert.Null(nums);
+        nums.AddRange((x, y) => x == y);
+        Assert.Null(nums);
+        nums.AddRange(targets, (x, y) => x == y);
+        Assert.Null(nums);
+    }
     [Fact]
     public void ICollectionAddRangeTest()
     {
@@ -346,20 +406,28 @@ public class CollectionTest
         nums.AddRange(new[] { 8, 9, 10 }, x => x.GetHashCode());
         Assert.True(nums.Count == 16);
         Assert.True(nums.Count == 16);
-        nums = null;
-        IEnumerable<int> targets = null;
-        nums.AddRange();
-        Assert.Null(nums);
-        nums.AddRange(targets);
-        Assert.Null(nums);
-        nums.AddRange(i => i);
-        Assert.Null(nums);
-        nums.AddRange(targets, i => i);
-        Assert.Null(nums);
-        nums.AddRange((x, y) => x == y);
-        Assert.Null(nums);
-        nums.AddRange(targets, (x, y) => x == y);
-        Assert.Null(nums);
+    }
+
+    [Fact]
+    public void NullICollectionAddRangeUniqueObjectTest()
+    {
+        ICollection<AddRangeTestModel> datas = null;
+        ICollection<AddRangeTestModel> datas2 = null;
+        datas.AddRange(datas2, item => item.Name);
+        Assert.Null(datas);
+    }
+
+    [Fact]
+    public void ICollectionAddRangeUniqueObjectTest()
+    {
+        ICollection<AddRangeTestModel> datas = new List<AddRangeTestModel> { new AddRangeTestModel { Name = "1" } };
+        ICollection<AddRangeTestModel> datas2 = new List<AddRangeTestModel> { new AddRangeTestModel { Name = "1" } };
+        datas.AddRange(datas2);
+        Assert.True(datas.Count() == 2);
+        datas.AddRange(item => item.Name, datas2.ToArray());
+        Assert.True(datas.Count() == 2);
+        datas.AddRange(new[] { new AddRangeTestModel { Name = "1" }, new AddRangeTestModel { Name = "2" } }, item => item.Name);
+        Assert.True(datas.Count() == 3);
     }
 
     [Fact]
@@ -430,7 +498,7 @@ public class CollectionTest
     [Fact]
     public void InTest()
     {
-        int[] items = new[] { 1, 2, 3, 4, 5 };
+        int[] items = { 1, 2, 3, 4, 5 };
         Assert.True(1.In(items));
         Assert.True(4.In(items));
         Assert.False(6.In(items));
@@ -443,36 +511,17 @@ public class CollectionTest
     [Fact]
     public void HasComparerInTest()
     {
-        var items = new List<UniqueTestModel>{
-            new UniqueTestModel{Index = 0 },
-            new UniqueTestModel{Index = 1 },
-            new UniqueTestModel{Index = 2 },
-            new UniqueTestModel{Index = 3 },
-            new UniqueTestModel{Index = 4 },
-        };
+        var items = UniqueTestModel.GetModels(0, 1, 2, 3, 4);
         Assert.False(new UniqueTestModel { Index = 1 }.In(items));
         Assert.True(new UniqueTestModel { Index = 1 }.In(items, (x, y) => x.Index == y.Index));
         Assert.True(new UniqueTestModel { Index = 3 }.In(items, (x, y) => x.Index == y.Index));
         Assert.False(new UniqueTestModel { Index = 5 }.In(items, (x, y) => x.Index == y.Index));
 
-        Assert.True(new UniqueTestModel { Index = 1 }.In((x, y) => x.Index == y.Index,
-            new UniqueTestModel { Index = 0 },
-            new UniqueTestModel { Index = 1 },
-            new UniqueTestModel { Index = 2 },
-            new UniqueTestModel { Index = 3 },
-            new UniqueTestModel { Index = 4 }));
-        Assert.True(new UniqueTestModel { Index = 3 }.In((x, y) => x.Index == y.Index,
-            new UniqueTestModel { Index = 0 },
-            new UniqueTestModel { Index = 1 },
-            new UniqueTestModel { Index = 2 },
-            new UniqueTestModel { Index = 3 },
-            new UniqueTestModel { Index = 4 }));
-        Assert.False(new UniqueTestModel { Index = 5 }.In((x, y) => x.Index == y.Index,
-            new UniqueTestModel { Index = 0 },
-            new UniqueTestModel { Index = 1 },
-            new UniqueTestModel { Index = 2 },
-            new UniqueTestModel { Index = 3 },
-            new UniqueTestModel { Index = 4 }));
+        var values = UniqueTestModel.GetModels(0, 1, 2, 3, 4).ToArray();
+
+        Assert.True(new UniqueTestModel { Index = 1 }.In((x, y) => x.Index == y.Index, values));
+        Assert.True(new UniqueTestModel { Index = 3 }.In((x, y) => x.Index == y.Index, values));
+        Assert.False(new UniqueTestModel { Index = 5 }.In((x, y) => x.Index == y.Index, values));
     }
 
     [Fact]
@@ -481,19 +530,8 @@ public class CollectionTest
         var list1 = new[] { 1, 2, 3, 4 };
         var list2 = new[] { 3, 4, 5, 6 };
         Assert.True(list1.GetItemIn(list2).SequenceEqual(new[] { 3, 4 }));
-        var model1 = new UniqueTestModel[] {
-            new(){ Index = 0 },
-            new(){ Index = 1 },
-            new(){ Index = 2 },
-            new(){ Index = 3 },
-        };
-        var model2 = new UniqueTestModel[] {
-            new(){ Index = 3 },
-            new(){ Index = 4 },
-            new(){ Index = 5 },
-            new(){ Index = 6 },
-            new(){ Index = 7 },
-        };
+        var model1 = UniqueTestModel.GetModels(0, 1, 2, 3);
+        var model2 = UniqueTestModel.GetModels(3, 4, 5, 6, 7);
         Assert.True(model1.GetItemIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
         Assert.True(model1.Intersect(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
 
@@ -510,19 +548,8 @@ public class CollectionTest
         var list1 = new[] { 1, 2, 3, 4 };
         var list2 = new[] { 3, 4, 5, 6 };
         Assert.True(list1.GetItemNotIn(list2).SequenceEqual(new[] { 1, 2 }));
-        var model1 = new UniqueTestModel[] {
-            new(){ Index = 0 },
-            new(){ Index = 1 },
-            new(){ Index = 2 },
-            new(){ Index = 3 },
-        };
-        var model2 = new UniqueTestModel[] {
-            new(){ Index = 3 },
-            new(){ Index = 4 },
-            new(){ Index = 5 },
-            new(){ Index = 6 },
-            new(){ Index = 7 },
-        };
+        var model1 = UniqueTestModel.GetModels(0, 1, 2, 3);
+        var model2 = UniqueTestModel.GetModels(3, 4, 5, 6, 7);
         Assert.True(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
         Assert.True(model1.Except(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
 
