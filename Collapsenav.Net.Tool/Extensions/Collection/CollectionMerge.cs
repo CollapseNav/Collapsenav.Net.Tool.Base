@@ -24,7 +24,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="querys">合并目标</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Merge<T>(this IEnumerable<IEnumerable<T>>? querys, Func<T?, int>? hashCodeFunc)
+    public static IEnumerable<T> Merge<T, E>(this IEnumerable<IEnumerable<T>>? querys, Func<T?, E>? hashCodeFunc)
     {
         if (querys.IsEmpty())
             return Enumerable.Empty<T>();
@@ -34,7 +34,7 @@ public static partial class CollectionExt
                 result = result.Concat(query);
         else
             foreach (var query in querys!.Skip(1))
-                result = result.Union(query, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+                result = result.Union(query, new CollapseNavEqualityComparer<T, E>(hashCodeFunc));
         return result;
     }
 
@@ -57,7 +57,7 @@ public static partial class CollectionExt
     /// <param name="querys">合并目标</param>
     /// <param name="query">多加一行</param>
     /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Merge<T>(this IEnumerable<IEnumerable<T>>? querys, IEnumerable<T> query, Func<T?, int>? hashCodeFunc)
+    public static IEnumerable<T> Merge<T, E>(this IEnumerable<IEnumerable<T>>? querys, IEnumerable<T> query, Func<T?, E>? hashCodeFunc)
     {
         if (querys == null)
             return Enumerable.Empty<T>();

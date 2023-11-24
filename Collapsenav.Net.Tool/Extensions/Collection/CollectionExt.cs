@@ -42,21 +42,21 @@ public static partial class CollectionExt
     /// 去重
     /// </summary>
     /// <param name="query">源集合</param>
-    /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Distinct<T>(this IEnumerable<T>? query, Func<T?, int>? hashCodeFunc)
+    /// <param name="field">hash去重</param>
+    public static IEnumerable<T> Distinct<T, E>(this IEnumerable<T>? query, Func<T?, E>? field)
     {
-        return query.Unique(hashCodeFunc);
+        return query.Unique(field);
     }
     /// <summary>
     /// 去重
     /// </summary>
     /// <param name="query">源集合</param>
-    /// <param name="hashCodeFunc">hash去重</param>
-    public static IEnumerable<T> Unique<T>(this IEnumerable<T>? query, Func<T?, int>? hashCodeFunc)
+    /// <param name="field">hash去重</param>
+    public static IEnumerable<T> Unique<T, E>(this IEnumerable<T>? query, Func<T?, E>? field)
     {
         if (query == null)
             return Enumerable.Empty<T>();
-        return query.Distinct(new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        return query.Distinct(new CollapseNavEqualityComparer<T, E>(field));
     }
 
     /// <summary>
@@ -88,12 +88,12 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="left">集合1</param>
     /// <param name="right">集合2</param>
-    /// <param name="hashCodeFunc">hash</param>
-    public static bool SequenceEqual<T>(this IEnumerable<T>? left, IEnumerable<T>? right, Func<T?, int>? hashCodeFunc)
+    /// <param name="field">hash</param>
+    public static bool SequenceEqual<T, E>(this IEnumerable<T>? left, IEnumerable<T>? right, Func<T?, E>? field)
     {
         if (left == null || right == null)
             return false;
-        return left.SequenceEqual(right, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        return left.SequenceEqual(right, new CollapseNavEqualityComparer<T, E>(field));
     }
 
     /// <summary>
