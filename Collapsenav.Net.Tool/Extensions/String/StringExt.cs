@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 namespace Collapsenav.Net.Tool;
 public static partial class StringExt
 {
+
+    #region pad 填充
     /// <summary>
     /// 填充
     /// </summary>
@@ -50,37 +52,37 @@ public static partial class StringExt
     /// <param name="act">一个委托</param>
     /// <param name="fill">填充字符</param>
     public static string PadRight<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj)?.ToString()?.PadRight(total, fill ?? ' ') ?? string.Empty;
-    /// <summary>
-    /// 数字转为中文,暂时只支持整数,支持最大的整数长度为16位
-    /// </summary>
-    /// <param name="num"></param>
-    public static string ToChinese(this string num)
-    {
-        string[] nums = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
-        string[] units = { "", "十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千", "万", "十", "百", "千" };
-        StringBuilder sb = new();
-        var numChar = num.ToArray();
-        var curUnits = units.Take(num.Length).Reverse().ToArray();
-        foreach (var (ch, index) in numChar.Select((nchar, i) => (nchar - 48, i)))
-        {
-            sb.Append(nums[ch]);
-            if (ch == 0 && !"亿万".Contains(curUnits[index]))
-                continue;
-            sb.Append(curUnits[index]);
-        }
-        Regex matchZero = new("零+");
-        Regex matchLastZero = new("零+$");
-        var result = matchZero.Replace(sb.ToString(), "零");
-        result = matchLastZero.Replace(result.Replace("零万", "万零").Replace("零亿", "亿零"), "");
-        return result;
-    }
-
+    #endregion
+    // /// <summary>
+    // /// 数字转为中文,暂时只支持整数,支持最大的整数长度为16位
+    // /// </summary>
+    // /// <param name="num"></param>
+    // public static string ToChinese(this string num)
+    // {
+    //     string[] nums = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
+    //     string[] units = { "", "十", "百", "千", "万", "十", "百", "千", "亿", "十", "百", "千", "万", "十", "百", "千" };
+    //     StringBuilder sb = new();
+    //     var numChar = num.ToArray();
+    //     var curUnits = units.Take(num.Length).Reverse().ToArray();
+    //     foreach (var (ch, index) in numChar.Select((nchar, i) => (nchar - 48, i)))
+    //     {
+    //         sb.Append(nums[ch]);
+    //         if (ch == 0 && !"亿万".Contains(curUnits[index]))
+    //             continue;
+    //         sb.Append(curUnits[index]);
+    //     }
+    //     Regex matchZero = new("零+");
+    //     Regex matchLastZero = new("零+$");
+    //     var result = matchZero.Replace(sb.ToString(), "零");
+    //     result = matchLastZero.Replace(result.Replace("零万", "万零").Replace("零亿", "亿零"), "");
+    //     return result;
+    // }
+    #region 字符串的格式转换
     public static DateTime? ToDateTime(this string input) => DateTime.TryParse(input, out DateTime result) ? result : null;
     public static int? ToInt(this string input) => int.TryParse(input, out int result) ? result : null;
     public static double? ToDouble(this string input) => double.TryParse(input, out double result) ? result : null;
     public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
     public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
-
     public static object? ToValue(this string input, Type type)
     {
         var flag = type.HasMethod("Parse");
@@ -91,6 +93,7 @@ public static partial class StringExt
         }
         return input;
     }
+    #endregion
 
     /// <summary>
     /// 拼!
@@ -203,11 +206,6 @@ public static partial class StringExt
     public static string AddIf(this string origin, string check, string value)
     {
         return check.IsEmpty() ? origin : origin + value;
-    }
-
-    public static string Add(this string origin, string value)
-    {
-        return origin + value;
     }
 
     public static string AddIf<T>(this string origin, T? check, string value) where T : struct

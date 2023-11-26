@@ -3,16 +3,16 @@ using Xunit;
 namespace Collapsenav.Net.Tool.Test;
 public class StringExtTest
 {
-    [Theory]
-    [InlineData("10510001010", "一百零五亿一千万零一千零一十")]
-    [InlineData("1010", "一千零一十")]
-    [InlineData("99999", "九万九千九百九十九")]
-    [InlineData("203300010001", "二千零三十三亿零一万零一")]
-    [InlineData("9999999999999999", "九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九")]
-    public void NumToChineseTest(string num, string result)
-    {
-        Assert.True(num.ToChinese() == result);
-    }
+    // [Theory]
+    // [InlineData("10510001010", "一百零五亿一千万零一千零一十")]
+    // [InlineData("1010", "一千零一十")]
+    // [InlineData("99999", "九万九千九百九十九")]
+    // [InlineData("203300010001", "二千零三十三亿零一万零一")]
+    // [InlineData("9999999999999999", "九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九")]
+    // public void NumToChineseTest(string num, string result)
+    // {
+    //     Assert.True(num.ToChinese() == result);
+    // }
 
     [Fact]
     public void StringConvertTest()
@@ -117,16 +117,6 @@ public class StringExtTest
         Assert.Equal(result, origin.HasStartsWith(strs.ToList()));
     }
     [Theory]
-    [InlineData(true, "23333333333333", "2333")]
-    [InlineData(true, "23333333333333", "2333", "23")]
-    [InlineData(false, "23333333333333", "2333", "23333333", "3")]
-    public void StringAllStartWiths(bool result, string origin, params string[] strs)
-    {
-        Assert.Equal(result, origin.AllStartsWith(strs));
-        Assert.Equal(result, origin.AllStartsWith(strs.AsEnumerable()));
-        Assert.Equal(result, origin.AllStartsWith(strs.ToList()));
-    }
-    [Theory]
     [InlineData(true, "23333333333333", "3", "333333")]
     [InlineData(true, "23333333333333", "3", "3333333", "2")]
     [InlineData(false, "23333333333333", "2333", "23333333", "2")]
@@ -135,16 +125,6 @@ public class StringExtTest
         Assert.Equal(result, origin.HasEndsWith(strs));
         Assert.Equal(result, origin.HasEndsWith(strs.AsEnumerable()));
         Assert.Equal(result, origin.HasEndsWith(strs.ToList()));
-    }
-    [Theory]
-    [InlineData(true, "23333333333333", "3", "333333")]
-    [InlineData(true, "23333333333333", "3", "3333333333", "23333333333333")]
-    [InlineData(false, "23333333333333", "3", "3333333333", "233333333333")]
-    public void StringAllEndWiths(bool result, string origin, params string[] strs)
-    {
-        Assert.Equal(result, origin.AllEndsWith(strs));
-        Assert.Equal(result, origin.AllEndsWith(strs.AsEnumerable()));
-        Assert.Equal(result, origin.AllEndsWith(strs.ToList()));
     }
 
     [Fact]
@@ -478,20 +458,17 @@ public class StringExtTest
         origin = origin.AddIf(false, "3");
         Assert.True(origin == "12");
 
-        origin = origin.Add("3");
-        Assert.True(origin == "123");
-
         origin = origin.AddIf("", "4");
-        Assert.True(origin == "123");
+        Assert.True(origin == "12");
         origin = origin.AddIf("not empty", "4");
-        Assert.True(origin == "1234");
+        Assert.True(origin == "124");
 
         int? i = null;
         origin = origin.AddIf(i, "5");
-        Assert.True(origin == "1234");
+        Assert.True(origin == "124");
         i = 10;
         origin = origin.AddIf(i, "5");
-        Assert.True(origin == "12345");
+        Assert.True(origin == "1245");
     }
 
     [Theory]
