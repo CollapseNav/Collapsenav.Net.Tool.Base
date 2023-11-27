@@ -120,7 +120,7 @@ public static partial class TypeExt
         // var objType = obj.GetType();
         // if (objType.Name.Contains("AnonymousType"))
         //     obj.SetAnonymousValue(field, value);
-        var fieldName = field.FirstTo('.');
+        var fieldName = field.FirstTo(".");
         var prop = obj?.GetType().GetProperty(fieldName);
         if (fieldName.Length == field.Length)
             prop?.SetValue(obj, value);
@@ -141,7 +141,7 @@ public static partial class TypeExt
     /// </summary>
     public static void SetAnonymousValue(this object obj, string field, object value)
     {
-        var fieldName = field.FirstTo('.');
+        var fieldName = field.FirstTo(".");
         var runtimeField = obj.GetType().GetRuntimeFields().FirstOrDefault(item => item.Name == $"<{fieldName}>i__Field");
         if (fieldName == field)
             runtimeField?.SetValue(obj, value);
@@ -171,7 +171,7 @@ public static partial class TypeExt
     /// <param name="field">属性/字段</param>
     public static object? GetValue<T>(this T obj, string field)
     {
-        var fieldName = field.FirstTo('.');
+        var fieldName = field.FirstTo(".");
         var prop = obj?.GetType().GetProperty(fieldName);
         if (fieldName.Length == field.Length && prop != null)
             return prop?.GetValue(obj);

@@ -25,6 +25,9 @@ public class XmlNodeCache
 
 public static class XmlExt
 {
+    /// <summary>
+    /// 第一次使用先生成对应缓存
+    /// </summary>
     static XmlExt()
     {
         // 获取目录中所有 xmldoc
@@ -130,10 +133,8 @@ public static class XmlExt
     {
         List<XmlNode> nodes = new();
         foreach (var node in nodeList)
-        {
             if (node is XmlNode xmlNode)
                 nodes.Add(xmlNode);
-        }
         return nodes;
     }
 }

@@ -214,6 +214,8 @@ public static partial class StringExt
             origin += value;
         return origin;
     }
+
+    #region 给集合中的字符串添加前后缀
     /// <summary>
     /// 加前缀
     /// </summary>
@@ -266,6 +268,8 @@ public static partial class StringExt
             origin[i] += value;
         return origin;
     }
+    #endregion
+
     /// <summary>
     /// 从前取到
     /// </summary>
@@ -283,54 +287,6 @@ public static partial class StringExt
         return index == -1 ? origin : origin.Last(origin.Length - (target.Length + index));
     }
     /// <summary>
-    /// 从前取到
-    /// </summary>
-    public static string FirstTo(this string origin, char target)
-    {
-        var index = origin.IndexOf(target);
-        return index == -1 ? origin : origin.First(index);
-    }
-    /// <summary>
-    /// 从后取到
-    /// </summary>
-    public static string EndTo(this string origin, char target)
-    {
-        var index = origin.LastIndexOf(target);
-        return index == -1 ? origin : origin.Last(origin.Length - (index + 1));
-    }
-
-    /// <summary>
-    /// 大写(从前算)
-    /// </summary>
-    public static string ToUpperFirst(this string origin, int num = 1)
-    {
-        return $"{origin.First(num).ToUpper()}{origin.Last(origin.Length - num)}";
-    }
-    /// <summary>
-    /// 小写(从前算)
-    /// </summary>
-    /// <returns></returns>
-    public static string ToLowerFirst(this string origin, int num = 1)
-    {
-        return $"{origin.First(num).ToLower()}{origin.Last(origin.Length - num)}";
-    }
-
-    /// <summary>
-    /// 小写(从后算)
-    /// </summary>
-    public static string ToUpperEnd(this string origin, int num = 1)
-    {
-        return $"{origin.First(origin.Length - num)}{origin.Last(num).ToUpper()}";
-    }
-
-    /// <summary>
-    /// 小写(从后算)
-    /// </summary>
-    public static string ToLowerEnd(this string origin, int num = 1)
-    {
-        return $"{origin.First(origin.Length - num)}{origin.Last(num).ToLower()}";
-    }
-    /// <summary>
     /// 首字母大写
     /// </summary>
     public static string UpFirstLetter(this string origin)
@@ -340,10 +296,10 @@ public static partial class StringExt
     /// <summary>
     /// 在两个字符串中间填充
     /// </summary>
-    public static string PadWith(this string origin, string value, int len)
+    public static string PadWith(this string origin, string value, int len, char? fill = ' ')
     {
         if ((origin.Length + value.Length) >= len)
             return origin + value;
-        return origin.PadRight(len - value.Length) + value;
+        return origin.PadRight(len - value.Length, fill) + value;
     }
 }
