@@ -13,7 +13,14 @@ public static partial class StringExt
     /// </summary>
     public static string ToBase64(this string origin)
     {
-        return Convert.ToBase64String(origin.ToBytes());
+        return origin.ToBytes().ToBase64();
+    }
+    /// <summary>
+    /// 流转为base64字符串
+    /// </summary>
+    public static string ToBase64(this Stream stream)
+    {
+        return stream.ToBytes().ToBase64();
     }
 
     /// <summary>
@@ -28,7 +35,7 @@ public static partial class StringExt
     /// </summary>
     public static string FromBase64ToString(this string base64String)
     {
-        return Convert.FromBase64String(base64String).BytesToString();
+        return base64String.FromBase64().BytesToString();
     }
 
     /// <summary>
@@ -36,7 +43,7 @@ public static partial class StringExt
     /// </summary>
     public static string ImageToBase64(this Stream stream)
     {
-        return "data:image;base64," + stream.StreamToBase64();
+        return "data:image;base64," + stream.ToBase64();
     }
 
     /// <summary>
@@ -45,15 +52,7 @@ public static partial class StringExt
     public static string ImageToBase64(this string filepath)
     {
         using var fs = filepath.OpenReadShareStream();
-        return "data:image;base64," + fs.StreamToBase64();
-    }
-
-    /// <summary>
-    /// 流转为base64字符串
-    /// </summary>
-    public static string StreamToBase64(this Stream stream)
-    {
-        return stream.ToBytes().ToBase64();
+        return "data:image;base64," + fs.ToBase64();
     }
 
     /// <summary>

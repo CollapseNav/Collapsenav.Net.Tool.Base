@@ -68,9 +68,9 @@ public partial class StringExt
         if (origin.IsNull())
             return false;
 #if NETSTANDARD2_0
-        return keys.Where(key => origin!.ToLower().Contains(key.ToLower())).Any();
+        return keys.Any(key => origin!.ToLower().Contains(key.ToLower()));
 #else
-        return keys.Where(key => origin!.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal)).Any();
+        return keys.Any(key => origin!.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
 #endif
     }
     /// <summary>
