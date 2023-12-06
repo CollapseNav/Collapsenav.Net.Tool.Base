@@ -5,20 +5,6 @@ namespace Collapsenav.Net.Tool;
 public static partial class AttributeExt
 {
     /// <summary>
-    /// type 拥有对应的attribute类型
-    /// </summary>
-    public static bool HasAttribute<T>(this Type type)
-    {
-        return type.HasAttribute(typeof(T));
-    }
-    /// <summary>
-    /// type 拥有对应的attribute类型
-    /// </summary>
-    public static bool HasAttribute(this Type type, params Type[] attrTypes)
-    {
-        return type.CustomAttributes.Any(attr => attrTypes.Contains(attr.AttributeType));
-    }
-    /// <summary>
     /// 成员 member 拥有对应的attribute类型
     /// </summary>
     public static bool HasAttribute<T>(this MemberInfo info)

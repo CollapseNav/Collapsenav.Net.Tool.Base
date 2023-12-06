@@ -49,9 +49,9 @@ public static class XmlExt
     private static IEnumerable<XmlDocument>? Docs;
     private static Dictionary<XmlDocument, IEnumerable<SummaryNode>> SummaryDict;
     public static List<XmlNodeCache> NodeCaches { get; private set; }
-    private static void AddDocToCache(XmlDocument doc, string path)
+    private static void AddDocToCache(XmlDocument? doc, string path)
     {
-        if (Docs == null)
+        if (Docs == null || doc == null)
             return;
         if (!doc.In(Docs))
             Docs = Docs.Append(doc);
@@ -62,9 +62,9 @@ public static class XmlExt
         if (path == SummaryNodePath)
             SummaryDict.Add(doc, cacheNode.Nodes?.Select(node => new SummaryNode(node)) ?? Enumerable.Empty<SummaryNode>());
     }
-    private static void AddDocsToCache(IEnumerable<XmlDocument> docs, string path)
+    private static void AddDocsToCache(IEnumerable<XmlDocument>? docs, string path)
     {
-        if (Docs == null)
+        if (Docs == null || docs == null)
             return;
         var notExist = docs.Except(Docs);
         if (notExist.NotEmpty())

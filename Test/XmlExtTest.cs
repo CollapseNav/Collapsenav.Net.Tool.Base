@@ -10,7 +10,7 @@ public class XmlExtTest
         var docs = XmlExt.GetXmlDocuments();
         Assert.True(docs.Count() == 2);
         var nodes = docs.GetSummaryNodes();
-        var node = nodes.FirstOrDefault(item => item.Summary == "注释node");
+        var node = nodes.FirstOrDefault(item => item.Summary == "xml对应的注释节点");
         Assert.NotNull(node);
         Assert.True(node.NodeType == XmlNodeMemberTypeEnum.Type);
     }

@@ -20,97 +20,33 @@ public static partial class TypeExt
     /// <summary>
     /// 是否内建类型
     /// </summary>
-    public static bool IsBuildInType(this object obj)
-    {
-        return obj.IsBaseType();
-    }
-    /// <summary>
-    /// 是否内建类型
-    /// </summary>
-    public static bool IsBuildInType(this Type type)
-    {
-        return type.IsBaseType();
-    }
-    /// <summary>
-    /// 是否内建类型
-    /// </summary>
     public static bool IsBaseType(this Type type)
     {
         return type.In(BuildInTypes);
     }
 
-
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string>? PropNames<T>(this T obj)
-    {
-        return obj?.GetType()?.PropNames();
-    }
-    /// <summary>
-    /// 获取属性名称
-    /// </summary>
-    public static IEnumerable<string> PropNames(this Type type)
-    {
-        return type.GetProperties().Select(item => item.Name);
-    }
-    /// <summary>
-    /// 获取属性名称
-    /// </summary>
-    public static IEnumerable<string>? PropNames<T>(this T obj, int depth)
+    public static IEnumerable<string>? PropNames<T>(this T obj, int depth = 0)
     {
         return obj?.GetType()?.PropNames(depth);
     }
     /// <summary>
     /// 获取属性名称
     /// </summary>
-    public static IEnumerable<string> PropNames(this Type type, int depth)
+    public static IEnumerable<string> PropNames(this Type type, int depth = 0)
     {
         var props = type.GetProperties();
-        var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
-        var loopProps = props.Where(item => !item.PropertyType.IsBuildInType());
+        if (depth == 0)
+            return props.Select(item => item.Name);
+        var nameProps = props.Where(item => item.PropertyType.IsBaseType());
+        var loopProps = props.Where(item => !item.PropertyType.IsBaseType());
         return depth > 0
             ? loopProps.Select(item => item.PropertyType.PropNames(depth - 1).Select(propName => $@"{item.Name}.{propName}")).Merge(nameProps.Select(item => item.Name))
             : nameProps.Select(item => item.Name).Concat(loopProps.Select(item => item.Name));
     }
 
-
-    /// <summary>
-    /// 获取内建类型的属性名
-    /// </summary>
-    public static IEnumerable<string>? BuildInTypePropNames<T>(this T obj)
-    {
-        var nameProps = obj?.GetType()?.BuildInTypeProps();
-        return nameProps?.Select(item => item.Name);
-    }
-    /// <summary>
-    /// 获取内建类型的属性名
-    /// </summary>
-    public static IEnumerable<string>? BuildInTypePropNames(this Type type)
-    {
-        var nameProps = type.BuildInTypeProps();
-        return nameProps.Select(item => item.Name);
-    }
-
-
-    /// <summary>
-    /// 获取内建类型属性
-    /// </summary>
-    public static IEnumerable<PropertyInfo> BuildInTypeProps(this Type type)
-    {
-        return type.GetProperties().Where(item => item.PropertyType.IsBuildInType());
-    }
-
-    /// <summary>
-    /// 获取内建类型的属性和值
-    /// </summary>
-    public static Dictionary<PropertyInfo, object>? BuildInTypeValues<T>(this T obj)
-    {
-        var propDict = obj?.GetType().BuildInTypeProps()
-        .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name) ?? ""))
-        .ToDictionary(item => item.Key, item => item.Value);
-        return propDict;
-    }
     /// <summary>
     /// 设置值
     /// </summary>
@@ -191,7 +127,7 @@ public static partial class TypeExt
     }
 
     /// <summary>
-    /// 判断是否有接口约束
+    /// 判断是否有指定接口约束
     /// </summary>
     public static bool HasInterface(this Type type, Type interfaceType)
     {
@@ -199,21 +135,26 @@ public static partial class TypeExt
             return false;
         return interfaceType.IsAssignableFrom(type);
     }
-
-    public static bool IsType<T>(this Type type)
+    /// <summary>
+    /// 判断是否有指定接口约束
+    /// </summary>
+    public static bool HasInterface<T>(this Type type)
     {
-        return type.IsType(typeof(T));
+        return type.HasInterface(typeof(T));
     }
+    /// <summary>
+    /// 判断是否有指定接口约束
+    /// </summary>
     public static bool IsType(this Type type, Type baseType)
     {
         return baseType.IsAssignableFrom(type);
     }
     /// <summary>
-    /// 判断是否有接口约束
+    /// 判断是否有指定接口约束
     /// </summary>
-    public static bool HasInterface<T>(this Type type)
+    public static bool IsType<T>(this Type type)
     {
-        return type.HasInterface(typeof(T));
+        return type.IsType(typeof(T));
     }
 
     /// <summary>

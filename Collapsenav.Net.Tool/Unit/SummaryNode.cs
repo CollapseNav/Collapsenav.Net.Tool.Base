@@ -3,7 +3,7 @@ using System.Xml;
 namespace Collapsenav.Net.Tool;
 
 /// <summary>
-/// 参数node
+/// 参数节点
 /// </summary>
 public class ParamNode
 {
@@ -22,7 +22,7 @@ public class ParamNode
     public string Desc { get; set; }
 }
 /// <summary>
-/// 注释node
+/// xml对应的注释节点
 /// </summary>
 public class SummaryNode
 {

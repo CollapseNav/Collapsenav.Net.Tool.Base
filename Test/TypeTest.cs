@@ -129,18 +129,6 @@ public class MyEnumerable : IEnumerable
 
 public class TypeTest
 {
-    [Theory]
-    [InlineData(2333, 2333, 2333.2333, "2333", true)]
-    public void CheckBaseTypeTest(int intValue, long longValue, double doubleValue, string stringValue, bool boolValue)
-    {
-        Assert.True(intValue.IsBuildInType());
-        Assert.True(longValue.IsBuildInType());
-        Assert.True(doubleValue.IsBuildInType());
-        Assert.True(stringValue.IsBuildInType());
-        Assert.True(boolValue.IsBuildInType());
-        Assert.True(boolValue.IsBaseType());
-    }
-
     [Fact]
     public void PropNamesTest()
     {
@@ -159,14 +147,6 @@ public class TypeTest
         Assert.True(props.Count() == 4 && props.AllContain("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
         props = typeof(PropTest0).PropNames(0);
         Assert.True(props.Count() == 2 && props.AllContain("Prop0", "Prop"));
-    }
-    [Fact]
-    public void GetBuildInTypePropNames()
-    {
-        var props = new PropTest0().BuildInTypePropNames();
-        Assert.True(props.Count() == 1);
-        props = new PropTest1().BuildInTypePropNames();
-        Assert.True(props.Count() == 3);
     }
     [Fact]
     public void GetValueTest()
@@ -188,39 +168,12 @@ public class TypeTest
     }
 
     [Fact]
-    public void BuildInPropsTest()
-    {
-        var props = typeof(PropTest1).BuildInTypePropNames();
-        Assert.True(props.Count() == 3);
-        props = typeof(PropTest0).BuildInTypePropNames();
-        Assert.True(props.Count() == 1);
-    }
-
-    [Fact]
     public void SetValueTest()
     {
         var data = new PropTest1 { Prop1 = "1" };
         Assert.True(data.Prop1 == "1");
         data.SetValue("Prop1", "233");
         Assert.True(data.Prop1 == "233");
-    }
-
-    [Fact]
-    public void BuildInTypeValueTest()
-    {
-        var data = new PropTest0
-        {
-            Prop0 = "233",
-            Prop = new()
-            {
-                Prop1 = "1",
-                Prop2 = "2",
-                Prop3 = "3",
-            }
-        };
-        var propValues = data.BuildInTypeValues();
-        Assert.True(propValues.Count == 1);
-        Assert.True(propValues.First().Value.ToString() == "233");
     }
 
     [Fact]
@@ -236,10 +189,6 @@ public class TypeTest
     [Fact]
     public void BuildInTypeTest()
     {
-        Assert.True(true.IsBuildInType());
-        Assert.True(((byte)12).IsBuildInType());
-        Assert.True(((sbyte)12).IsBuildInType());
-        Assert.True('a'.IsBuildInType());
         Assert.True(2.33m.IsBaseType());
         Assert.True(2.33.IsBaseType());
         Assert.True(2.33f.IsBaseType());
@@ -249,9 +198,6 @@ public class TypeTest
         Assert.True(((ushort)233).IsBaseType());
         Assert.True(233333333333.IsBaseType());
         Assert.True(((ulong)233333333333).IsBaseType());
-        Assert.True(DateTime.Now.IsBuildInType());
-        Assert.True(Guid.NewGuid().IsBuildInType());
-        Assert.True(typeof(nint).IsBuildInType());
         Assert.True(typeof(nuint).IsBaseType());
     }
 
