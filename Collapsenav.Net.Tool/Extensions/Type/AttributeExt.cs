@@ -62,54 +62,53 @@ public static partial class AttributeExt
     }
 
 
-
 #if NET6_0_OR_GREATER
     /// <summary>
     /// 获取T中存在E的attribute的字段及attribute值
     /// </summary>
-    public static Dictionary<FieldInfo, E?> AttrFieldValues<E>(this Type type) where E : Attribute
+    public static Dictionary<FieldInfo, IEnumerable<E>> AttrFieldValues<E>(this Type type) where E : Attribute
     {
         var fields = type.AttrFields<E>();
-        return fields.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+        return fields.ToDictionary(item => item, item => item.GetCustomAttributes<E>());
     }
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E?> AttrValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, IEnumerable<E>> AttrValues<E>(this Type type) where E : Attribute
     {
         return type.AttrPropValues<E>();
     }
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E?> AttrPropValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, IEnumerable<E>> AttrPropValues<E>(this Type type) where E : Attribute
     {
         var props = type.AttrProps<E>();
-        return props.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+        return props.ToDictionary(item => item, item => item.GetCustomAttributes<E>());
     }
 #else
     /// <summary>
     /// 获取T中存在E的attribute的字段及attribute值
     /// </summary>
-    public static Dictionary<FieldInfo, E> AttrFieldValues<E>(this Type type) where E : Attribute
+    public static Dictionary<FieldInfo, IEnumerable<E>> AttrFieldValues<E>(this Type type) where E : Attribute
     {
         var fields = type.AttrFields<E>();
-        return fields.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+        return fields.ToDictionary(item => item, item => item.GetCustomAttributes<E>());
     }
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E> AttrValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, IEnumerable<E>> AttrValues<E>(this Type type) where E : Attribute
     {
         return type.AttrPropValues<E>();
     }
     /// <summary>
     /// 获取T中存在E的attribute的属性及attribute值
     /// </summary>
-    public static Dictionary<PropertyInfo, E> AttrPropValues<E>(this Type type) where E : Attribute
+    public static Dictionary<PropertyInfo, IEnumerable<E>> AttrPropValues<E>(this Type type) where E : Attribute
     {
         var props = type.AttrProps<E>();
-        return props.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+        return props.ToDictionary(item => item, item => item.GetCustomAttributes<E>());
     }
 #endif
 
@@ -117,14 +116,14 @@ public static partial class AttributeExt
     /// <summary>
     /// 获取T中存在E的attribute的成员及attribute值
     /// </summary>
-    public static Dictionary<MemberInfo, E> AttrMemberValues<E>(this Type type) where E : Attribute
+    public static Dictionary<MemberInfo, IEnumerable<E>> AttrMemberValues<E>(this Type type) where E : Attribute
     {
         var props = type.AttrPropValues<E>();
         var fields = type.AttrFieldValues<E>();
-        Dictionary<MemberInfo, E> result = new();
-        if (props is IDictionary<PropertyInfo, E> propDict && propDict.NotEmpty())
+        Dictionary<MemberInfo, IEnumerable<E>> result = new();
+        if (props is IDictionary<PropertyInfo, IEnumerable<E>> propDict && propDict.NotEmpty())
             propDict.ForEach(dict => result.AddOrUpdate(dict.Key, dict.Value));
-        if (fields is IDictionary<FieldInfo, E> fieldDict && fieldDict.NotEmpty())
+        if (fields is IDictionary<FieldInfo, IEnumerable<E>> fieldDict && fieldDict.NotEmpty())
             fieldDict.ForEach(dict => result.AddOrUpdate(dict.Key, dict.Value));
         return result;
     }
