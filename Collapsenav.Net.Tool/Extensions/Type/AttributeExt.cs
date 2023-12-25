@@ -86,7 +86,53 @@ public static partial class AttributeExt
         var props = type.AttrProps<E>();
         return props.ToDictionary(item => item, item => item.GetCustomAttributes<E>());
     }
+    /// <summary>
+    /// 获取T中存在E的attribute的字段及attribute值
+    /// </summary>
+    public static Dictionary<FieldInfo, E?> AttrFieldValue<E>(this Type type) where E : Attribute
+    {
+        var fields = type.AttrFields<E>();
+        return fields.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+    }
+    /// <summary>
+    /// 获取T中存在E的attribute的属性及attribute值
+    /// </summary>
+    public static Dictionary<PropertyInfo, E?> AttrValue<E>(this Type type) where E : Attribute
+    {
+        return type.AttrPropValue<E>();
+    }
+    /// <summary>
+    /// 获取T中存在E的attribute的属性及attribute值
+    /// </summary>
+    public static Dictionary<PropertyInfo, E?> AttrPropValue<E>(this Type type) where E : Attribute
+    {
+        var props = type.AttrProps<E>();
+        return props.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+    }
 #else
+    /// <summary>
+    /// 获取T中存在E的attribute的字段及attribute值
+    /// </summary>
+    public static Dictionary<FieldInfo, E> AttrFieldValue<E>(this Type type) where E : Attribute
+    {
+        var fields = type.AttrFields<E>();
+        return fields.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+    }
+    /// <summary>
+    /// 获取T中存在E的attribute的属性及attribute值
+    /// </summary>
+    public static Dictionary<PropertyInfo, E> AttrValue<E>(this Type type) where E : Attribute
+    {
+        return type.AttrPropValue<E>();
+    }
+    /// <summary>
+    /// 获取T中存在E的attribute的属性及attribute值
+    /// </summary>
+    public static Dictionary<PropertyInfo, E> AttrPropValue<E>(this Type type) where E : Attribute
+    {
+        var props = type.AttrProps<E>();
+        return props.ToDictionary(item => item, item => item.GetCustomAttribute<E>());
+    }
     /// <summary>
     /// 获取T中存在E的attribute的字段及attribute值
     /// </summary>

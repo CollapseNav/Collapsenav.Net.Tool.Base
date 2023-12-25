@@ -57,6 +57,7 @@ public class AttributeTest
         var attrValues = typeof(PropTest1).AttrPropValues<UnitTestAttribute>();
         Assert.True(attrValues.Count == 2);
         Assert.True(attrValues.Select(item => item.Value.First().Field).AllContain("123", "233"));
+        Assert.True(typeof(PropTest1).AttrPropValue<UnitTestAttribute>().Select(item => item.Value.Field).AllContain("123", "233"));
     }
 
     [Fact]
@@ -65,6 +66,7 @@ public class AttributeTest
         var attrValues = typeof(PropTest1).AttrValues<UnitTestAttribute>();
         Assert.True(attrValues.Count == 2);
         Assert.True(attrValues.Select(item => item.Value.First().Field).AllContain("123", "233"));
+        Assert.True(typeof(PropTest1).AttrValue<UnitTestAttribute>().Select(item => item.Value.Field).AllContain("123", "233"));
     }
 
     [Fact]
