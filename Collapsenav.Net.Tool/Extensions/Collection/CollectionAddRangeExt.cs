@@ -5,8 +5,8 @@ public partial class CollectionExt
     /// 向一个集合中添加多个对象(带去重)
     /// </summary>
     /// <param name="query">源</param>
-    /// <param name="field">去重依据</param>
     /// <param name="values">添加的对象</param>
+    /// <param name="field">按照选定字段判断是否重复</param>
     public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, IEnumerable<T>? values, Func<T?, E>? field)
     {
         if (query == null)
@@ -28,6 +28,8 @@ public partial class CollectionExt
             return Enumerable.Empty<T>();
         return query.Union(values, comparer != null ? new CollapseNavEqualityComparer<T>(comparer) : null);
     }
+
+
 
     /// <summary>
     /// 向一个集合中添加多个对象

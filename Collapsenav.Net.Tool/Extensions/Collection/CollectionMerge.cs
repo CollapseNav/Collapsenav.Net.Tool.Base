@@ -10,12 +10,12 @@ public static partial class CollectionExt
     {
         if (querys.IsEmpty())
             return Enumerable.Empty<T>();
-        var result = querys!.First();
+        var result = querys.First();
         if (comparer == null)
-            foreach (var query in querys!.Skip(1))
+            foreach (var query in querys.Skip(1))
                 result = result.Concat(query);
         else
-            foreach (var query in querys!.Skip(1))
+            foreach (var query in querys.Skip(1))
                 result = result.Union(query, new CollapseNavEqualityComparer<T>(comparer));
         return result;
     }
@@ -28,12 +28,12 @@ public static partial class CollectionExt
     {
         if (querys.IsEmpty())
             return Enumerable.Empty<T>();
-        var result = querys!.First();
+        var result = querys.First();
         if (hashCodeFunc == null)
-            foreach (var query in querys!.Skip(1))
+            foreach (var query in querys.Skip(1))
                 result = result.Concat(query);
         else
-            foreach (var query in querys!.Skip(1))
+            foreach (var query in querys.Skip(1))
                 result = result.Union(query, new CollapseNavEqualityComparer<T, E>(hashCodeFunc));
         return result;
     }

@@ -39,7 +39,7 @@ public static class XmlExt
         {
             NodeCaches.Add(new XmlNodeCache(doc, SummaryNodePath));
         });
-        SummaryDict = NodeCaches.ToDictionary(item => item.Doc, item => item!.Nodes!.Select(node => new SummaryNode(node)));
+        SummaryDict = NodeCaches.ToDictionary(item => item.Doc, item => item.Nodes!.Select(node => new SummaryNode(node)));
         SummaryDict ??= new();
     }
     public const string SummaryNodePath = "doc/members/member";

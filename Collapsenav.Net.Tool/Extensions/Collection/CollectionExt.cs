@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 
 namespace Collapsenav.Net.Tool;
 public static partial class CollectionExt
@@ -160,7 +161,11 @@ public static partial class CollectionExt
     /// 空?
     /// </summary>
     /// <param name="query">源集合</param>
-    public static bool IsEmpty<T>(this IEnumerable<T>? query)
+    public static bool IsEmpty<T>(
+#if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
+        [NotNullWhen(false)] 
+#endif
+        this IEnumerable<T>? query)
     {
         return query == null || !query.Any();
     }
@@ -169,7 +174,11 @@ public static partial class CollectionExt
     /// 没空?
     /// </summary>
     /// <param name="query">源集合</param>
-    public static bool NotEmpty<T>(this IEnumerable<T>? query)
+    public static bool NotEmpty<T>(
+#if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
+        [NotNullWhen(true)] 
+#endif
+        this IEnumerable<T>? query)
     {
         return query != null && query.Any();
     }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Snowflake.Core;
 using Yitter.IdGenerator;
 
@@ -34,10 +35,13 @@ public class SnowFlake
         return YitIdHelper.NextId();
     }
 
-    public static IdWorker? Worker;
+    public static IdWorker Worker { get; set; }
     /// <summary>
     /// 初始化雪花算法(经典雪花算法-更长)
     /// </summary>
+#if NETCOREAPP2_0_OR_GREATER
+    [MemberNotNull("Worker")]
+#endif
     public static void InitClassicSnowFlake(long workId = 1, long datacenterId = 1)
     {
         Worker = new IdWorker(workId, datacenterId);
@@ -47,6 +51,6 @@ public class SnowFlake
     /// </summary>
     public static long ClassicNextId()
     {
-        return Worker!.NextId();
+        return Worker.NextId();
     }
 }
