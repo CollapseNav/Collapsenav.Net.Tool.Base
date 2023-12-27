@@ -111,6 +111,7 @@ public class CollectionTest
         Assert.True(strList.AllContain((x, y) => x == y, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().AllContain(null, (x, y) => x == y));
         strList = null;
         Assert.False(strList.AllContain(new[] { "2", "6" }));
         Assert.False(strList.AllContain("2", "6"));
@@ -131,6 +132,7 @@ public class CollectionTest
         Assert.True(strList.HasContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.HasContain((x, y) => x == y, "7", "8"));
         Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().HasContain(null, (x, y) => x == y));
         strList = null;
         Assert.False(strList.HasContain(new[] { "2", "6" }));
         Assert.False(strList.HasContain((x, y) => x == y, "2", "6"));
@@ -513,15 +515,19 @@ public class CollectionTest
     {
         var items = UniqueTestModel.GetModels(0, 1, 2, 3, 4);
         Assert.False(new UniqueTestModel { Index = 1 }.In(items));
+        Func<UniqueTestModel, int> func = null;
+        Assert.False(new UniqueTestModel { Index = 1 }.In(items, func));
         Assert.True(new UniqueTestModel { Index = 1 }.In(items, (x, y) => x.Index == y.Index));
         Assert.True(new UniqueTestModel { Index = 3 }.In(items, (x, y) => x.Index == y.Index));
         Assert.False(new UniqueTestModel { Index = 5 }.In(items, (x, y) => x.Index == y.Index));
+        Assert.False(new UniqueTestModel { Index = 5 }.In(items, x => x.Index));
 
         var values = UniqueTestModel.GetModels(0, 1, 2, 3, 4).ToArray();
 
         Assert.True(new UniqueTestModel { Index = 1 }.In((x, y) => x.Index == y.Index, values));
         Assert.True(new UniqueTestModel { Index = 3 }.In((x, y) => x.Index == y.Index, values));
         Assert.False(new UniqueTestModel { Index = 5 }.In((x, y) => x.Index == y.Index, values));
+        Assert.False(new UniqueTestModel { Index = 5 }.In(x => x.Index, values));
     }
 
     [Fact]

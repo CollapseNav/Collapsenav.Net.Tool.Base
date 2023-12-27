@@ -9,8 +9,53 @@ public static partial class CollectionExt
     /// <param name="comparer">对比</param>
     public static bool In<T>(this T origin, IEnumerable<T> items, Func<T?, T?, bool>? comparer = null)
     {
-        return comparer == null ? items.Contains(origin) : items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
+        if (comparer == null)
+            return items.Contains(origin);
+        return items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
     }
+    /// <summary>
+    /// 对象是否在集合中
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="items"></param>
+    /// <param name="comparer">对比</param>
+    public static bool In<T, E>(this T origin, IEnumerable<T> items, Func<T?, E>? comparer)
+    {
+        if (comparer == null)
+            return items.Contains(origin);
+        return items.Contains(origin, new CollapseNavEqualityComparer<T, E>(comparer));
+    }
+    /// <summary>
+    /// 对象是否在集合中
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="items"></param>
+    /// <param name="comparer">对比</param>
+    public static bool In<T>(this T origin, Func<T?, T?, bool>? comparer, params T[] items)
+    {
+        return items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
+    }
+    /// <summary>
+    /// 对象是否在集合中
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="items"></param>
+    /// <param name="comparer">对比</param>
+    public static bool In<T, E>(this T origin, Func<T?, E>? comparer, params T[] items)
+    {
+        return items.Contains(origin, new CollapseNavEqualityComparer<T, E>(comparer));
+    }
+    /// <summary>
+    /// 对象是否在集合中
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="items"></param>
+    public static bool In<T>(this T origin, params T[] items)
+    {
+        return items.Contains(origin);
+    }
+
+
 
     /// <summary>
     /// 全包含
@@ -18,10 +63,12 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T>? query, IEnumerable<T> filters, Func<T?, T?, bool>? comparer = null)
+    public static bool AllContain<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer = null)
     {
         if (query == null)
             return false;
+        if (filters.IsEmpty())
+            return true;
         foreach (var filter in filters)
             if (!query.Contains(filter, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer)))
                 return false;
@@ -53,10 +100,12 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么判断重复</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T>? query, IEnumerable<T> filters, Func<T?, T?, bool>? comparer)
+    public static bool HasContain<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer)
     {
         if (query == null)
             return false;
+        if (filters.IsEmpty())
+            return true;
         foreach (var filter in filters)
             if (query.Contains(filter, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer)))
                 return true;
@@ -80,25 +129,6 @@ public static partial class CollectionExt
     public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
         return query.HasContain(filters, comparer);
-    }
-    /// <summary>
-    /// 对象是否在集合中
-    /// </summary>
-    /// <param name="origin"></param>
-    /// <param name="items"></param>
-    /// <param name="comparer">对比</param>
-    public static bool In<T>(this T origin, Func<T?, T?, bool>? comparer, params T[] items)
-    {
-        return items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
-    }
-    /// <summary>
-    /// 对象是否在集合中
-    /// </summary>
-    /// <param name="origin"></param>
-    /// <param name="items"></param>
-    public static bool In<T>(this T origin, params T[] items)
-    {
-        return items.Contains(origin);
     }
     /// <summary>
     /// 取交集

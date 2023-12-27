@@ -11,7 +11,7 @@ public partial class CollectionExt
     {
         if (query == null)
             return Enumerable.Empty<T>();
-        if (values == null || values.IsEmpty())
+        if (values.IsEmpty())
             return query;
         return query.Union(values, new CollapseNavEqualityComparer<T, E>(field));
     }
@@ -22,10 +22,12 @@ public partial class CollectionExt
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(this IEnumerable<T>? query, IEnumerable<T> values, Func<T?, T?, bool>? comparer = null)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T>? query, IEnumerable<T>? values, Func<T?, T?, bool>? comparer = null)
     {
         if (query == null)
             return Enumerable.Empty<T>();
+        if (values.IsEmpty())
+            return query;
         return query.Union(values, comparer != null ? new CollapseNavEqualityComparer<T>(comparer) : null);
     }
 
@@ -40,7 +42,7 @@ public partial class CollectionExt
     {
         if (query == null)
             return Enumerable.Empty<T>();
-        return query.Concat(values);
+        return query.AddRange(values, null);
     }
 
     /// <summary>
@@ -65,15 +67,17 @@ public partial class CollectionExt
     public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, Func<T?, E>? field, params T[] values)
         => query.AddRange(values, field);
 
+
+
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
     /// </summary>
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(this ICollection<T>? query, IEnumerable<T> values, Func<T?, T?, bool>? comparer = null)
+    public static void AddRange<T>(this ICollection<T>? query, IEnumerable<T>? values, Func<T?, T?, bool>? comparer = null)
     {
-        if (query == null)
+        if (query == null || values.IsEmpty())
             return;
         if (comparer == null)
         {
@@ -128,7 +132,7 @@ public partial class CollectionExt
     /// <param name="values">添加的对象</param>
     public static void AddRange<T, E>(this ICollection<T>? query, IEnumerable<T>? values, Func<T?, E>? hashCodeFunc)
     {
-        if (query == null || values == null || values.IsEmpty())
+        if (query == null || values.IsEmpty())
             return;
         var uniqueComparer = new CollapseNavEqualityComparer<T, E>(hashCodeFunc);
         var uniqueData = values.Distinct(uniqueComparer);
