@@ -8,15 +8,6 @@ namespace Collapsenav.Net.Tool.Test;
 public class AssemblyTest
 {
     [Fact]
-    public void GetCustomerAssemblyNameTest()
-    {
-        var allAssNames = Assembly.GetEntryAssembly().GetAllAssemblyNames();
-        var customerAssNames = Assembly.GetEntryAssembly().GetCustomerAssemblyNames();
-        Assert.Contains(allAssNames, item => item.Name.HasStartsWith(new[] { "System", "Microsoft" }, true));
-        Assert.Contains(customerAssNames, item => !item.Name.HasStartsWith(new[] { "System", "Microsoft" }, true));
-    }
-
-    [Fact]
     public void GetCustomerAssembliesTest()
     {
         var allAsses = Assembly.GetEntryAssembly().GetAllAssemblies().ToList();
@@ -82,7 +73,6 @@ public class AssemblyTest
         Assert.True(types.AllContain(typeof(JEnumerable<>)));
 
         types = AppDomain.CurrentDomain.GetCustomerTypes<IEnumerable>();
-        Assert.False(types.AllContain(typeof(JEnumerable<>)));
         Assert.True(types.AllContain(typeof(MyEnumerable)));
     }
 

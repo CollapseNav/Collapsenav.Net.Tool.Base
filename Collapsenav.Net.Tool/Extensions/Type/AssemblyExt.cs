@@ -5,22 +5,6 @@ namespace Collapsenav.Net.Tool;
 public static partial class AssemblyExt
 {
     /// <summary>
-    /// 判断是否自定义程序集(通过publickeytoken是否为空判断)
-    /// </summary>
-    /// <param name="ass"></param>
-    public static bool IsCustomerAssembly(this AssemblyName ass)
-    {
-        return ass.GetPublicKeyToken().IsEmpty();
-    }
-    /// <summary>
-    /// 判断是否自定义程序集(通过publickeytoken是否为空判断)
-    /// </summary>
-    /// <param name="ass"></param>
-    public static bool IsCustomerAssembly(this Assembly ass)
-    {
-        return ass.GetName().IsCustomerAssembly() && !ass.IsDynamic;
-    }
-    /// <summary>
     /// 获取所有assemblyName
     /// </summary>
     public static IEnumerable<AssemblyName> GetAllAssemblyNames(this Assembly ass)
@@ -93,10 +77,8 @@ public static partial class AssemblyExt
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this AppDomain domain)
     {
-        var ass = domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly());
-        if (ass == null)
-            return Enumerable.Empty<Assembly>();
-        return ass.GetCustomerAssemblies();
+        var ass = domain.GetAssemblies().Where(item => item.IsCustomerAssembly());
+        return ass;
     }
     /// <summary>
     /// 获取所有接口
