@@ -2,55 +2,6 @@ namespace Collapsenav.Net.Tool;
 public static partial class DictionaryExt
 {
     /// <summary>
-    /// 添加或更新
-    /// </summary>
-    /// <param name="dict">字典</param>
-    /// <param name="item">键值对</param>
-    public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, KeyValuePair<K, V> item)
-    {
-        if (dict.ContainsKey(item.Key))
-            dict[item.Key] = item.Value;
-        else
-            dict.Add(item.Key, item.Value);
-        return dict;
-    }
-    /// <summary>
-    /// 添加或更新
-    /// </summary>
-    /// <param name="dict">字典</param>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, K key, V value)
-    {
-        if (dict.ContainsKey(key))
-            dict[key] = value;
-        else
-            dict.Add(key, value);
-        return dict;
-    }
-    /// <summary>
-    /// 添加多个字典项
-    /// </summary>
-    /// <param name="dict">字典</param>
-    /// <param name="values">值</param>
-    public static IDictionary<K, V> AddRange<K, V>(this IDictionary<K, V> dict, IDictionary<K, V> values)
-    {
-        foreach (var item in values)
-            dict.AddOrUpdate(item);
-        return dict;
-    }
-    /// <summary>
-    /// 添加多个字典项
-    /// </summary>
-    /// <param name="dict">字典</param>
-    /// <param name="values">值</param>
-    public static IDictionary<K, V> AddRange<K, V>(this IDictionary<K, V> dict, IEnumerable<KeyValuePair<K, V>> values)
-    {
-        foreach (var item in values)
-            dict.AddOrUpdate(item);
-        return dict;
-    }
-    /// <summary>
     /// 将键值对集合转为字典
     /// </summary>
     /// <param name="dict"></param>
@@ -74,10 +25,7 @@ public static partial class DictionaryExt
     /// <param name="key"></param>
     public static V? GetAndRemove<K, V>(this IDictionary<K, V> dict, K key)
     {
-        var flag = dict.TryGetValue(key, out V? value);
-        if (flag)
-            dict.Remove(key);
-        return value;
+        return dict.Pop(key);
     }
 
     /// <summary>
@@ -118,5 +66,26 @@ public static partial class DictionaryExt
     {
         foreach (var item in dict)
             yield return (value(item.Value), index(item.Key));
+    }
+
+    /// <summary>
+    /// 将字典转换为指定类型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="dict"></param>
+    /// <returns></returns>
+    public static T? ToObj<T>(this Dictionary<string, object> dict)
+    {
+        return dict.ToJson().ToObj<T>();
+    }
+    /// <summary>
+    /// 将字典转换为指定类型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="dict"></param>
+    /// <returns></returns>
+    public static T? ToObj<T>(this Dictionary<string, string> dict)
+    {
+        return dict.ToJson().ToObj<T>();
     }
 }

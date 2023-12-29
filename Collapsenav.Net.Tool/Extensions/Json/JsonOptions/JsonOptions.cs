@@ -16,6 +16,7 @@ public static class JsonOptions
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         ReferenceHandler = ReferenceHandler.IgnoreCycles,
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
     };
 
     /// <summary>
@@ -29,5 +30,6 @@ public static class JsonOptions
         options.PropertyNamingPolicy = BetterUseOption.PropertyNamingPolicy;
         options.ReferenceHandler = BetterUseOption.ReferenceHandler;
         options.Encoder = BetterUseOption.Encoder;
+        options.NumberHandling = BetterUseOption.NumberHandling;
     }
 }

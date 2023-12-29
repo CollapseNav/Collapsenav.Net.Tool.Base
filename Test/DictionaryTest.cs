@@ -101,5 +101,26 @@ public class DictionaryTest
             Assert.True(value == index);
         }
     }
+    [Fact]
+    public void DictToObject()
+    {
+        Dictionary<string, object> dict1 = new Dictionary<string, object>{
+            {"username","name"},
+            {"age",3},
+        };
+        var userinfo = dict1.ToObj<UserInfo>();
+        Assert.Equal("name", userinfo.UserName);
+        Assert.Equal(3, userinfo.Age);
+
+
+        Dictionary<string, string> dict2 = new Dictionary<string, string>{
+            {"username","name"},
+            {"age","3"},
+        };
+        userinfo = dict2.ToObj<UserInfo>();
+        Assert.Equal("name", userinfo.UserName);
+        Assert.Equal(3, userinfo.Age);
+    }
+
 }
 
