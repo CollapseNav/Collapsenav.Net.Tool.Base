@@ -7,7 +7,7 @@ public partial class CollectionExt
     /// <param name="query">源</param>
     /// <param name="values">添加的对象</param>
     /// <param name="field">按照选定字段判断是否重复</param>
-    public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, IEnumerable<T>? values, Func<T?, E>? field)
+    public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, IEnumerable<T>? values, Func<T?, E?>? field)
     {
         if (query == null)
             return Enumerable.Empty<T>();
@@ -64,7 +64,7 @@ public partial class CollectionExt
     /// <param name="query">源</param>
     /// <param name="field">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, Func<T?, E>? field, params T[] values)
+    public static IEnumerable<T> AddRange<T, E>(this IEnumerable<T>? query, Func<T?, E?>? field, params T[] values)
         => query.AddRange(values, field);
 
 
@@ -119,7 +119,7 @@ public partial class CollectionExt
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T, E>(this ICollection<T>? query, Func<T?, E>? hashCodeFunc, params T[] values)
+    public static void AddRange<T, E>(this ICollection<T>? query, Func<T?, E?>? hashCodeFunc, params T[] values)
     {
         query.AddRange(values, hashCodeFunc);
     }
@@ -130,7 +130,7 @@ public partial class CollectionExt
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T, E>(this ICollection<T>? query, IEnumerable<T>? values, Func<T?, E>? hashCodeFunc)
+    public static void AddRange<T, E>(this ICollection<T>? query, IEnumerable<T>? values, Func<T?, E?>? hashCodeFunc)
     {
         if (query == null || values.IsEmpty())
             return;

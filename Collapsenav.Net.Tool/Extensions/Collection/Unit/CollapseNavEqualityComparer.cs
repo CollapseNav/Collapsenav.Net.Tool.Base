@@ -50,7 +50,7 @@ public class CollapseNavEqualityComparer<T, E> : IEqualityComparer<T>
     /// 一个用于对比的委托
     /// </summary>
     /// <param name="keySelector">按照选定字段判断是否重复</param>
-    public CollapseNavEqualityComparer(Func<T?, E>? keySelector)
+    public CollapseNavEqualityComparer(Func<T?, E?>? keySelector)
     {
         KeySelector = keySelector;
     }
@@ -69,7 +69,7 @@ public class CollapseNavEqualityComparer<T, E> : IEqualityComparer<T>
     /// <summary>
     /// 提供一个选择字段/属性的委托
     /// </summary>
-    private readonly Func<T?, E>? KeySelector;
+    private readonly Func<T?, E?>? KeySelector;
 
     public bool Equals(T? x, T? y)
     {

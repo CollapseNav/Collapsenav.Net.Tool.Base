@@ -242,35 +242,4 @@ public static partial class CollectionExt
             return Enumerable.Empty<(E, F)>();
         return origin.Select(item => (value(item), index(item)));
     }
-
-    /// <summary>
-    /// 创建数组
-    /// </summary>
-    public static T[] BuildArray<T>(this T obj, int len = 1)
-    {
-        T[] array = new T[len];
-#if NETSTANDARD2_0
-        for (var i = 0; i < array.Length; i++)
-            array[i] = obj;
-#else
-        Array.Fill(array, obj);
-#endif
-        return array;
-    }
-    /// <summary>
-    /// 创建List集合
-    /// </summary>
-    public static List<T> BuildList<T>(this T obj, int len = 1)
-    {
-        List<T> list = new();
-        T[] array = new T[len];
-#if NETSTANDARD2_0
-        for (var i = 0; i < array.Length; i++)
-            array[i] = obj;
-#else
-        Array.Fill(array, obj);
-#endif
-        list.AddRange(array);
-        return list;
-    }
 }

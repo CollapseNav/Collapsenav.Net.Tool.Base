@@ -109,14 +109,18 @@ public class CollectionTest
         Assert.True(strList.AllContain("2", "6"));
         Assert.False(strList.AllContain(new[] { "2", "8" }));
         Assert.True(strList.AllContain((x, y) => x == y, "2", "6"));
+        Assert.True(strList.AllContain(x => x, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, x => x));
         Assert.True(strList.AsEnumerable().AllContain(null, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().AllContain(null, x => x));
         strList = null;
         Assert.False(strList.AllContain(new[] { "2", "6" }));
         Assert.False(strList.AllContain("2", "6"));
         Assert.False(strList.AllContain(new[] { "2", "8" }));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.AllContain(x => x, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
     }
@@ -126,17 +130,22 @@ public class CollectionTest
     {
         string[] strList = { "1", "2", "3", "4", "5", "6" };
         Assert.True(strList.HasContain(new[] { "2", "6" }));
-        Assert.True(strList.HasContain(new[] { "2", "8" }));
+        Assert.True(strList.HasContain(new[] { "2", "8" }.AsEnumerable()));
         Assert.False(strList.HasContain(new[] { "7", "8" }));
         Assert.True(strList.HasContain((x, y) => x == y, "2", "6"));
+        Assert.True(strList.HasContain(x => x, "2", "6"));
         Assert.True(strList.HasContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.HasContain((x, y) => x == y, "7", "8"));
         Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, x => x));
         Assert.True(strList.AsEnumerable().HasContain(null, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().HasContain(null, x => x));
         strList = null;
         Assert.False(strList.HasContain(new[] { "2", "6" }));
         Assert.False(strList.HasContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.HasContain(x => x, "2", "6"));
         Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, x => x));
     }
 
 
@@ -342,6 +351,7 @@ public class CollectionTest
         Assert.Empty(nums.AddRange(targets, i => i));
         Assert.Empty(nums.AddRange(Enumerable.Empty<int>(), i => i));
         Assert.Empty(nums.AddRange((x, y) => x == y));
+        nums = Enumerable.Empty<int>();
         Assert.Empty(nums.AddRange(targets, (x, y) => x == y));
     }
 
@@ -466,35 +476,6 @@ public class CollectionTest
         Assert.Empty(nums.SelectWithIndex());
         Assert.Empty(nums.SelectWithIndex(num => num * num));
         Assert.Empty(nums.SelectWithIndex(num => num.ToString(), num => num));
-    }
-
-    [Fact]
-    public void BuildArrayTest()
-    {
-        int num = 2;
-        var array = num.BuildArray();
-        Assert.True(array.Length == 1);
-        Assert.True(array.All(item => item == 2));
-        array = num.BuildArray(10);
-        Assert.True(array.Length == 10);
-        Assert.True(array.All(item => item == 2));
-        array = 233.BuildArray(233);
-        Assert.True(array.Length == 233);
-        Assert.True(array.All(item => item == 233));
-    }
-    [Fact]
-    public void BuildListTest()
-    {
-        int num = 2;
-        var array = num.BuildList();
-        Assert.True(array.Count == 1);
-        Assert.True(array.All(item => item == 2));
-        array = num.BuildList(10);
-        Assert.True(array.Count == 10);
-        Assert.True(array.All(item => item == 2));
-        array = 233.BuildList(233);
-        Assert.True(array.Count == 233);
-        Assert.True(array.All(item => item == 233));
     }
 
     [Fact]
