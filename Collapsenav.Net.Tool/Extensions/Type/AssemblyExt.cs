@@ -5,58 +5,29 @@ namespace Collapsenav.Net.Tool;
 public static partial class AssemblyExt
 {
     /// <summary>
-    /// 获取所有assemblyName
-    /// </summary>
-    public static IEnumerable<AssemblyName> GetAllAssemblyNames(this Assembly ass)
-    {
-        if (ass.IsDynamic)
-            return Enumerable.Empty<AssemblyName>();
-        var dirPath = Path.GetDirectoryName(ass.Location);
-        if (dirPath == null)
-            return Enumerable.Empty<AssemblyName>();
-        var fileNames = Directory.GetFiles(dirPath, "*.dll");
-        return fileNames.Select(item =>
-        {
-            if (TryGetAssemblyName(item, out AssemblyName assName))
-                assName.CodeBase = item;
-            return assName;
-        }).Where(item => item != null);
-    }
-
-    internal static bool TryGetAssemblyName(string path, out AssemblyName assemblyName)
-    {
-        try
-        {
-            assemblyName = AssemblyName.GetAssemblyName(path);
-            return true;
-        }
-        catch (BadImageFormatException ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
-    }
-    /// <summary>
-    /// 获取自定义的程序集Name(通过publickeytoken是否为空判断)
-    /// </summary>
-    /// <param name="ass"></param>
-    public static IEnumerable<AssemblyName> GetCustomerAssemblyNames(this Assembly ass)
-    {
-        return ass.GetAllAssemblyNames().Where(item => item.IsCustomerAssembly());
-    }
-    /// <summary>
     /// 获取所有 assembly
     /// </summary>
     public static IEnumerable<Assembly> GetAllAssemblies(this Assembly ass)
     {
-        return ass.GetAllAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase ?? ""));
+        return ass.GetReferencedAssemblies().Select(
+            item =>
+            {
+                try
+                {
+                    return Assembly.Load(item);
+                }
+                catch
+                {
+                    return null;
+                }
+            }).Where(item => item != null).Select(i => i!).Concat(new[] { ass });
     }
     /// <summary>
     /// 获取所有自定义 assembly(通过publickeytoken是否为空判断)
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this Assembly ass)
     {
-        return ass.GetCustomerAssemblyNames().Select(item => Assembly.LoadFrom(item.CodeBase ?? ""));
+        return ass.GetAllAssemblies().Where(item => item.IsCustomerAssembly());
     }
 
     /// <summary>
@@ -66,10 +37,7 @@ public static partial class AssemblyExt
     /// <returns></returns>
     public static IEnumerable<Assembly> GetAllAssemblies(this AppDomain domain)
     {
-        var ass = domain.GetAssemblies().FirstOrDefault(item => item.IsCustomerAssembly());
-        if (ass == null)
-            return Enumerable.Empty<Assembly>();
-        return ass.GetAllAssemblies();
+        return domain.GetAssemblies().SelectMany(item => item.GetAllAssemblies()).Distinct(i => i?.FullName);
     }
 
     /// <summary>
@@ -77,8 +45,7 @@ public static partial class AssemblyExt
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this AppDomain domain)
     {
-        var ass = domain.GetAssemblies().Where(item => item.IsCustomerAssembly());
-        return ass;
+        return domain.GetAssemblies().SelectMany(item => item.GetCustomerAssemblies()).Distinct(i => i?.FullName);
     }
     /// <summary>
     /// 获取所有接口
@@ -131,7 +98,7 @@ public static partial class AssemblyExt
     }
     public static IEnumerable<Type> GetTypes<T>(this AppDomain domain)
     {
-        return domain.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
+        return domain.GetAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
     }
     public static IEnumerable<Type> GetCustomerTypes<T>(this AppDomain domain)
     {
