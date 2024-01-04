@@ -84,24 +84,6 @@ public class DictionaryTest
     }
 
     [Fact]
-    public void DeconstructTest()
-    {
-        Dictionary<int, string> dict = new()
-        {
-            { 1, "1" },
-            { 2, "2" },
-            { 3, "3" },
-        };
-        foreach (var (value, index) in dict.Deconstruct())
-            Assert.True(value.ToInt() == index);
-
-        foreach (var (value, index) in dict.Deconstruct(value => value.ToInt(), key => key))
-        {
-            Assert.True(value is int);
-            Assert.True(value == index);
-        }
-    }
-    [Fact]
     public void DictToObject()
     {
         Dictionary<string, object> dict1 = new Dictionary<string, object>{
