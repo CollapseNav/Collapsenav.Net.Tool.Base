@@ -7,23 +7,13 @@ public static partial class AssemblyExt
     /// <summary>
     /// 获取所有 assembly
     /// </summary>
-    public static IEnumerable<Assembly> GetAllAssemblies(this Assembly ass, bool withSystem = true)
+    public static IEnumerable<Assembly> GetAllAssemblies(this Assembly ass, bool withSystemAssembly = true)
     {
-        var asses = ass.GetReferencedAssemblies().Select(
-            item =>
-            {
-                try
-                {
-                    return Assembly.Load(item);
-                }
-                catch
-                {
-                    return null;
-                }
-            }).Where(item => item != null && (withSystem || item.IsCustomerAssembly()))
-            .Select(i => i!).Concat(new[] { ass });
-
-        return asses;
+        var asses = ass.GetReferencedAssemblies()
+        .Select(LoadFrom)
+        .Where(item => item != null && (withSystemAssembly || item.IsCustomerAssembly()))
+        .Concat(new[] { ass }).Distinct(i => i?.FullName);
+        return asses!;
     }
     /// <summary>
     /// 获取所有自定义 assembly(通过publickeytoken是否为空判断)
@@ -32,31 +22,23 @@ public static partial class AssemblyExt
     {
         return ass.GetAllAssemblies(false);
     }
-
     /// <summary>
     /// 获取所有assembly
     /// </summary>
     /// <param name="domain"></param>
-    /// <param name="withSystem"></param>
+    /// <param name="withSystemAssembly"></param>
     /// <returns></returns>
-    public static IEnumerable<Assembly> GetAllAssemblies(this AppDomain domain, bool withSystem = false)
+    public static IEnumerable<Assembly> GetAllAssemblies(this AppDomain domain, bool withSystemAssembly = false)
     {
         List<Assembly> asses = new(domain.GetAssemblies());
         var path = domain.BaseDirectory;
         var dllPaths = Directory.GetFiles(path, "*.dll");
+        // load所有查到的dll程序集
         if (dllPaths.NotEmpty())
         {
-            asses = asses.Concat(dllPaths.Select(item =>
-            {
-                try
-                {
-                    return Assembly.LoadFile(item);
-                }
-                catch
-                {
-                    return null;
-                }
-            }).Where(item => item != null && (withSystem || item.IsCustomerAssembly()))).Distinct(i => i?.FullName).ToList()!;
+            asses = asses.Concat(dllPaths.Select(LoadFromFile)
+            .Where(item => item != null && (withSystemAssembly || item.IsCustomerAssembly())))
+            .Distinct(i => i?.FullName).ToList()!;
         }
         return asses.SelectMany(item => item.GetAllAssemblies()).Distinct(i => i?.FullName);
     }
@@ -66,7 +48,7 @@ public static partial class AssemblyExt
     /// </summary>
     public static IEnumerable<Assembly> GetCustomerAssemblies(this AppDomain domain)
     {
-        return domain.GetAllAssemblies(false).Distinct(i => i?.FullName);
+        return domain.GetAllAssemblies(false);
     }
     /// <summary>
     /// 获取所有接口
@@ -133,9 +115,9 @@ public static partial class AssemblyExt
     /// <summary>
     /// 获取appdomain下所有type
     /// </summary>
-    public static IEnumerable<Type> GetTypes(this AppDomain domain, bool withSystem = true)
+    public static IEnumerable<Type> GetTypes(this AppDomain domain, bool withSystemAssembly = true)
     {
-        return domain.GetAllAssemblies(withSystem).SelectMany(item => item.GetTypes());
+        return domain.GetAllAssemblies(withSystemAssembly).SelectMany(item => item.GetTypes());
     }    /// <summary>
          /// 获取appdomain下所有自定义程序集的type
          /// </summary>
@@ -146,9 +128,9 @@ public static partial class AssemblyExt
     /// <summary>
     /// 获取appdomain下所有接口
     /// </summary>
-    public static IEnumerable<Type> GetInterfaces(this AppDomain domain, bool withSystem = true)
+    public static IEnumerable<Type> GetInterfaces(this AppDomain domain, bool withSystemAssembly = true)
     {
-        return domain.GetAllAssemblies(withSystem).SelectMany(item => item.GetInterfaces());
+        return domain.GetAllAssemblies(withSystemAssembly).SelectMany(item => item.GetInterfaces());
     }    /// <summary>
          /// 获取appdomain下所有自定义程序集的接口
          /// </summary>
@@ -156,9 +138,9 @@ public static partial class AssemblyExt
     {
         return domain.GetCustomerAssemblies().SelectMany(item => item.GetInterfaces());
     }
-    public static IEnumerable<Type> GetTypes<T>(this AppDomain domain, bool withSystem = true)
+    public static IEnumerable<Type> GetTypes<T>(this AppDomain domain, bool withSystemAssembly = true)
     {
-        return domain.GetAllAssemblies(withSystem).SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
+        return domain.GetAllAssemblies(withSystemAssembly).SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
     }
     public static IEnumerable<Type> GetCustomerTypes<T>(this AppDomain domain)
     {
@@ -200,5 +182,27 @@ public static partial class AssemblyExt
                 return false;
             return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName[..item.FullName.IndexOf('`')] : item.Name).HasEndsWith(prefixAndSuffixs);
         });
+    }
+    private static Assembly? LoadFrom(AssemblyName name)
+    {
+        try
+        {
+            return Assembly.Load(name);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    private static Assembly? LoadFromFile(string path)
+    {
+        try
+        {
+            return Assembly.LoadFile(path);
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
