@@ -10,10 +10,13 @@
         <PackageId>Collapsenav.Net.Tool</PackageId>
     </PropertyGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
-        <PackageReference Include="System.Text.Json" Version="6.*"/>
+        <PackageReference Include="System.Text.Json" Version="8.*"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <PackageReference Include="System.Text.Json" Version="6.*"/>
+        <PackageReference Include="System.Text.Json" Version="8.*"/>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+        <PackageReference Include="System.Text.Json" Version="8.*"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Yitter.IdGenerator" Version="1.0.*" />
