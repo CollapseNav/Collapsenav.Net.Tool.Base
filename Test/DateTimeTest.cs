@@ -10,6 +10,11 @@ public class DateTimeTest
         Assert.True(now.ToString() == now.ToTimestamp().ToDateTime().ToString());
         now = now.AddMilliseconds(-now.Millisecond);
         Assert.True(now.ToString() == now.ToShortTimestamp().ToShortDateTime().ToString());
+        now = DateTime.Now;
+        var temp = (-1L).ToDateTime();
+        Assert.Equal(now.Year, temp.Year);
+        Assert.Equal(now.Month, temp.Month);
+        Assert.Equal(now.Day, temp.Day);
     }
 
     [Fact]

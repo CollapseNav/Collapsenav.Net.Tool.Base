@@ -54,6 +54,22 @@ public class DictionaryTest
         string[] nums = new[] { "1", "2", "3", "4", "5" };
         dict = nums.ToDictionary(item => int.Parse(item));
         Assert.True(dict[5] == "5");
+
+        value = new List<KeyValuePair<int, string>>();
+        Assert.Empty(value.ToDictionary());
+        try
+        {
+            Func<string, int> func = null;
+            nums.ToDictionary(func);
+        }
+        catch (Exception ex)
+        {
+            Assert.True(ex is NullReferenceException);
+            Assert.Equal("keySelector", ex.Message);
+        }
+        nums = null;
+        Assert.Empty(nums.ToDictionary(int.Parse));
+
     }
 
     [Fact]
@@ -68,6 +84,11 @@ public class DictionaryTest
         var value = dict.GetAndRemove(1);
         Assert.True(value == "1");
         Assert.True(dict.Count == 2);
+
+        dict = null;
+
+        value = dict.GetAndRemove(2);
+        Assert.True(value == null);
     }
     [Fact]
     public void PopTest()
@@ -81,6 +102,27 @@ public class DictionaryTest
         var value = dict.Pop(1);
         Assert.True(value == "1");
         Assert.True(dict.Count == 2);
+        dict = null;
+
+        value = dict.Pop(2);
+        Assert.True(value == null);
+    }
+
+    [Fact]
+    public void DeconstructTest()
+    {
+        var dict = new Dictionary<int, string>()
+        .AddOrUpdate(1, "1")
+        .AddOrUpdate(2, "2")
+        .AddOrUpdate(3, "4")
+        ;
+        var values = dict.Deconstruct(i => i + 1000, i => i + i);
+        Assert.True(values.Count() == 3);
+        Assert.True(values.ElementAt(0).Value == "11");
+        Assert.True(values.ElementAt(0).Key == 1001);
+        dict = null;
+        Assert.Empty(dict.Deconstruct(i => i + 1000, i => i + i));
+
     }
 
     [Fact]

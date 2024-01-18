@@ -116,9 +116,10 @@ public class CollectionTest
         Assert.True(strList.AsEnumerable().AllContain(null, (x, y) => x == y));
         Assert.True(strList.AsEnumerable().AllContain(null, x => x));
         strList = null;
+        Func<string, string> func = null;
         Assert.False(strList.AllContain(new[] { "2", "6" }));
         Assert.False(strList.AllContain("2", "6"));
-        Assert.False(strList.AllContain(new[] { "2", "8" }));
+        Assert.False(strList.AllContain(new[] { "2", "8" }, func));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "6"));
         Assert.False(strList.AllContain(x => x, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));

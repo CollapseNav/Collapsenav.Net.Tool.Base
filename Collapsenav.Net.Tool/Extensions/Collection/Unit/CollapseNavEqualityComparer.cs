@@ -55,14 +55,6 @@ public class CollapseNavEqualityComparer<T, E> : IEqualityComparer<T>
         KeySelector = keySelector;
     }
     /// <summary>
-    /// 一个用于对比的委托
-    /// </summary>
-    /// <param name="equalFunc">两个对象的具体的对比方法</param>
-    public CollapseNavEqualityComparer(Func<T?, T?, bool>? equalFunc)
-    {
-        EqualFunc = equalFunc;
-    }
-    /// <summary>
     /// 提供一个用于对比的委托
     /// </summary>
     private readonly Func<T?, T?, bool>? EqualFunc;
