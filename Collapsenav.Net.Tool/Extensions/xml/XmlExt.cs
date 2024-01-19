@@ -31,24 +31,48 @@ public static class XmlExt
     static XmlExt()
     {
         // 获取目录中所有 xmldoc
-        Docs = Directory.GetFiles(AppContext.BaseDirectory, "*.xml").Select(item => item.GetXmlDocument()).ToList();
-
+        docs = Enumerable.Empty<XmlDocument>();
         // 根据默认的xml注释生成规则先生成对应的summarynode
-        NodeCaches = new();
-        Docs.ForEach(doc =>
-        {
-            NodeCaches.Add(new XmlNodeCache(doc, SummaryNodePath));
-        });
-        SummaryDict = NodeCaches.ToDictionary(item => item.Doc, item => item.Nodes!.Select(node => new SummaryNode(node)));
-        SummaryDict ??= new();
+        nodeCaches = new();
+        summaryDict = new();
     }
     public const string SummaryNodePath = "doc/members/member";
     /// <summary>
     /// 基本上不太可能会在运行的过程中改变, 所以写个静态存着
     /// </summary>
-    private static IEnumerable<XmlDocument>? Docs;
-    private static Dictionary<XmlDocument, IEnumerable<SummaryNode>> SummaryDict;
-    public static List<XmlNodeCache> NodeCaches { get; private set; }
+    private static IEnumerable<XmlDocument> Docs
+    {
+        get
+        {
+            if (docs.IsEmpty())
+                docs = Directory.GetFiles(AppContext.BaseDirectory, "*.xml").Select(item => GetXmlDocument(item)).ToList();
+            return docs;
+        }
+        set => docs = value;
+    }
+    private static Dictionary<XmlDocument, IEnumerable<SummaryNode>> summaryDict;
+    private static List<XmlNodeCache> nodeCaches;
+    private static IEnumerable<XmlDocument>? docs;
+    private static Dictionary<XmlDocument, IEnumerable<SummaryNode>> SummaryDict
+    {
+        get
+        {
+            if (summaryDict.IsEmpty())
+                summaryDict = NodeCaches.ToDictionary(item => item.Doc, item => item.Nodes!.Select(node => new SummaryNode(node)));
+            return summaryDict;
+        }
+        set => summaryDict = value;
+    }
+    public static List<XmlNodeCache> NodeCaches
+    {
+        get
+        {
+            if (Docs.NotEmpty() && nodeCaches.IsEmpty())
+                Docs.ForEach(doc => nodeCaches.Add(new XmlNodeCache(doc, SummaryNodePath)));
+            return nodeCaches;
+        }
+        private set => nodeCaches = value;
+    }
     private static void AddDocToCache(XmlDocument? doc, string path)
     {
         if (Docs == null || doc == null)
@@ -62,10 +86,8 @@ public static class XmlExt
         if (path == SummaryNodePath)
             SummaryDict.Add(doc, cacheNode.Nodes?.Select(node => new SummaryNode(node)) ?? Enumerable.Empty<SummaryNode>());
     }
-    private static void AddDocsToCache(IEnumerable<XmlDocument>? docs, string path)
+    private static void AddDocsToCache(IEnumerable<XmlDocument> docs, string path)
     {
-        if (Docs == null || docs == null)
-            return;
         var notExist = docs.Except(Docs);
         if (notExist.NotEmpty())
             notExist.ForEach(item => AddDocToCache(item, path));
@@ -78,13 +100,13 @@ public static class XmlExt
     public static IEnumerable<XmlDocument> GetXmlDocuments(bool reset = false)
     {
         if (reset)
-            Docs = Directory.GetFiles(AppContext.BaseDirectory, "*.xml").Select(item => item.GetXmlDocument()).ToList();
+            Docs = Directory.GetFiles(AppContext.BaseDirectory, "*.xml").Select(item => GetXmlDocument(item)).ToList();
         return Docs ?? Enumerable.Empty<XmlDocument>();
     }
     /// <summary>
     /// 从指定路径读取xml文件并转为 xmldoc
     /// </summary>
-    public static XmlDocument GetXmlDocument(this string path)
+    public static XmlDocument GetXmlDocument(string path)
     {
         XmlDocument doc = new();
         doc.Load(path);
@@ -93,30 +115,10 @@ public static class XmlExt
     /// <summary>
     /// 获取nodelist
     /// </summary>
-    public static XmlNodeList? GetNodeList(this XmlDocument doc, string path)
-    {
-        // 先看有无缓存
-        var cache = NodeCaches.FirstOrDefault(item => item.Doc == doc && item.Path == path);
-        if (cache != null)
-            return cache.NodeList;
-        AddDocToCache(doc, path);
-        return NodeCaches.FirstOrDefault(item => item.Doc == doc && item.Path == path)?.NodeList;
-    }
-    /// <summary>
-    /// 获取nodelist
-    /// </summary>
     public static IEnumerable<XmlNodeList> GetNodeLists(this IEnumerable<XmlDocument> docs, string path)
     {
         AddDocsToCache(docs, path);
         return NodeCaches.Where(item => item.Doc.In(docs)).Select(item => item.NodeList!) ?? Enumerable.Empty<XmlNodeList>();
-    }
-    /// <summary>
-    /// 获取xmlnode
-    /// </summary>
-    public static IEnumerable<XmlNode> GetNodes(this IEnumerable<XmlDocument> docs, string path)
-    {
-        AddDocsToCache(docs, path);
-        return NodeCaches.SelectMany(item => item.Nodes ?? Enumerable.Empty<XmlNode>());
     }
     /// <summary>
     /// 获取注释node
@@ -136,5 +138,14 @@ public static class XmlExt
             if (node is XmlNode xmlNode)
                 nodes.Add(xmlNode);
         return nodes;
+    }
+    /// <summary>
+    /// 清空xml缓存
+    /// </summary>
+    public static void ClearCache()
+    {
+        Docs = Enumerable.Empty<XmlDocument>();
+        summaryDict.Clear();
+        NodeCaches.Clear();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -74,6 +75,16 @@ public class AssemblyTest
 
         types = AppDomain.CurrentDomain.GetCustomerTypes<IEnumerable>();
         Assert.True(types.AllContain(typeof(MyEnumerable)));
+
+        var ass = Assembly.Load("Collapsenav.Net.Tool");
+        types = ass.GetTypes<SummaryNode>();
+        Assert.Single(types);
+        types = ass.GetByPrefix("WithKey");
+        Assert.Equal(2, types.Count());
+        types = ass.GetBySuffix("Node");
+        Assert.Equal(2, types.Count());
+        types = ass.GetByPrefixAndSuffix("WithKey", "Node");
+        Assert.Equal(4, types.Count());
     }
 
     [Fact]

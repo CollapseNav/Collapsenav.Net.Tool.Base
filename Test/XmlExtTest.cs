@@ -24,10 +24,14 @@ public class XmlExtTest
     }
 
     [Fact]
-    public void XmlCacheTest()
+    public void XmlDocumentRestTest()
     {
-        var cache = XmlExt.NodeCaches;
-        Assert.True(cache.Count == 2);
-        Assert.True(cache.All(item => item.Path == XmlExt.SummaryNodePath));
+        var docs = XmlExt.GetXmlDocuments();
+        Assert.True(docs == XmlExt.GetXmlDocuments());
+
+        Assert.False(docs == XmlExt.GetXmlDocuments(true));
+
+        XmlExt.ClearCache();
+        Assert.False(docs == XmlExt.GetXmlDocuments());
     }
 }
