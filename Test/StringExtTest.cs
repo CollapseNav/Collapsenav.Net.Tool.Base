@@ -455,4 +455,43 @@ public class StringExtTest
         var result = obj.Pad(10, act);
         Assert.Equal(expected, result);
     }
+
+    [Fact]
+    public void SplitTo_WithDefaultSeparator()
+    {
+        string input = "hello world";
+        var result = input.SplitTo(str => str.ToUpper());
+
+        Assert.Equal(2, result.Length);
+        Assert.Equal("HELLO", result[0]);
+        Assert.Equal("WORLD", result[1]);
+    }
+
+    [Fact]
+    public void SplitTo_WithCustomSeparator()
+    {
+        string input = "hello,world";
+        var result = input.SplitTo(str => str, new[] { ',' });
+
+        Assert.Equal(2, result.Length);
+        Assert.Equal("hello", result[0]);
+    }
+
+    [Fact]
+    public void SplitTo_WithNullInput()
+    {
+        string input = null;
+        var result = input.SplitTo(str => str);
+
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void SplitTo_WithEmptyInput()
+    {
+        string input = "";
+        var result = input.SplitTo(str => str);
+
+        Assert.Empty(result);
+    }
 }

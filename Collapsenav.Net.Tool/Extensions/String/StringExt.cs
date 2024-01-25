@@ -105,6 +105,22 @@ public static partial class StringExt
     {
         return string.Join(separate, query.Select(getStr ?? (item => item?.ToString() ?? string.Empty)));
     }
+    /// <summary>
+    /// 将字符串分割并转换
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="origin"></param>
+    /// <param name="selector"></param>
+    /// <param name="separator"></param>
+    /// <returns></returns>
+    public static T[] SplitTo<T>(this string? origin, Func<string, T> selector, params char[]? separator)
+    {
+        if (origin.IsEmpty())
+            return Array.Empty<T>();
+        if (separator.IsEmpty())
+            separator = new[] { ' ' };
+        return origin.Split(separator).Select(selector).ToArray();
+    }
 
     /// <summary>
     /// 获取 Domain 域名
