@@ -460,7 +460,7 @@ public class StringExtTest
     public void SplitTo_WithDefaultSeparator()
     {
         string input = "hello world";
-        var result = input.SplitTo(str => str.ToUpper());
+        var result = input.SplitAs(str => str.ToUpper());
 
         Assert.Equal(2, result.Length);
         Assert.Equal("HELLO", result[0]);
@@ -471,7 +471,7 @@ public class StringExtTest
     public void SplitTo_WithCustomSeparator()
     {
         string input = "hello,world";
-        var result = input.SplitTo(str => str, new[] { ',' });
+        var result = input.SplitAs(str => str, new[] { ',' });
 
         Assert.Equal(2, result.Length);
         Assert.Equal("hello", result[0]);
@@ -481,7 +481,7 @@ public class StringExtTest
     public void SplitTo_WithNullInput()
     {
         string input = null;
-        var result = input.SplitTo(str => str);
+        var result = input.SplitAs(str => str);
 
         Assert.Empty(result);
     }
@@ -490,7 +490,7 @@ public class StringExtTest
     public void SplitTo_WithEmptyInput()
     {
         string input = "";
-        var result = input.SplitTo(str => str);
+        var result = input.SplitAs(str => str);
 
         Assert.Empty(result);
     }

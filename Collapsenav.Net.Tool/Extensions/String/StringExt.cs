@@ -113,7 +113,7 @@ public static partial class StringExt
     /// <param name="selector"></param>
     /// <param name="separator"></param>
     /// <returns></returns>
-    public static T[] SplitTo<T>(this string? origin, Func<string, T> selector, params char[]? separator)
+    public static T[] SplitAs<T>(this string? origin, Func<string, T> selector, params char[]? separator)
     {
         if (origin.IsEmpty())
             return Array.Empty<T>();
