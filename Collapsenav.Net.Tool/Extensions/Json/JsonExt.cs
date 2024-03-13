@@ -36,12 +36,11 @@ public static partial class JsonExt
     public static T? JsonMap<S, T>(this S origin, T target) where S : class where T : class
     {
         var propNames = origin.PropNames();
-        var temp = target.ToJson().ToObj<T>();
         if (propNames == null)
             throw new NullReferenceException();
         foreach (var name in propNames)
-            temp?.SetValue(name, origin.GetValue(name));
-        return temp;
+            target?.SetValue(name, origin.GetValue(name));
+        return target;
     }
 
     /// <summary>

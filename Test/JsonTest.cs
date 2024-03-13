@@ -103,13 +103,9 @@ public class JsonTest
     {
         var obj1 = new TestJsonObj1 { Age = 1, UserName = "1", Id = 1 };
         var obj2 = new TestJsonObj2 { Age = 2, UserName = "2" };
-        var temp = obj1.JsonMap(obj2);
-        Assert.True(temp.Age == 1);
-        Assert.True(temp.UserName == "1");
-        var temp2 = obj2.JsonMap(obj1);
-        Assert.True(temp2.Age == 2);
-        Assert.True(temp2.UserName == "2");
-        Assert.True(temp2.Id == 1);
+        obj1.JsonMap(obj2);
+        Assert.True(obj2.Age == 1);
+        Assert.True(obj2.UserName == "1");
     }
 
     [Fact]
