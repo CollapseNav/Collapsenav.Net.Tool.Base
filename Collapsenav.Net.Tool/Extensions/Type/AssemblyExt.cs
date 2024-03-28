@@ -75,6 +75,10 @@ public static partial class AssemblyExt
     {
         return ass.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
     }
+    public static IEnumerable<Type> GetTypes(this Assembly ass, params Type[] types)
+    {
+        return ass.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => types.Any(type => item.IsType(type)));
+    }
     /// <summary>
     /// 根据前缀查找type
     /// </summary>
@@ -118,9 +122,17 @@ public static partial class AssemblyExt
     public static IEnumerable<Type> GetTypes(this AppDomain domain, bool withSystemAssembly = true)
     {
         return domain.GetAllAssemblies(withSystemAssembly).SelectMany(item => item.GetTypes());
-    }    /// <summary>
-         /// 获取appdomain下所有自定义程序集的type
-         /// </summary>
+    }
+    /// <summary>
+    /// 获取appdomain下所有type
+    /// </summary>
+    public static IEnumerable<Type> GetTypes(this AppDomain domain, params Type[] types)
+    {
+        return domain.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => types.Any(type => item.IsType(type)));
+    }
+    /// <summary>
+    /// 获取appdomain下所有自定义程序集的type
+    /// </summary>
     public static IEnumerable<Type> GetCustomerTypes(this AppDomain domain)
     {
         return domain.GetCustomerAssemblies().SelectMany(item => item.GetTypes());
