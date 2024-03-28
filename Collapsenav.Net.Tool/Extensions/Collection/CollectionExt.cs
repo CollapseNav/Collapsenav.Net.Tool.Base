@@ -128,7 +128,7 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="input">非空字符串则应用筛选条件</param>
     /// <param name="filter">筛选条件</param>
-    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T>? query, string input, Func<T, bool> filter)
+    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T>? query, string? input, Func<T, bool> filter)
     {
         return query.WhereIf(input.NotEmpty(), filter);
     }
@@ -152,7 +152,7 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="input">非空字符串则应用筛选条件</param>
     /// <param name="filter">筛选条件</param>
-    public static IQueryable<T> WhereIf<T>(this IQueryable<T>? query, string input, Expression<Func<T, bool>> filter)
+    public static IQueryable<T> WhereIf<T>(this IQueryable<T>? query, string? input, Expression<Func<T, bool>> filter)
     {
         return query.WhereIf(input.NotEmpty(), filter);
     }
