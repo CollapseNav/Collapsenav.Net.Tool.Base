@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
@@ -118,7 +119,14 @@ public class InterfaceTestClass5 : InterfaceTestClass4<PropTest1>, ITestInterfac
     }
 }
 public abstract class AbsClass { }
-public enum TestEnum { }
+public enum TestEnum
+{
+    [Description("测试")]
+    Test,
+    [Description("测试2")]
+    Test2,
+    Test3,
+}
 public class MyEnumerable : IEnumerable
 {
     public IEnumerator GetEnumerator()

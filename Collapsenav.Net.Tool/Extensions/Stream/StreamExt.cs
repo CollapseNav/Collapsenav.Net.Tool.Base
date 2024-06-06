@@ -56,10 +56,8 @@ public static partial class StreamExt
     /// </summary>
     public static byte[] ToBytes(this Stream stream)
     {
-        stream.SeekToOrigin();
         byte[] bytes = new byte[stream.Length];
         stream.Read(bytes, 0, bytes.Length);
-        stream.SeekToOrigin();
         return bytes;
     }
     /// <summary>
@@ -67,14 +65,12 @@ public static partial class StreamExt
     /// </summary>
     public static async Task<byte[]> ToBytesAsync(this Stream stream)
     {
-        stream.SeekToOrigin();
         byte[] bytes = new byte[stream.Length];
 #if NETSTANDARD2_0
         await stream.ReadAsync(bytes, 0, (int)stream.Length);
 #else
         await stream.ReadAsync(bytes);
 #endif
-        stream.SeekToOrigin();
         return bytes;
     }
     /// <summary>
