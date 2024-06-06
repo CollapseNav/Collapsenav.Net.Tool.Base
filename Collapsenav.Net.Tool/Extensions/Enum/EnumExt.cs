@@ -4,10 +4,9 @@ namespace Collapsenav.Net.Tool;
 
 public static class EnumExt
 {
-    public static T? ToEnum<T>(this string value) where T : struct, Enum
+    public static object? ToEnum(this string value, Type type)
     {
-        var type = typeof(T);
-        var values = Enum.GetValues<T>();
+        var values = Enum.GetValues(type);
         foreach (var v in values)
         {
             var attributes = v.GetType().GetField(v.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -20,6 +19,15 @@ public static class EnumExt
                     return v;
             }
         }
+        return null;
+    }
+
+    public static T? ToEnum<T>(this string value) where T : struct, Enum
+    {
+        var type = typeof(T);
+        var enumValue = ToEnum(value, type);
+        if (enumValue is T t)
+            return t;
         return null;
     }
 

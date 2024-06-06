@@ -4,22 +4,22 @@ namespace Collapsenav.Net.Tool.Test;
 
 public class EnumTest
 {
-    [Fact]
-    public void ToEnumTest()
+    [Theory]
+    [InlineData("测试", TestEnum.Test)]
+    [InlineData("测试2", TestEnum.Test2)]
+    [InlineData("Test3", null)]
+    public void ToEnumTest(string str, TestEnum? testEnum)
     {
-        Assert.Equal(TestEnum.Test, "测试".ToEnum<TestEnum>());
-        Assert.Equal(TestEnum.Test2, "测试2".ToEnum<TestEnum>());
-        Assert.Null("Test3".ToEnum<TestEnum>());
+        Assert.Equal(testEnum, str.ToEnum<TestEnum>());
+        Assert.Equal(testEnum, str.ToEnum(typeof(TestEnum)));
     }
 
-    [Fact]
-    public void ToDescriptionTest()
+    [Theory]
+    [InlineData("测试", TestEnum.Test)]
+    [InlineData("测试2", TestEnum.Test2)]
+    [InlineData("Test3", TestEnum.Test3)]
+    public void ToDescriptionTest(string str, TestEnum? testEnum)
     {
-        TestEnum testEnum = TestEnum.Test;
-        Assert.Equal("测试", testEnum.Description());
-        testEnum = TestEnum.Test2;
-        Assert.Equal("测试2", testEnum.Description());
-        testEnum = TestEnum.Test3;
-        Assert.Equal("Test3", testEnum.Description());
+        Assert.Equal(str, testEnum?.Description());
     }
 }
