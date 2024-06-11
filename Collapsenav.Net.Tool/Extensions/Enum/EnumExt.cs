@@ -9,8 +9,10 @@ public static class EnumExt
         var values = Enum.GetValues(type);
         foreach (var v in values)
         {
+            if (v == null)
+                continue;
             var attributes = v.GetType().GetField(v.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), false);
-            if (attributes.IsEmpty() && v.ToString() != value)
+        if (attributes.IsEmpty() && v.ToString() != value)
                 continue;
             else if (attributes.NotEmpty())
             {
