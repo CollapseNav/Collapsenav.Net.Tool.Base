@@ -389,12 +389,25 @@ public class StringExtTest
             Assert.True(origin.PadWith(value, len, fill).Length == origin.Length + value.Length);
     }
 
-    [Fact]
-    public void ToValueTest()
+    [Theory]
+    [InlineData("123", 123, typeof(int))]
+    [InlineData("123.123", 123.123, typeof(double))]
+    [InlineData("123.123", "123.123", typeof(string))]
+    public void ToValueTest(string origin, object value, Type type)
     {
-        Assert.Equal(123, "123".ToValue(typeof(int)));
-        Assert.Equal(123.123, "123.123".ToValue(typeof(double)));
-        Assert.Equal("123.123", "123.123".ToValue(typeof(string)));
+        Assert.Equal(value, origin.ToValue(type));
+    }
+
+    [Fact]
+    public void DateTimeToValueTest()
+    {
+        var date = new DateTime(2011, 1, 1, 1, 1, 1);
+        Assert.Equal(date.Date, "2011-01-01".ToValue(typeof(DateTime)));
+        Assert.Equal(date.Date, "2011/01/01".ToValue(typeof(DateTime)));
+        Assert.Equal(date.Date, "2011#01#01".ToValue(typeof(DateTime), "yyyy#MM#dd"));
+        Assert.Equal(date, "2011-01-01 01:01:01".ToValue(typeof(DateTime)));
+        date = date.AddMilliseconds(1);
+        Assert.Equal(date, "2011-01-01 01:01:01.001".ToValue(typeof(DateTime)));
     }
 
     [Fact]

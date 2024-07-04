@@ -83,12 +83,45 @@ public static partial class StringExt
     public static double? ToDouble(this string input) => double.TryParse(input, out double result) ? result : null;
     public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
     public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
-    public static object? ToValue(this string input, Type type)
+    public static object? ToValue(this string input, Type type, string? format = null)
     {
         var flag = type.HasMethod("Parse");
         if (flag)
         {
             var method = type.GetMethods().FirstOrDefault(item => item.Name == "Parse");
+            if (type == typeof(DateTime))
+            {
+                var date = new DateTime();
+                method = type.GetMethods().FirstOrDefault(item => item.Name == "TryParseExact");
+                object[] args;
+                if (format.NotEmpty())
+                {
+                    args = new object[] { input, format, CultureInfo.InvariantCulture, DateTimeStyles.None, date };
+                    flag = (bool?)method?.Invoke(null, args) ?? false;
+                }
+                else if (input.Contains("/"))
+                {
+                    method = type.GetMethods().FirstOrDefault(item => item.Name == "TryParse");
+                    args = new object[] { input, date };
+                    flag = (bool?)method?.Invoke(null, args) ?? false;
+                }
+                else if (input.Contains("."))
+                {
+                    args = new object[] { input, DateTimeExt.DefaultMilliFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, date };
+                    flag = (bool?)method?.Invoke(null, args) ?? false;
+                }
+                else if (input.Contains(":"))
+                {
+                    args = new object[] { input, DateTimeExt.DefaultTimeFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, date };
+                    flag = (bool?)method?.Invoke(null, args) ?? false;
+                }
+                else
+                {
+                    args = new object[] { input, DateTimeExt.DefaultDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, date };
+                    flag = (bool?)method?.Invoke(null, args) ?? false;
+                }
+                return flag ? args[^1] : null;
+            }
             return method?.Invoke(null, new[] { input });
         }
         return input;

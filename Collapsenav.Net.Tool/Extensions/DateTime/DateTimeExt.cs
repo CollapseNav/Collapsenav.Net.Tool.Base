@@ -50,8 +50,6 @@ public static partial class DateTimeExt
     {
         return date.ToString($"yyyy-MM-dd");
     }
-
-
     /// <summary>
     /// 转为默认时间格式字符串(yyyy-MM-dd HH:mm:ss)
     /// </summary>
@@ -69,6 +67,11 @@ public static partial class DateTimeExt
     {
         return time.ToString($"yyyy-MM-dd HH:mm:ss").Replace("-", f);
     }
+
+    public static string DefaultDateFormat = "yyyy-MM-dd";
+    public static string DefaultTimeFormat = "yyyy-MM-dd HH:mm:ss";
+    public static string DefaultMilliFormat = "yyyy-MM-dd HH:mm:ss.fff";
+
     /// <summary>
     /// 转为默认时间格式字符串(yyyy-MM-dd HH:mm:ss)
     /// </summary>
