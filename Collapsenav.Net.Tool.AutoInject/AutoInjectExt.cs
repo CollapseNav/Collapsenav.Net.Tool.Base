@@ -32,7 +32,7 @@ public static class AutoInjectExt
         // 挑出需要注册的 非接口
         autoInjectTypes = autoInjectTypes.Where(item => !item.IsInterface).Concat(autoInjectTypesTuple.Select(item=>item.ServiceType)).ToList();
         // 挑出所有 "实现"
-        types = types.Where(item => !item.IsInterface && !item.IsAbstract);
+        types = types.Where(item => !item.IsInterface && !item.IsAbstract).ToList();
 
         if (autoInjectInterfaces.NotEmpty())
         {
