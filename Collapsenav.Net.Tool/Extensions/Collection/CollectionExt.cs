@@ -242,4 +242,10 @@ public static partial class CollectionExt
             return Enumerable.Empty<(E, F)>();
         return origin.Select(item => (value(item), index(item)));
     }
+
+    public static JoinResult<T1, T2> LeftJoin<T1, T2>(this IEnumerable<T1> left, IEnumerable<T2> right, Expression<Func<T1, object?>> LKey, Expression<Func<T2, object?>> RKey) where T1 : class
+    {
+        var node = new JoinResult<T1>(left) { Query = left.Select(i => new JoinResultItem<T1> { Data1 = i }).AsQueryable() };
+        return node.LeftJoin(right, LKey, RKey);
+    }
 }

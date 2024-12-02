@@ -104,7 +104,7 @@ public class CollectionTest
     [Fact]
     public void ContainAndTest()
     {
-        string[] strList = { "1", "2", "3", "4", "5", "6" };
+        string[] strList = { "1", "2", "3", "4", "5", "6", "10" };
         Assert.True(strList.AllContain(new[] { "2", "6" }));
         Assert.True(strList.AllContain("2", "6"));
         Assert.False(strList.AllContain(new[] { "2", "8" }));
@@ -112,7 +112,7 @@ public class CollectionTest
         Assert.True(strList.AllContain(x => x, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
-        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, x => x));
+        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, x => (x.ToInt() + 2).ToString()));
         Assert.True(strList.AsEnumerable().AllContain(null, (x, y) => x == y));
         Assert.True(strList.AsEnumerable().AllContain(null, x => x));
         strList = null;
@@ -120,7 +120,7 @@ public class CollectionTest
         Assert.False(strList.AllContain(new[] { "2", "6" }));
         Assert.False(strList.AllContain("2", "6"));
         Assert.False(strList.AllContain(new[] { "2", "8" }, func));
-        Assert.False(strList.AllContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.AllContain(comparer: (x, y) => x == y, "2", "6"));
         Assert.False(strList.AllContain(x => x, "2", "6"));
         Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
         Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
@@ -546,5 +546,49 @@ public class CollectionTest
         Assert.Empty(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index));
         Assert.Empty(model1.Except(model2, (a, b) => a.Index == b.Index));
         Assert.Empty(model1.GetItemNotIn(model2));
+    }
+
+
+    [Fact]
+    public void LeftJoinTest()
+    {
+        IEnumerable<C1> c1s = new[] { new C1 { Id = 1, Name = "a" }, new C1 { Id = 2, Name = "b" }, new C1 { Id = 3, Name = "c" } };
+        IEnumerable<C2> c2s = new[] { new C2 { Id = 1, C1Key = 1, Value = "x" }, new C2 { Id = 2, C1Key = 2, Value = "y" }, new C2 { Id = 3, C1Key = 3, Value = "z" } };
+        var result = c1s
+        .LeftJoin(c2s, c1 => c1.Id, c2 => c2.C1Key)
+        .Select(i => new
+        {
+            i.Data1.Id,
+            i.Data1.Name,
+            i.Data2.Value,
+        }).ToList();
+        Assert.True(result.First().Name == "a");
+
+        var result2 = c1s
+        .LeftJoin(c2s, c1 => c1.Id, c2 => c2.C1Key)
+        .SelectValue((a, b) =>
+        {
+            return new
+            {
+                a.Id,
+                a.Name,
+                b.Value,
+            };
+        })
+        .ToList();
+        Assert.True(result2.SequenceEqual(result, (x, y) => x.Id == y.Id && x.Name == y.Name && x.Value == y.Value));
+    }
+
+    private class C1
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+    private class C2
+    {
+        public int Id { get; set; }
+        public int C1Key { get; set; }
+        public string Value { get; set; }
     }
 }
