@@ -331,6 +331,7 @@ public class JoinResult<T1> : IQueryable<JoinResultItem<T1>>
     public JoinResult(IEnumerable<T1> query)
     {
         _query = query;
+        Query = query.Select(i => new JoinResultItem<T1> { Data1 = i }).AsQueryable();
     }
     public IQueryable<JoinResultItem<T1>> Query;
     public Type ElementType => Query.ElementType;
