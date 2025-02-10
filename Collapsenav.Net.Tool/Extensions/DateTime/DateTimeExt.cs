@@ -1,6 +1,16 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool;
+
+public enum DateTimeType
+{
+    Year,
+    Month,
+    Day,
+    Hour,
+    Minute,
+    Second
+}
 public static partial class DateTimeExt
 {
     /// <summary>
@@ -124,5 +134,30 @@ public static partial class DateTimeExt
     {
         var map = new Dictionary<string, string> { { "-", f }, { ":", m }, { ".", e } };
         return new Regex(@"(-)|(:)|(\.)").Replace(time.ToString($"yyyy-MM-dd HH:mm:ss.fff"), m => map[m.Value]);
+    }
+
+    public static IEnumerable<DateTime> CreateDates(this (DateTime start, DateTime end) range, DateTimeType? type = DateTimeType.Day)
+    {
+        if (range.start > range.end)
+            range = (range.end, range.start);
+        var (start, end) = range;
+        var timediff = end - start;
+        var dates = type switch
+        {
+            DateTimeType.Year => GetDates(start.AddYears, end.Year - start.Year),
+            DateTimeType.Month => GetDates(start.AddMonths, (end.Year - start.Year) * 12 + (end.Month - start.Month) - (end.Day < start.Day ? 1 : 0)),
+            DateTimeType.Day => GetDates(num => start.AddDays(num), timediff.TotalDays),
+            DateTimeType.Hour => GetDates(num => start.AddHours(num), timediff.TotalHours),
+            DateTimeType.Minute => GetDates(num => start.AddMinutes(num), timediff.TotalMinutes),
+            DateTimeType.Second => GetDates(num => start.AddSeconds(num), timediff.TotalSeconds),
+            _ => Enumerable.Empty<DateTime>()
+        };
+
+        return dates;
+
+        static IEnumerable<DateTime> GetDates(Func<int, DateTime> function, double count)
+        {
+            return Enumerable.Range(0, (int)(count + 1)).Select(num => function(num));
+        }
     }
 }
