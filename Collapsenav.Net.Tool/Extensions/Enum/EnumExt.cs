@@ -12,7 +12,7 @@ public static class EnumExt
             if (v == null)
                 continue;
             var attributes = v.GetType().GetField(v.ToString())?.GetCustomAttributes(typeof(DescriptionAttribute), false);
-        if (attributes.IsEmpty() && v.ToString() != value)
+            if (attributes.IsEmpty() && v.ToString() != value)
                 continue;
             else if (attributes.NotEmpty())
             {

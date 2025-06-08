@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool;
+
 public static partial class StringExt
 {
 
