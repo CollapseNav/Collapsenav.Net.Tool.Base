@@ -17,14 +17,14 @@ public class JoinResult<T1, T2, T3, T4, T5, T6, T7, T8, T9> : IQueryable<JoinRes
     /// <summary>
     /// 求求了，别再联表了
     /// </summary>
-    public JoinResult<T1, T2, T3, T4, T5, T6, T7, T8, T9> LeftJoin<T10>(Expression<Func<JoinResultItem<T1, T2, T3, T4, T5, T6, T7, T8, T9>, object?>> LKey, Expression<Func<T10, object?>> RKey)
+    public JoinResult<T1, T2, T3, T4, T5, T6, T7, T8, T9> LeftJoin<T10>(IEnumerable<T10> query, Expression<Func<JoinResultItem<T1, T2, T3, T4, T5, T6, T7, T8, T9>, object?>> LKey, Expression<Func<T10, object?>> RKey)
     {
         throw new Exception("求求了，别再联表了");
     }
     /// <summary>
     /// 求求了，别再联表了
     /// </summary>
-    public JoinResult<T1, T2, T3, T4, T5, T6, T7, T8, T9> Join<T10>(Expression<Func<JoinResultItem<T1, T2, T3, T4, T5, T6, T7, T8, T9>, object?>> LKey, Expression<Func<T10, object?>> RKey)
+    public JoinResult<T1, T2, T3, T4, T5, T6, T7, T8, T9> Join<T10>(IEnumerable<T10> query, Expression<Func<JoinResultItem<T1, T2, T3, T4, T5, T6, T7, T8, T9>, object?>> LKey, Expression<Func<T10, object?>> RKey)
     {
         throw new Exception("求求了，别再联表了");
     }
