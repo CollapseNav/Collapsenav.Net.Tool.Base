@@ -8,13 +8,6 @@ public partial class Sha1Tool : DefaultAlgorithm<SHA1>
 {
     static Sha1Tool() => Algorithm ??= SHA1.Create();
     /// <summary>
-    /// 解密
-    /// </summary>
-    public static string Decrypt(string md5)
-    {
-        throw new Exception("Are you kidding ?");
-    }
-    /// <summary>
     /// 加密
     /// </summary>
     public static string Encrypt(string msg)

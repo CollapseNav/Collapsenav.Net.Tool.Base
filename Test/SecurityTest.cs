@@ -83,7 +83,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.Md5En(), same.Md5En());
         Assert.NotEqual(same.Md5En(), different.Md5En());
-        Assert.ThrowsAny<Exception>(() => origin.Md5En().Md5De());
     }
 
     [Theory]
@@ -93,7 +92,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.Sha1En(), same.Sha1En());
         Assert.NotEqual(same.Sha1En(), different.Sha1En());
-        Assert.ThrowsAny<Exception>(() => origin.Sha1En().Sha1De());
     }
 
     [Theory]
@@ -103,7 +101,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.Sha256En(), same.Sha256En());
         Assert.NotEqual(same.Sha256En(), different.Sha256En());
-        Assert.ThrowsAny<Exception>(() => origin.Sha256En().Sha256De());
     }
     [Theory]
     [InlineData("123", "123123123123", "123123123123", "1231231231233")]
@@ -112,7 +109,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.HMacMd5En(key), same.HMacMd5En(key));
         Assert.NotEqual(same.HMacMd5En(key), different.HMacMd5En(key));
-        Assert.ThrowsAny<Exception>(() => origin.HMacMd5En().HMacMd5De());
     }
 
     [Theory]
@@ -122,7 +118,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.HMacSha1En(key), same.HMacSha1En(key));
         Assert.NotEqual(same.HMacSha1En(key), different.HMacSha1En(key));
-        Assert.ThrowsAny<Exception>(() => origin.HMacSha1En().HMacSha1De());
     }
 
     [Theory]
@@ -132,7 +127,6 @@ public class SecurityTest
     {
         Assert.Equal(origin.HMacSha256En(key), same.HMacSha256En(key));
         Assert.NotEqual(same.HMacSha256En(key), different.HMacSha256En(key));
-        Assert.ThrowsAny<Exception>(() => origin.HMacSha256En().HMacSha256De());
     }
 
     [Theory]

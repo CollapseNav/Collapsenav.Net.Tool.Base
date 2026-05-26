@@ -4,13 +4,6 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacMd5Tool : WithKeyAlgorithm<HMACMD5>
 {
     /// <summary>
-    /// 解密
-    /// </summary>
-    public static string Decrypt(string input, string key = DefaultKey)
-    {
-        throw new Exception("Are you kidding ?");
-    }
-    /// <summary>
     /// 加密
     /// </summary>
     public static string Encrypt(string msg, string key = DefaultKey)

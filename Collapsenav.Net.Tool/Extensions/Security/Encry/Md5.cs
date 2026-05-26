@@ -7,13 +7,6 @@ public partial class MD5Tool : DefaultAlgorithm<MD5>
 {
     static MD5Tool() => Algorithm ??= MD5.Create();
     /// <summary>
-    /// 解密
-    /// </summary>
-    public static string Decrypt(string md5)
-    {
-        throw new Exception("Are you kidding ?");
-    }
-    /// <summary>
     /// 加密
     /// </summary>
     public static string Encrypt(string msg)

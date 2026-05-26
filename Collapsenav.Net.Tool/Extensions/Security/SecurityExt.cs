@@ -18,13 +18,6 @@ public static partial class SecurityExt
         return MD5Tool.Encrypt(input);
     }
     /// <summary>
-    /// Md5解密
-    /// </summary>
-    public static string Md5De(this string input)
-    {
-        return MD5Tool.Decrypt(input);
-    }
-    /// <summary>
     /// Sha1计算
     /// </summary>
     public static string Sha1En(this string input)
@@ -39,13 +32,6 @@ public static partial class SecurityExt
         return Sha1Tool.Encrypt(stream);
     }
     /// <summary>
-    /// Sha1解密
-    /// </summary>
-    public static string Sha1De(this string input)
-    {
-        return Sha1Tool.Decrypt(input);
-    }
-    /// <summary>
     /// Sha256计算
     /// </summary>
     public static string Sha256En(this string input)
@@ -58,13 +44,6 @@ public static partial class SecurityExt
     public static string Sha256En(this Stream stream)
     {
         return Sha256Tool.Encrypt(stream);
-    }
-    /// <summary>
-    /// Sha256解密
-    /// </summary>
-    public static string Sha256De(this string input)
-    {
-        return Sha256Tool.Decrypt(input);
     }
     /// <summary>
     /// Aes加密
@@ -151,26 +130,5 @@ public static partial class SecurityExt
     public static string HMacSha256En(this Stream input, string key = HMacSha256Tool.DefaultKey)
     {
         return HMacSha256Tool.Encrypt(input, key);
-    }
-    /// <summary>
-    /// HMacMd5解密
-    /// </summary>
-    public static string HMacMd5De(this string input, string key = HMacMd5Tool.DefaultKey)
-    {
-        return HMacMd5Tool.Decrypt(input, key);
-    }
-    /// <summary>
-    /// HMacSha1解密
-    /// </summary>
-    public static string HMacSha1De(this string input, string key = HMacSha1Tool.DefaultKey)
-    {
-        return HMacSha1Tool.Decrypt(input, key);
-    }
-    /// <summary>
-    /// HMacSha256解密
-    /// </summary>
-    public static string HMacSha256De(this string input, string key = HMacSha256Tool.DefaultKey)
-    {
-        return HMacSha256Tool.Decrypt(input, key);
     }
 }

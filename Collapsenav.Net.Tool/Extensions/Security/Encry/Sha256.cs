@@ -8,13 +8,6 @@ public partial class Sha256Tool : DefaultAlgorithm<SHA256>
 {
     static Sha256Tool() => Algorithm ??= SHA256.Create();
     /// <summary>
-    /// 解密
-    /// </summary>
-    public static string Decrypt(string md5)
-    {
-        throw new Exception("Are you kidding ?");
-    }
-    /// <summary>
     /// 加密
     /// </summary>
     public static string Encrypt(string msg)

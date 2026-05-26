@@ -7,13 +7,6 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacSha256Tool : WithKeyAlgorithm<HMACSHA256>
 {
     /// <summary>
-    /// 解密
-    /// </summary>
-    public static string Decrypt(string input, string key = DefaultKey)
-    {
-        throw new Exception("Are you kidding ?");
-    }
-    /// <summary>
     /// 加密
     /// </summary>
     public static string Encrypt(string msg, string key = DefaultKey)
