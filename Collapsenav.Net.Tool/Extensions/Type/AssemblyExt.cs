@@ -12,7 +12,7 @@ public static partial class AssemblyExt
         var asses = ass.GetReferencedAssemblies()
         .Select(LoadFrom)
         .Where(item => item != null && (withSystemAssembly || item.IsCustomerAssembly()))
-        .Concat(new[] { ass }).Distinct(i => i?.FullName);
+        .Concat(new[] { ass }).Unique(i => i?.FullName);
         return asses!;
     }
     /// <summary>
@@ -38,9 +38,9 @@ public static partial class AssemblyExt
         {
             asses = asses.Concat(dllPaths.Select(LoadFromFile)
             .Where(item => item != null && (withSystemAssembly || item.IsCustomerAssembly())))
-            .Distinct(i => i?.FullName).ToList()!;
+            .Unique(i => i?.FullName).ToList()!;
         }
-        return asses.SelectMany(item => item.GetAllAssemblies()).Distinct(i => i?.FullName);
+        return asses.SelectMany(item => item.GetAllAssemblies()).Unique(i => i?.FullName);
     }
 
     /// <summary>

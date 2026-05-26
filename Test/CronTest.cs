@@ -30,6 +30,6 @@ public class CronTest
     {
         var getCrons = CronTool.CreateCrons(len, cronType);
         Assert.True(crons.Length == getCrons.Count());
-        Assert.True(getCrons.AllContain(crons));
+        Assert.True(getCrons.ContainsAll(crons));
     }
 }

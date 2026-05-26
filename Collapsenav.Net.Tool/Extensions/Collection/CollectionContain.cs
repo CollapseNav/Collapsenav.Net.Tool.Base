@@ -63,7 +63,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer = null)
+    public static bool ContainsAll<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer = null)
     {
         if (query == null)
             return false;
@@ -80,7 +80,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
     /// <param name="keyselector"></param>
-    public static bool AllContain<T, E>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, E?>? keyselector)
+    public static bool ContainsAll<T, E>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, E?>? keyselector)
     {
         if (query == null)
             return false;
@@ -96,9 +96,9 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T>? query, params T[] filters)
+    public static bool ContainsAll<T>(this IEnumerable<T>? query, params T[] filters)
     {
-        return query.AllContain(filters, null);
+        return query.ContainsAll(filters, null);
     }
     /// <summary>
     /// 全包含
@@ -106,9 +106,9 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
+    public static bool ContainsAll<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
-        return query.AllContain(filters, comparer);
+        return query.ContainsAll(filters, comparer);
     }
     /// <summary>
     /// 全包含
@@ -116,9 +116,9 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="keyselector">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool AllContain<T, E>(this IEnumerable<T>? query, Func<T?, E?>? keyselector, params T[] filters)
+    public static bool ContainsAll<T, E>(this IEnumerable<T>? query, Func<T?, E?>? keyselector, params T[] filters)
     {
-        return query.AllContain(filters, keyselector);
+        return query.ContainsAll(filters, keyselector);
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么判断重复</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer = null)
+    public static bool ContainsAny<T>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, T?, bool>? comparer = null)
     {
         if (query == null)
             return false;
@@ -144,7 +144,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="keyselector">怎么判断重复</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T, E>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, E?>? keyselector)
+    public static bool ContainsAny<T, E>(this IEnumerable<T>? query, IEnumerable<T>? filters, Func<T?, E?>? keyselector)
     {
         if (query == null)
             return false;
@@ -160,9 +160,9 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T>? query, params T[] filters)
+    public static bool ContainsAny<T>(this IEnumerable<T>? query, params T[] filters)
     {
-        return query.HasContain(filters, null);
+        return query.ContainsAny(filters, null);
     }
     /// <summary>
     /// 部分包含
@@ -170,9 +170,9 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
+    public static bool ContainsAny<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer, params T[] filters)
     {
-        return query.HasContain(filters, comparer);
+        return query.ContainsAny(filters, comparer);
     }
     /// <summary>
     /// 部分包含
@@ -180,9 +180,9 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="keyselector">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool HasContain<T, E>(this IEnumerable<T>? query, Func<T?, E?>? keyselector, params T[] filters)
+    public static bool ContainsAny<T, E>(this IEnumerable<T>? query, Func<T?, E?>? keyselector, params T[] filters)
     {
-        return query.HasContain(filters, keyselector);
+        return query.ContainsAny(filters, keyselector);
     }
     /// <summary>
     /// 取交集

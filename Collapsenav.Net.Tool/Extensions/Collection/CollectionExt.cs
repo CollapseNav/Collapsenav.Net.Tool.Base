@@ -9,7 +9,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="size">每片大小</param>
-    public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T>? query, int size = 1)
+    public static IEnumerable<IEnumerable<T>> SplitCollection<T>(this IEnumerable<T>? query, int size = 1)
     {
 #if NET6_0
         return query.Chunk(size);
@@ -27,15 +27,6 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
-    public static IEnumerable<T> Distinct<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer)
-    {
-        return query.Unique(comparer);
-    }
-    /// <summary>
-    /// 去重
-    /// </summary>
-    /// <param name="query">源集合</param>
-    /// <param name="comparer">怎么比</param>
     public static IEnumerable<T> Unique<T>(this IEnumerable<T>? query, Func<T?, T?, bool>? comparer)
     {
         if (query == null)
@@ -43,15 +34,6 @@ public static partial class CollectionExt
         return query.Distinct(new CollapseNavEqualityComparer<T>(comparer));
     }
 
-    /// <summary>
-    /// 去重
-    /// </summary>
-    /// <param name="query">源集合</param>
-    /// <param name="field">hash去重</param>
-    public static IEnumerable<T> Distinct<T, E>(this IEnumerable<T>? query, Func<T?, E>? field)
-    {
-        return query.Unique(field);
-    }
     /// <summary>
     /// 去重
     /// </summary>

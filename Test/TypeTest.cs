@@ -141,20 +141,20 @@ public class TypeTest
     public void PropNamesTest()
     {
         var props = typeof(PropTest1).PropNames();
-        Assert.True(props.Count() == 3 && props.AllContain("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Count() == 3 && props.ContainsAll("Prop1", "Prop2", "Prop3"));
         props = new PropTest1().PropNames();
-        Assert.True(props.Count() == 3 && props.AllContain("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Count() == 3 && props.ContainsAll("Prop1", "Prop2", "Prop3"));
         props = new PropTest0().PropNames();
-        Assert.True(props.Count() == 2 && props.AllContain("Prop0", "Prop"));
+        Assert.True(props.Count() == 2 && props.ContainsAll("Prop0", "Prop"));
     }
 
     [Fact]
     public void PropNamesHasDepthTest()
     {
         var props = new PropTest0().PropNames(1);
-        Assert.True(props.Count() == 4 && props.AllContain("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
+        Assert.True(props.Count() == 4 && props.ContainsAll("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
         props = typeof(PropTest0).PropNames(0);
-        Assert.True(props.Count() == 2 && props.AllContain("Prop0", "Prop"));
+        Assert.True(props.Count() == 2 && props.ContainsAll("Prop0", "Prop"));
     }
     [Fact]
     public void GetValueTest()
@@ -191,7 +191,7 @@ public class TypeTest
         var data = new PropTest1();
         var props2 = data.Props();
         Assert.True(props.SequenceEqual(props2, item => item.Name.GetHashCode()));
-        Assert.True(props.Select(item => item.Name).AllContain("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Select(item => item.Name).ContainsAll("Prop1", "Prop2", "Prop3"));
     }
 
     [Fact]

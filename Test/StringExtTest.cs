@@ -190,19 +190,19 @@ public class StringExtTest
     [InlineData("               ", "default")]
     public void WhiteTest(string value, string defaultValue = "")
     {
-        Assert.True(value.IsWhite());
-        Assert.False(value.NotWhite());
+        Assert.True(value.IsBlank());
+        Assert.False(value.NotBlank());
         if (!string.IsNullOrEmpty(defaultValue))
-            Assert.True(value.IsWhite(defaultValue) == defaultValue);
+            Assert.True(value.IsBlank(defaultValue) == defaultValue);
     }
     [Theory]
     [InlineData("123")]
     [InlineData("  fdsa")]
     [InlineData("  fdsa   ")]
-    public void NotWhiteTest(string value)
+    public void NotBlankTest(string value)
     {
-        Assert.True(value.NotWhite());
-        Assert.False(value.IsWhite());
+        Assert.True(value.NotBlank());
+        Assert.False(value.IsBlank());
     }
     [Theory]
     [InlineData("   233", 233, 6)]
@@ -304,25 +304,25 @@ public class StringExtTest
     public void ContainTest()
     {
         string temp = "123456789";
-        Assert.True(temp.AllContain(new[] { "123", "345" }));
-        Assert.True(temp.AllContain("789", "567"));
-        Assert.True(temp.HasContain(new[] { "234", "444" }));
-        Assert.True(temp.HasContain("456", "898"));
+        Assert.True(temp.ContainsAll(new[] { "123", "345" }));
+        Assert.True(temp.ContainsAll("789", "567"));
+        Assert.True(temp.ContainsAny(new[] { "234", "444" }));
+        Assert.True(temp.ContainsAny("456", "898"));
 
-        Assert.False(temp.AllContain("789", "5679"));
-        Assert.False(temp.HasContain("7899", "5679"));
+        Assert.False(temp.ContainsAll("789", "5679"));
+        Assert.False(temp.ContainsAny("7899", "5679"));
         temp = "ABCD";
-        Assert.True(temp.AllContain(new[] { "ABc", "cD" }, ignoreCase: true));
-        Assert.False(temp.AllContain(new[] { "ABc", "cD" }, ignoreCase: false));
-        Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: true));
-        Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: false));
-        Assert.False(temp.HasContain(new[] { "ABcE", "cD" }, ignoreCase: false));
+        Assert.True(temp.ContainsAll(new[] { "ABc", "cD" }, ignoreCase: true));
+        Assert.False(temp.ContainsAll(new[] { "ABc", "cD" }, ignoreCase: false));
+        Assert.True(temp.ContainsAny(new[] { "ABc", "CD" }, ignoreCase: true));
+        Assert.True(temp.ContainsAny(new[] { "ABc", "CD" }, ignoreCase: false));
+        Assert.False(temp.ContainsAny(new[] { "ABcE", "cD" }, ignoreCase: false));
 
         temp = null;
-        Assert.False(temp.AllContain("456", "898"));
-        Assert.False(temp.HasContain("456", "898"));
-        Assert.False(temp.AllContain(new[] { "456", "898" }, ignoreCase: true));
-        Assert.False(temp.HasContain(new[] { "456", "898" }, ignoreCase: true));
+        Assert.False(temp.ContainsAll("456", "898"));
+        Assert.False(temp.ContainsAny("456", "898"));
+        Assert.False(temp.ContainsAll(new[] { "456", "898" }, ignoreCase: true));
+        Assert.False(temp.ContainsAny(new[] { "456", "898" }, ignoreCase: true));
     }
 
     [Fact]

@@ -30,19 +30,16 @@ public class CollectionTest
         int[] value = { 1, 2, 3, 4 };
         var uniqueIntList = intList.Unique(item => item);
         Assert.True(uniqueIntList.SequenceEqual(value));
-        uniqueIntList = intList.Distinct(item => item);
+        uniqueIntList = intList.Unique(item => item);
         Assert.True(uniqueIntList.SequenceEqual(value));
 
         uniqueIntList = intList.Unique((x, y) => x == y);
-        Assert.True(uniqueIntList.SequenceEqual(value));
-        uniqueIntList = intList.Distinct((x, y) => x == y);
         Assert.True(uniqueIntList.SequenceEqual(value));
 
         uniqueIntList = intList.Unique();
         Assert.True(uniqueIntList.SequenceEqual(value));
         intList = null;
         Assert.Empty(intList.Unique(item => item));
-        Assert.Empty(intList.Distinct(item => item));
         Assert.Empty(intList.Unique((x, y) => x == y));
         Assert.Empty(intList.Unique());
 
@@ -105,48 +102,48 @@ public class CollectionTest
     public void ContainAndTest()
     {
         string[] strList = { "1", "2", "3", "4", "5", "6", "10" };
-        Assert.True(strList.AllContain(new[] { "2", "6" }));
-        Assert.True(strList.AllContain("2", "6"));
-        Assert.False(strList.AllContain(new[] { "2", "8" }));
-        Assert.True(strList.AllContain((x, y) => x == y, "2", "6"));
-        Assert.True(strList.AllContain(x => x, "2", "6"));
-        Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
-        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
-        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, x => (x.ToInt() + 2).ToString()));
-        Assert.True(strList.AsEnumerable().AllContain(null, (x, y) => x == y));
-        Assert.True(strList.AsEnumerable().AllContain(null, x => x));
+        Assert.True(strList.ContainsAll(new[] { "2", "6" }));
+        Assert.True(strList.ContainsAll("2", "6"));
+        Assert.False(strList.ContainsAll(new[] { "2", "8" }));
+        Assert.True(strList.ContainsAll((x, y) => x == y, "2", "6"));
+        Assert.True(strList.ContainsAll(x => x, "2", "6"));
+        Assert.False(strList.ContainsAll((x, y) => x == y, "2", "8"));
+        Assert.False(strList.AsEnumerable().ContainsAll(new[] { "2", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().ContainsAll(new[] { "2", "8" }, x => (x.ToInt() + 2).ToString()));
+        Assert.True(strList.AsEnumerable().ContainsAll(null, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().ContainsAll(null, x => x));
         strList = null;
         Func<string, string> func = null;
-        Assert.False(strList.AllContain(new[] { "2", "6" }));
-        Assert.False(strList.AllContain("2", "6"));
-        Assert.False(strList.AllContain(new[] { "2", "8" }, func));
-        Assert.False(strList.AllContain(comparer: (x, y) => x == y, "2", "6"));
-        Assert.False(strList.AllContain(x => x, "2", "6"));
-        Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
-        Assert.False(strList.AsEnumerable().AllContain(new[] { "2", "8" }, (x, y) => x == y));
+        Assert.False(strList.ContainsAll(new[] { "2", "6" }));
+        Assert.False(strList.ContainsAll("2", "6"));
+        Assert.False(strList.ContainsAll(new[] { "2", "8" }, func));
+        Assert.False(strList.ContainsAll(comparer: (x, y) => x == y, "2", "6"));
+        Assert.False(strList.ContainsAll(x => x, "2", "6"));
+        Assert.False(strList.ContainsAll((x, y) => x == y, "2", "8"));
+        Assert.False(strList.AsEnumerable().ContainsAll(new[] { "2", "8" }, (x, y) => x == y));
     }
 
     [Fact]
     public void ContainOrTest()
     {
         string[] strList = { "1", "2", "3", "4", "5", "6" };
-        Assert.True(strList.HasContain(new[] { "2", "6" }));
-        Assert.True(strList.HasContain(new[] { "2", "8" }.AsEnumerable()));
-        Assert.False(strList.HasContain(new[] { "7", "8" }));
-        Assert.True(strList.HasContain((x, y) => x == y, "2", "6"));
-        Assert.True(strList.HasContain(x => x, "2", "6"));
-        Assert.True(strList.HasContain((x, y) => x == y, "2", "8"));
-        Assert.False(strList.HasContain((x, y) => x == y, "7", "8"));
-        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
-        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, x => x));
-        Assert.True(strList.AsEnumerable().HasContain(null, (x, y) => x == y));
-        Assert.True(strList.AsEnumerable().HasContain(null, x => x));
+        Assert.True(strList.ContainsAny(new[] { "2", "6" }));
+        Assert.True(strList.ContainsAny(new[] { "2", "8" }.AsEnumerable()));
+        Assert.False(strList.ContainsAny(new[] { "7", "8" }));
+        Assert.True(strList.ContainsAny((x, y) => x == y, "2", "6"));
+        Assert.True(strList.ContainsAny(x => x, "2", "6"));
+        Assert.True(strList.ContainsAny((x, y) => x == y, "2", "8"));
+        Assert.False(strList.ContainsAny((x, y) => x == y, "7", "8"));
+        Assert.False(strList.AsEnumerable().ContainsAny(new[] { "7", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().ContainsAny(new[] { "7", "8" }, x => x));
+        Assert.True(strList.AsEnumerable().ContainsAny(null, (x, y) => x == y));
+        Assert.True(strList.AsEnumerable().ContainsAny(null, x => x));
         strList = null;
-        Assert.False(strList.HasContain(new[] { "2", "6" }));
-        Assert.False(strList.HasContain((x, y) => x == y, "2", "6"));
-        Assert.False(strList.HasContain(x => x, "2", "6"));
-        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, (x, y) => x == y));
-        Assert.False(strList.AsEnumerable().HasContain(new[] { "7", "8" }, x => x));
+        Assert.False(strList.ContainsAny(new[] { "2", "6" }));
+        Assert.False(strList.ContainsAny((x, y) => x == y, "2", "6"));
+        Assert.False(strList.ContainsAny(x => x, "2", "6"));
+        Assert.False(strList.AsEnumerable().ContainsAny(new[] { "7", "8" }, (x, y) => x == y));
+        Assert.False(strList.AsEnumerable().ContainsAny(new[] { "7", "8" }, x => x));
     }
 
 
@@ -276,19 +273,19 @@ public class CollectionTest
     }
 
     [Fact]
-    public void SpliteCollectionTest()
+    public void SplitCollectionTest()
     {
         var nums = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        var numSplit = nums.SpliteCollection(2);
+        var numSplit = nums.SplitCollection(2);
         Assert.True(numSplit.Count() == 5);
         Assert.True(numSplit.First().SequenceEqual(new[] { 1, 2 }));
 
-        numSplit = nums.SpliteCollection(3);
+        numSplit = nums.SplitCollection(3);
         Assert.True(numSplit.Count() == 4);
         Assert.True(numSplit.First().SequenceEqual(new[] { 1, 2, 3 }));
         Assert.True(numSplit.Last().SequenceEqual(new[] { 10 }));
         nums = null;
-        Assert.Empty(nums.SpliteCollection(3));
+        Assert.Empty(nums.SplitCollection(3));
     }
 
     [Fact]

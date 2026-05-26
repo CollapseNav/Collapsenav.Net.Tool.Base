@@ -49,7 +49,7 @@ public partial class StringExt
     /// <summary>
     /// 是空白字符串
     /// </summary>
-    public static bool IsWhite(
+    public static bool IsBlank(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(false)]
 #endif
@@ -57,22 +57,22 @@ public partial class StringExt
     /// <summary>
     /// 不是空白字符串
     /// </summary>
-    public static bool NotWhite(
+    public static bool NotBlank(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(true)]
 #endif
-        this string? str) => !str.IsWhite();
+        this string? str) => !str.IsBlank();
     /// <summary>
     /// 若是空白字符串则返回value
     /// </summary>
-    public static string? IsWhite(this string? str, string? value) => str.IsWhite() ? (value ?? string.Empty) : str;
+    public static string? IsBlank(this string? str, string? value) => str.IsBlank() ? (value ?? string.Empty) : str;
     /// <summary>
     /// 全包含
     /// </summary>
     /// <param name="origin">源字符串</param>
     /// <param name="keys"></param>
     /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
-    public static bool AllContain(this string? origin, IEnumerable<string> keys, bool ignoreCase = false)
+    public static bool ContainsAll(this string? origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
         if (origin.IsNull())
             return false;
@@ -88,7 +88,7 @@ public partial class StringExt
     /// <param name="origin">源字符串</param>
     /// <param name="keys"></param>
     /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
-    public static bool HasContain(this string? origin, IEnumerable<string> keys, bool ignoreCase = false)
+    public static bool ContainsAny(this string? origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
         if (origin.IsNull())
             return false;
@@ -103,7 +103,7 @@ public partial class StringExt
     /// </summary>
     /// <param name="origin">源字符串</param>
     /// <param name="keys"></param>
-    public static bool AllContain(this string? origin, params string[] keys)
+    public static bool ContainsAll(this string? origin, params string[] keys)
     {
         if (origin.IsNull())
             return false;
@@ -114,7 +114,7 @@ public partial class StringExt
     /// </summary>
     /// <param name="origin">源字符串</param>
     /// <param name="keys"></param>
-    public static bool HasContain(this string? origin, params string[] keys)
+    public static bool ContainsAny(this string? origin, params string[] keys)
     {
         if (origin.IsNull())
             return false;

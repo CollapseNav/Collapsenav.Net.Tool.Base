@@ -32,16 +32,16 @@ public class AssemblyTest
     {
         var interfaces = Assembly.GetExecutingAssembly().GetInterfaces().ToList();
         Assert.True(interfaces.All(type => type.IsInterface));
-        Assert.True(interfaces.AllContain(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
+        Assert.True(interfaces.ContainsAll(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
 
         interfaces = AppDomain.CurrentDomain.GetInterfaces().ToList();
         Assert.True(interfaces.All(type => type.IsInterface));
-        Assert.True(interfaces.AllContain(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
+        Assert.True(interfaces.ContainsAll(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
         Assert.Contains(interfaces, type => type.FullName.HasStartsWith("System", "Microsoft"));
 
         interfaces = AppDomain.CurrentDomain.GetCustomerInterfaces().ToList();
         Assert.True(interfaces.All(type => type.IsInterface));
-        Assert.True(interfaces.AllContain(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
+        Assert.True(interfaces.ContainsAll(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
         Assert.Contains(interfaces, type => !type.FullName.HasStartsWith("System", "Microsoft"));
     }
 
@@ -50,7 +50,7 @@ public class AssemblyTest
     {
         var absClasses = Assembly.GetExecutingAssembly().GetAbstracts().ToList();
         Assert.True(absClasses.All(type => type.IsAbstract));
-        Assert.True(absClasses.AllContain(typeof(AbsClass)));
+        Assert.True(absClasses.ContainsAll(typeof(AbsClass)));
     }
 
     [Fact]
@@ -58,23 +58,23 @@ public class AssemblyTest
     {
         var enums = Assembly.GetExecutingAssembly().GetEnums().ToList();
         Assert.True(enums.All(type => type.IsEnum));
-        Assert.True(enums.AllContain(typeof(TestEnum)));
+        Assert.True(enums.ContainsAll(typeof(TestEnum)));
     }
 
     [Fact]
     public void GetTypesTest()
     {
         var types = AppDomain.CurrentDomain.GetTypes<ITestInterface>();
-        Assert.True(types.AllContain(typeof(ITestInterface<>), typeof(ITestInterface<,>), typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
+        Assert.True(types.ContainsAll(typeof(ITestInterface<>), typeof(ITestInterface<,>), typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
 
         types = AppDomain.CurrentDomain.GetCustomerTypes<ITestInterface>();
-        Assert.True(types.AllContain(typeof(ITestInterface<>), typeof(ITestInterface<,>), typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
+        Assert.True(types.ContainsAll(typeof(ITestInterface<>), typeof(ITestInterface<,>), typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
 
         types = AppDomain.CurrentDomain.GetTypes<IEnumerable>();
-        Assert.True(types.AllContain(typeof(JEnumerable<>)));
+        Assert.True(types.ContainsAll(typeof(JEnumerable<>)));
 
         types = AppDomain.CurrentDomain.GetCustomerTypes<IEnumerable>();
-        Assert.True(types.AllContain(typeof(MyEnumerable)));
+        Assert.True(types.ContainsAll(typeof(MyEnumerable)));
 
         var ass = Assembly.Load("Collapsenav.Net.Tool");
         types = ass.GetTypes<SummaryNode>();
@@ -91,21 +91,21 @@ public class AssemblyTest
     public void GetCustomerTypesByPrefixTest()
     {
         var types = AppDomain.CurrentDomain.GetCustomerTypesByPrefix("Interface");
-        Assert.True(types.AllContain(typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
+        Assert.True(types.ContainsAll(typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3)));
     }
 
     [Fact]
     public void GetCustomerTypesBySuffixTest()
     {
         var types = AppDomain.CurrentDomain.GetCustomerTypesBySuffix("Interface");
-        Assert.True(types.AllContain(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
+        Assert.True(types.ContainsAll(typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
     }
 
     [Fact]
     public void GetCustomerTypesByPrefixAndSuffixTest()
     {
         var types = AppDomain.CurrentDomain.GetCustomerTypesByPrefixAndSuffix("Interface");
-        Assert.True(types.AllContain(typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3), typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
+        Assert.True(types.ContainsAll(typeof(InterfaceTestClass), typeof(InterfaceTestClass2), typeof(InterfaceTestClass3), typeof(ITestInterface), typeof(ITestInterface<>), typeof(ITestInterface<,>)));
     }
 }
 
