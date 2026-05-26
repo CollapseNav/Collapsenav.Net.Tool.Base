@@ -16,7 +16,9 @@ public static partial class CollectionExt
 #else
         if (query != null)
         {
-            for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
+            var count = query.Count();
+            var pageCount = (count / size) + (count % size == 0 ? 0 : 1);
+            for (int i = 0; i < pageCount; i++)
                 yield return query.Skip(i * size).Take(size);
         }
 #endif
@@ -169,19 +171,14 @@ public static partial class CollectionExt
         return query != null && query.Any();
     }
     /// <summary>
-    /// 打乱顺序
+    /// 打乱顺序（seed 为 0 时使用随机种子，指定固定 seed 可复现顺序）
     /// </summary>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T>? query, int round = 1)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T>? query, int seed = 0)
     {
         if (query == null)
             return Enumerable.Empty<T>();
-        var random = new Random();
-        if (round > 0)
-        {
-            for (var i = 0; i < round; i++)
-                query = query.OrderBy(item => Guid.NewGuid()).ToList();
-        }
-        return query;
+        var random = seed == 0 ? new Random() : new Random(seed);
+        return query.OrderBy(item => random.Next()).ToList();
     }
 
 

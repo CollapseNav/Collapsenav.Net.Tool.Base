@@ -128,7 +128,7 @@ public partial class StringExt
     {
         if (email.IsNull())
             return false;
-        return Regex.IsMatch(email, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
+        return Regex.IsMatch(email, @"^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z0-9]+$");
     }
     /// <summary>
     /// 检查是否 Url 格式，check=true 时会发起网络 Ping 请求验证域名可达性
@@ -151,7 +151,7 @@ public partial class StringExt
     {
         if (domain.IsNull())
             return false;
-        Ping pingObj = new();
+        using Ping pingObj = new();
         if (domain.IsUrl())
             domain = domain.GetDomain();
         var reply = pingObj.Send(domain, timeout);

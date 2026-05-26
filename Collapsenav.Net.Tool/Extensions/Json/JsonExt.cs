@@ -57,11 +57,19 @@ public static partial class JsonExt
     /// <summary>
     /// 从 JSON 文件中读取 JsonElement（path 为文件路径）
     /// </summary>
-    public static JsonElement GetJsonElementFromPath(this string path) => path.GetJsonDocumentFromPath().RootElement;
+    public static JsonElement GetJsonElementFromPath(this string path)
+    {
+        using var doc = path.GetJsonDocumentFromPath();
+        return doc.RootElement.Clone();
+    }
     /// <summary>
     /// 从 JSON 文件中读取 JsonElement（path 为文件路径，异步）
     /// </summary>
-    public static async ValueTask<JsonElement> GetJsonElementFromPathAsync(this string path) => (await path.GetJsonDocumentFromPathAsync()).RootElement;
+    public static async ValueTask<JsonElement> GetJsonElementFromPathAsync(this string path)
+    {
+        using var doc = await path.GetJsonDocumentFromPathAsync();
+        return doc.RootElement.Clone();
+    }
     /// <summary>
     /// 从 JSON 文件中读取 JsonDocument（path 为文件路径）
     /// </summary>

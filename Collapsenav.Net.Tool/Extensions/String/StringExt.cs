@@ -201,6 +201,8 @@ public static partial class StringExt
     /// </summary>
     public static string First(this string origin, int len = 1)
     {
+        if (origin.IsNull())
+            return string.Empty;
         return len > origin.Length ? origin : origin[..len];
     }
     /// <summary>
@@ -208,6 +210,8 @@ public static partial class StringExt
     /// </summary>
     public static string Last(this string origin, int len = 1)
     {
+        if (origin.IsNull())
+            return string.Empty;
         return len > origin.Length ? origin : origin.Substring(origin.Length - len, len);
     }
     /// <summary>
@@ -223,6 +227,8 @@ public static partial class StringExt
     /// </summary>
     public static byte[] HexToBytes(this string hex)
     {
+        if (hex.Length % 2 != 0)
+            hex = "0" + hex;
         var bytes = new byte[hex.Length / 2];
         for (var i = 0; i < bytes.Length; i++)
             bytes[i] = (byte)Convert.ToInt32(hex[(i * 2)..(i * 2 + 2)], 16);
@@ -331,6 +337,8 @@ public static partial class StringExt
     /// </summary>
     public static string Before(this string origin, string target)
     {
+        if (origin.IsNull())
+            return string.Empty;
         var index = origin.IndexOf(target);
         return index == -1 ? origin : origin.First(index);
     }
@@ -339,6 +347,8 @@ public static partial class StringExt
     /// </summary>
     public static string After(this string origin, string target)
     {
+        if (origin.IsNull())
+            return string.Empty;
         var index = origin.LastIndexOf(target);
         return index == -1 ? origin : origin.Last(origin.Length - (target.Length + index));
     }
@@ -347,6 +357,8 @@ public static partial class StringExt
     /// </summary>
     public static string UpFirstLetter(this string origin)
     {
+        if (origin.IsNull())
+            return string.Empty;
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(origin);
     }
     /// <summary>
@@ -354,6 +366,8 @@ public static partial class StringExt
     /// </summary>
     public static string PadWith(this string origin, string value, int len, char? fill = ' ')
     {
+        if (origin.IsNull())
+            return string.Empty;
         if ((origin.Length + value.Length) >= len)
             return origin + value;
         return origin.PadRight(len - value.Length, fill) + value;
