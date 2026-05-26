@@ -130,7 +130,7 @@ public static partial class CollectionExt
     public static IQueryable<T> WhereIf<T>(this IQueryable<T>? query, bool flag, Expression<Func<T, bool>> filter)
     {
         if (query == null)
-            return Enumerable.Empty<T>().AsQueryable();
+            throw new ArgumentNullException(nameof(query));
         return flag ? query.Where(filter) : query;
     }
 
@@ -183,15 +183,14 @@ public static partial class CollectionExt
 
 
     /// <summary>
-    /// 遍历执行(不知道为啥原来的IEnumerable不提供这功能)
+    /// 遍历执行
     /// </summary>
-    public static IEnumerable<T> ForEach<T>(this IEnumerable<T>? query, Action<T> action)
+    public static void ForEach<T>(this IEnumerable<T>? query, Action<T> action)
     {
         if (query == null)
-            return Enumerable.Empty<T>();
+            return;
         foreach (var item in query)
             action(item);
-        return query;
     }
     /// <summary>
     /// 生成包含index的元组集合(value,index)

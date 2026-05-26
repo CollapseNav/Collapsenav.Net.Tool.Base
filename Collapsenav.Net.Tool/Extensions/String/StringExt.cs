@@ -219,7 +219,11 @@ public static partial class StringExt
     /// </summary>
     public static string ToHexString(this byte[] bytes)
     {
+#if NET5_0_OR_GREATER
+        return Convert.ToHexString(bytes).ToLower();
+#else
         return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
+#endif
     }
 
     /// <summary>

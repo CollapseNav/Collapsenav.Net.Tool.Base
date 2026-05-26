@@ -196,7 +196,7 @@ public class CollectionTest
 
         var query = intList.AsQueryable();
         query = null;
-        Assert.Empty(query
+        Assert.Throws<ArgumentNullException>(() => query
         .WhereIf(true, item => item > 1)
         .WhereIf(false, item => item < 3)
         .WhereIf("", item => item != 2)
@@ -452,7 +452,7 @@ public class CollectionTest
         Assert.True(sum == 14);
 
         nums = null;
-        Assert.Empty(nums.ForEach(item => sum += item));
+        nums.ForEach(item => sum += item);
     }
 
     [Fact]
