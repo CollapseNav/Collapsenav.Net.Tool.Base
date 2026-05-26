@@ -187,7 +187,7 @@ public static partial class CollectionExt
     /// <summary>
     /// 取交集
     /// </summary>
-    public static IEnumerable<T> Intersect<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> IntersectBy<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
     {
         if (origin == null)
             return Enumerable.Empty<T>();
@@ -197,7 +197,7 @@ public static partial class CollectionExt
     /// <summary>
     /// 取差集
     /// </summary>
-    public static IEnumerable<T> Except<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
+    public static IEnumerable<T> ExceptBy<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer)
     {
         if (origin == null)
             return Enumerable.Empty<T>();

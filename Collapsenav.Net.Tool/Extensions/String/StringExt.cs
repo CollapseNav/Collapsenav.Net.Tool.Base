@@ -157,7 +157,7 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// 获取 Domain 域名
+    /// 从 URL 字符串中提取域名（仅支持 http/https 协议）
     /// </summary>
     public static string GetDomain(this string input)
     {
@@ -173,7 +173,7 @@ public static partial class StringExt
     /// <summary>
     /// 自动遮罩(偷懒)
     /// </summary>
-    public static string AutoMask(this string origin, string mask = "*")
+    public static string MaskMiddle(this string origin, string mask = "*")
     {
         // TODO 邮箱,手机,地址,网址,账号等可能需要特定的遮罩
         if (origin.Trim().IsEmpty())
@@ -246,6 +246,9 @@ public static partial class StringExt
         return input.Shuffle<char>().Join();
     }
 
+    /// <summary>
+    /// 条件为 true 时追加
+    /// </summary>
     public static string AddIf(this string origin, bool check, string value)
     {
         if (check)
@@ -253,9 +256,12 @@ public static partial class StringExt
         return origin;
     }
 
-    public static string AddIf(this string origin, string check, string value)
+    /// <summary>
+    /// 当 input 非空时追加 value
+    /// </summary>
+    public static string AddIf(this string origin, string input, string value)
     {
-        return check.IsEmpty() ? origin : origin + value;
+        return input.NotEmpty() ? origin + value : origin;
     }
 
     public static string AddIf<T>(this string origin, T? check, string value) where T : struct
@@ -323,7 +329,7 @@ public static partial class StringExt
     /// <summary>
     /// 从前取到
     /// </summary>
-    public static string FirstTo(this string origin, string target)
+    public static string Before(this string origin, string target)
     {
         var index = origin.IndexOf(target);
         return index == -1 ? origin : origin.First(index);
@@ -331,7 +337,7 @@ public static partial class StringExt
     /// <summary>
     /// 从后取到
     /// </summary>
-    public static string EndTo(this string origin, string target)
+    public static string After(this string origin, string target)
     {
         var index = origin.LastIndexOf(target);
         return index == -1 ? origin : origin.Last(origin.Length - (target.Length + index));

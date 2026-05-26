@@ -62,7 +62,7 @@ public class DiffItem<T>
     {
         if (before == null || end == null)
             return Enumerable.Empty<DiffItem<T>>();
-        var props = before.GetType().Props().Intersect(end.GetType().Props(), (a, b) => a?.Name == b?.Name && a?.PropertyType == b?.PropertyType).ToArray();
+        var props = before.GetType().Props().IntersectBy(end.GetType().Props(), (a, b) => a?.Name == b?.Name && a?.PropertyType == b?.PropertyType).ToArray();
         if (props.IsEmpty())
             return default;
         return props?.Select(item => new DiffItem<T>(item, item.GetValue(before), item.GetValue(end)));

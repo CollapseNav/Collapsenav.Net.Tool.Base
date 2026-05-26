@@ -69,21 +69,15 @@ public static partial class DictionaryExt
     }
 
     /// <summary>
-    /// 将字典转换为指定类型
+    /// 将字典通过 JSON 序列化转换为指定类型
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="dict"></param>
-    /// <returns></returns>
     public static T? ToObj<T>(this Dictionary<string, object>? dict)
     {
         return dict.ToJson().ToObj<T>();
     }
     /// <summary>
-    /// 将字典转换为指定类型
+    /// 将字典通过 JSON 序列化转换为指定类型
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="dict"></param>
-    /// <returns></returns>
     public static T? ToObj<T>(this Dictionary<string, string>? dict)
     {
         return dict.ToJson().ToObj<T>();

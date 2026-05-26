@@ -39,7 +39,7 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// 图片文件转为base64字符串
+    /// 将流内容作为图片转为 data:image/base64 格式（假设流内容为图片数据）
     /// </summary>
     public static string ImageToBase64(this Stream stream)
     {
@@ -47,7 +47,7 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// 图片文件转为base64字符串
+    /// 读取图片文件并转为 data:image/base64 格式
     /// </summary>
     public static string ImageToBase64(this string filepath)
     {
@@ -56,7 +56,7 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// base64图片文件中取出string
+    /// 从 data:image/base64 字符串中提取纯 base64 部分
     /// </summary>
     public static string Base64ImageToString(this string base64String)
     {
@@ -64,14 +64,14 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// base64图片字符串转为流
+    /// 将 data:image/base64 字符串转为 Stream
     /// </summary>
     public static Stream Base64ImageToStream(this string base64String)
     {
         return base64String.Base64ImageToString().FromBase64().ToStream();
     }
     /// <summary>
-    /// base64图片字符串转为文件
+    /// 将 data:image/base64 保存到文件
     /// </summary>
     public static void Base64ImageSaveTo(this string base64String, string filepath)
     {
@@ -79,7 +79,7 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// base64图片字符串转为文件
+    /// 将 data:image/base64 保存到文件（异步）
     /// </summary>
     public static async Task Base64ImageSaveToAsync(this string base64String, string filepath)
     {

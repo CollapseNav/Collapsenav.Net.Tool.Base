@@ -6,32 +6,35 @@ public static partial class JsonExt
 {
     public static JsonSerializerOptions DefaultJsonSerializerOption = JsonOptions.BetterUseOption;
     /// <summary>
-    /// Json字符串转为对象
+    /// Json字符串转为对象（via JSON deserialization）
     /// </summary>
     public static T? ToObj<T>(this string str, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize<T>(str, options ?? DefaultJsonSerializerOption);
+    /// <summary>
+    /// Json字符串转为指定类型对象（via JSON deserialization）
+    /// </summary>
     public static object? ToObj(this string str, Type type, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize(str, type, options ?? DefaultJsonSerializerOption);
     /// <summary>
-    /// Json字符串转为对象集合
+    /// Json字符串转为对象集合（via JSON deserialization）
     /// </summary>
     public static IEnumerable<T>? ToObjCollection<T>(this string str, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize<IEnumerable<T>>(str, options ?? DefaultJsonSerializerOption);
     /// <summary>
-    /// 对象转为Json字符串
+    /// 对象转为Json字符串（via JSON serialization）
     /// </summary>
     public static string ToJson<T>(this T obj, JsonSerializerOptions? options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
 
 
 
     /// <summary>
-    /// 通过json的序列化反序列化map对象
+    /// 通过 JSON 序列化反序列化映射对象
     /// </summary>
     public static T? JsonMap<T>(this object obj) => obj.ToJson().ToObj<T>();
     /// <summary>
-    /// 通过json的序列化反序列化map对象
+    /// 通过 JSON 序列化反序列化映射对象
     /// </summary>
     public static T? JsonMap<S, T>(this S obj) => obj.ToJson().ToObj<T>();
 
     /// <summary>
-    /// 通过json的序列化反序列化将左边的对象映射到右边
+    /// 通过反射将左边对象的属性值映射到右边对象
     /// </summary>
     public static T? JsonMap<S, T>(this S origin, T target) where S : class where T : class
     {
@@ -44,7 +47,7 @@ public static partial class JsonExt
     }
 
     /// <summary>
-    /// 简单使用Json的序列化反序列化进行copy
+    /// 通过 JSON 序列化反序列化进行深拷贝
     /// </summary>
     public static T? JsonCopy<T>(this T origin)
     {
@@ -52,15 +55,15 @@ public static partial class JsonExt
     }
 
     /// <summary>
-    /// 从文件中读取 JsonElement
+    /// 从 JSON 文件中读取 JsonElement（path 为文件路径）
     /// </summary>
     public static JsonElement GetJsonElementFromPath(this string path) => path.GetJsonDocumentFromPath().RootElement;
     /// <summary>
-    /// 从文件中读取 JsonElement
+    /// 从 JSON 文件中读取 JsonElement（path 为文件路径，异步）
     /// </summary>
     public static async ValueTask<JsonElement> GetJsonElementFromPathAsync(this string path) => (await path.GetJsonDocumentFromPathAsync()).RootElement;
     /// <summary>
-    /// 从文件中读取 JsonDocument
+    /// 从 JSON 文件中读取 JsonDocument（path 为文件路径）
     /// </summary>
     public static JsonDocument GetJsonDocumentFromPath(this string path)
     {
@@ -68,7 +71,7 @@ public static partial class JsonExt
         return JsonDocument.Parse(stream);
     }
     /// <summary>
-    /// 从文件中读取 JsonDocument
+    /// 从 JSON 文件中读取 JsonDocument（path 为文件路径，异步）
     /// </summary>
     public static async ValueTask<JsonDocument> GetJsonDocumentFromPathAsync(this string path)
     {
@@ -76,11 +79,11 @@ public static partial class JsonExt
         return await JsonDocument.ParseAsync(stream);
     }
     /// <summary>
-    /// 从文件中读取 JsonObject
+    /// 从 JSON 文件中读取 JsonObject（path 为文件路径）
     /// </summary>
     public static JsonObject? GetJsonObjectFromPath(this string path) => JsonObject.Create(path.GetJsonElementFromPath());
     /// <summary>
-    /// 从文件中读取 JsonObject
+    /// 从 JSON 文件中读取 JsonObject（path 为文件路径，异步）
     /// </summary>
     public static async ValueTask<JsonObject?> GetJsonObjectFromPathAsync(this string path) => JsonObject.Create(await path.GetJsonElementFromPathAsync());
     /// <summary>
@@ -119,7 +122,7 @@ public static partial class JsonExt
         return JsonArray.Create(jsonStr.ToJsonElement());
     }
     /// <summary>
-    /// 将jsonnode转为指定对象
+    /// 将 JsonNode 转为指定对象（via JSON deserialization）
     /// </summary>
     public static T? ToObj<T>(this JsonNode node, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize<T>(node, options ?? DefaultJsonSerializerOption);
 }

@@ -254,15 +254,15 @@ public class StringExtTest
     }
 
     [Fact]
-    public void AutoMaskTest()
+    public void MaskMiddleTest()
     {
         string origin = "1";
-        var data = origin.AutoMask();
+        var data = origin.MaskMiddle();
         Assert.True(data == "#*1");
         origin = "CollapseNav.Net.Tool";
-        data = origin.AutoMask();
+        data = origin.MaskMiddle();
         Assert.True(data == "Col*ool");
-        data = "".AutoMask();
+        data = "".MaskMiddle();
         Assert.True(data == "***");
     }
 
@@ -363,17 +363,17 @@ public class StringExtTest
         Assert.False(strEnums.AllEndsWith("777"));
     }
     [Fact]
-    public void FirstToTest()
+    public void BeforeTest()
     {
         string value = "123456789.2333";
-        Assert.True(value.FirstTo(".") == "123456789");
+        Assert.True(value.Before(".") == "123456789");
     }
 
     [Fact]
-    public void EndToTest()
+    public void AfterTest()
     {
         string value = "123456789.2333";
-        Assert.True(value.EndTo(".") == "2333");
+        Assert.True(value.After(".") == "2333");
     }
 
     [Theory]

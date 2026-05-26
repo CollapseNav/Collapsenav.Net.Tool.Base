@@ -131,7 +131,7 @@ public partial class StringExt
         return Regex.IsMatch(email, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
     }
     /// <summary>
-    /// 检查是否 Url 格式
+    /// 检查是否 Url 格式，check=true 时会发起网络 Ping 请求验证域名可达性
     /// </summary>
     public static bool IsUrl(this string? url, bool check = false)
     {
@@ -145,7 +145,7 @@ public partial class StringExt
         return true;
     }
     /// <summary>
-    /// 能ping通
+    /// 检查域名是否能 Ping 通（发起网络 ICMP 请求）
     /// </summary>
     public static bool CanPing(this string? domain, int timeout = 1000)
     {
