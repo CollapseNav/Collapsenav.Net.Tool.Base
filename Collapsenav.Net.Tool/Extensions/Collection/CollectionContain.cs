@@ -193,13 +193,7 @@ public static partial class CollectionExt
             return Enumerable.Empty<T>();
         return origin.Intersect(target, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer));
     }
-    /// <summary>
-    /// 取交集
-    /// </summary>
-    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer = null)
-    {
-        return origin.Intersect(target, comparer);
-    }
+
     /// <summary>
     /// 取差集
     /// </summary>
@@ -208,12 +202,5 @@ public static partial class CollectionExt
         if (origin == null)
             return Enumerable.Empty<T>();
         return origin.Except(target, comparer == null ? null : new CollapseNavEqualityComparer<T>(comparer));
-    }
-    /// <summary>
-    /// 取差集
-    /// </summary>
-    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T>? origin, IEnumerable<T> target, Func<T?, T?, bool>? comparer = null)
-    {
-        return origin.Except(target, comparer);
     }
 }

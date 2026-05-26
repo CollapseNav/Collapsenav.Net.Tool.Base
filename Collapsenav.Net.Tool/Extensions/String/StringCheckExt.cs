@@ -7,45 +7,45 @@ namespace Collapsenav.Net.Tool;
 public partial class StringExt
 {
     /// <summary>
-    /// 是空的
+    /// 是否为 null
     /// </summary>
     public static bool IsNull(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(false)]
 #endif
-        this string? str) => string.IsNullOrEmpty(str);
+        this string? str) => str is null;
     /// <summary>
-    /// 若空则返回value
+    /// 若为 null 则返回 value
     /// </summary>
     public static string IsNull(this string? str, string value) => str.IsNull() ? value : str;
     /// <summary>
-    /// 是空的
+    /// 是否为空字符串
     /// </summary>
     public static bool IsEmpty(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(false)]
 #endif
-        this string? str) => string.IsNullOrEmpty(str);
+        this string? str) => str == string.Empty;
     /// <summary>
-    /// 若空则返回value
+    /// 若为空字符串则返回 value
     /// </summary>
     public static string IsEmpty(this string? str, string? value) => str.IsEmpty() ? (value ?? string.Empty) : str;
     /// <summary>
-    /// 没空
+    /// 不为 null（可能为空字符串）
     /// </summary>
     public static bool NotNull(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(true)]
 #endif
-        this string? str) => !str.IsNull();
+        this string? str) => str is not null;
     /// <summary>
-    /// 没空
+    /// 不为空（null 或空字符串都算空）
     /// </summary>
     public static bool NotEmpty(
 #if (NETSTANDARD2_1_OR_GREATER || NETCOREAPP2_0_OR_GREATER)
         [NotNullWhen(true)]
 #endif
-        this string? str) => !str.IsEmpty();
+        this string? str) => !string.IsNullOrEmpty(str);
     /// <summary>
     /// 是空白字符串
     /// </summary>

@@ -152,14 +152,22 @@ public class StringExtTest
     [InlineData(null, "default")]
     public void NullTest(string value, string defaultValue = "")
     {
-        Assert.True(value.IsNull());
-        Assert.True(value.IsEmpty());
-        Assert.False(value.NotNull());
-        Assert.False(value.NotEmpty());
+        Assert.Equal(value is null, value.IsNull());
+        Assert.Equal(value == string.Empty, value.IsEmpty());
+        Assert.Equal(value is not null, value.NotNull());
+        Assert.Equal(!string.IsNullOrEmpty(value), value.NotEmpty());
         if (!string.IsNullOrEmpty(defaultValue))
         {
-            Assert.True(value.IsNull(defaultValue) == defaultValue);
-            Assert.True(value.IsEmpty(defaultValue) == defaultValue);
+            if (value is null)
+            {
+                Assert.True(value.IsNull(defaultValue) == defaultValue);
+                Assert.True(value.IsEmpty(defaultValue) != defaultValue);
+            }
+            else if (value == string.Empty)
+            {
+                Assert.True(value.IsNull(defaultValue) != defaultValue);
+                Assert.True(value.IsEmpty(defaultValue) == defaultValue);
+            }
         }
     }
     [Theory]

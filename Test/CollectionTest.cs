@@ -517,17 +517,14 @@ public class CollectionTest
     {
         var list1 = new[] { 1, 2, 3, 4 };
         var list2 = new[] { 3, 4, 5, 6 };
-        Assert.True(list1.GetItemIn(list2).SequenceEqual(new[] { 3, 4 }));
+        Assert.True(list1.Intersect(list2).SequenceEqual(new[] { 3, 4 }));
         var model1 = UniqueTestModel.GetModels(0, 1, 2, 3);
         var model2 = UniqueTestModel.GetModels(3, 4, 5, 6, 7);
-        Assert.True(model1.GetItemIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
         Assert.True(model1.Intersect(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
 
         model1 = null;
         model2 = null;
-        Assert.Empty(model1.GetItemIn(model2, (a, b) => a.Index == b.Index));
         Assert.Empty(model1.Intersect(model2, (a, b) => a.Index == b.Index));
-        Assert.Empty(model1.GetItemIn(model2));
     }
 
     [Fact]
@@ -535,17 +532,14 @@ public class CollectionTest
     {
         var list1 = new[] { 1, 2, 3, 4 };
         var list2 = new[] { 3, 4, 5, 6 };
-        Assert.True(list1.GetItemNotIn(list2).SequenceEqual(new[] { 1, 2 }));
+        Assert.True(list1.Except(list2).SequenceEqual(new[] { 1, 2 }));
         var model1 = UniqueTestModel.GetModels(0, 1, 2, 3);
         var model2 = UniqueTestModel.GetModels(3, 4, 5, 6, 7);
-        Assert.True(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
         Assert.True(model1.Except(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
 
         model1 = null;
         model2 = null;
-        Assert.Empty(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index));
         Assert.Empty(model1.Except(model2, (a, b) => a.Index == b.Index));
-        Assert.Empty(model1.GetItemNotIn(model2));
     }
 
 
